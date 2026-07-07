@@ -1,7 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import SiteHeader from "@/components/SiteHeader";
 import MathText from "@/components/MathText";
-import { ExamBadge, TpBadge, DoneBadge } from "@/components/ExerciseBadges";
+import { ExamBadge, DoneBadge } from "@/components/ExerciseBadges";
 import { getChapter } from "@/data/chapters";
 import { exercisesForChapter, exerciseSlug } from "@/data/exercises";
 import { useProgress } from "@/hooks/use-progress";
@@ -91,7 +91,6 @@ function ChapterExercises() {
                   Exercice {e.id}
                 </span>
                 {e.examType && <ExamBadge />}
-                <TpBadge exerciseId={e.id} />
                 {isDone(e.id) && <DoneBadge />}
               </div>
               <h2 className="mt-2.5 text-lg font-bold group-hover:underline">{e.title}</h2>

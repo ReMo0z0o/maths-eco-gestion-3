@@ -2,7 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useState } from "react";
 import SiteHeader from "@/components/SiteHeader";
 import MathText from "@/components/MathText";
-import { ExamBadge, TpBadge } from "@/components/ExerciseBadges";
+import { ExamBadge } from "@/components/ExerciseBadges";
 import { getChapter } from "@/data/chapters";
 import { allExercises, getExercise, exerciseSlug, exerciseIdFromSlug } from "@/data/exercises";
 import type { ExercisePart } from "@/data/exercises";
@@ -149,7 +149,6 @@ function ExercisePage() {
               Exercice {exercise.id}
             </span>
             {exercise.examType && <ExamBadge />}
-            <TpBadge exerciseId={exercise.id} />
           </div>
           <h1 className="mt-3 text-3xl font-bold tracking-tight">{exercise.title}</h1>
         </header>

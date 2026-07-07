@@ -9,18 +9,14 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as PlanningRouteImport } from './routes/planning'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ExercicesIndexRouteImport } from './routes/exercices.index'
+import { Route as DemonstrationsIndexRouteImport } from './routes/demonstrations.index'
+import { Route as DemonstrationsDemoIdRouteImport } from './routes/demonstrations.$demoId'
 import { Route as CoursChapterIdRouteImport } from './routes/cours.$chapterId'
 import { Route as ExercicesChapterIdIndexRouteImport } from './routes/exercices.$chapterId.index'
 import { Route as ExercicesChapterIdExerciseIdRouteImport } from './routes/exercices.$chapterId.$exerciseId'
 
-const PlanningRoute = PlanningRouteImport.update({
-  id: '/planning',
-  path: '/planning',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -29,6 +25,16 @@ const IndexRoute = IndexRouteImport.update({
 const ExercicesIndexRoute = ExercicesIndexRouteImport.update({
   id: '/exercices/',
   path: '/exercices/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemonstrationsIndexRoute = DemonstrationsIndexRouteImport.update({
+  id: '/demonstrations/',
+  path: '/demonstrations/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemonstrationsDemoIdRoute = DemonstrationsDemoIdRouteImport.update({
+  id: '/demonstrations/$demoId',
+  path: '/demonstrations/$demoId',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CoursChapterIdRoute = CoursChapterIdRouteImport.update({
@@ -50,16 +56,18 @@ const ExercicesChapterIdExerciseIdRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/planning': typeof PlanningRoute
   '/cours/$chapterId': typeof CoursChapterIdRoute
+  '/demonstrations/$demoId': typeof DemonstrationsDemoIdRoute
+  '/demonstrations/': typeof DemonstrationsIndexRoute
   '/exercices/': typeof ExercicesIndexRoute
   '/exercices/$chapterId/$exerciseId': typeof ExercicesChapterIdExerciseIdRoute
   '/exercices/$chapterId/': typeof ExercicesChapterIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/planning': typeof PlanningRoute
   '/cours/$chapterId': typeof CoursChapterIdRoute
+  '/demonstrations/$demoId': typeof DemonstrationsDemoIdRoute
+  '/demonstrations': typeof DemonstrationsIndexRoute
   '/exercices': typeof ExercicesIndexRoute
   '/exercices/$chapterId/$exerciseId': typeof ExercicesChapterIdExerciseIdRoute
   '/exercices/$chapterId': typeof ExercicesChapterIdIndexRoute
@@ -67,8 +75,9 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/planning': typeof PlanningRoute
   '/cours/$chapterId': typeof CoursChapterIdRoute
+  '/demonstrations/$demoId': typeof DemonstrationsDemoIdRoute
+  '/demonstrations/': typeof DemonstrationsIndexRoute
   '/exercices/': typeof ExercicesIndexRoute
   '/exercices/$chapterId/$exerciseId': typeof ExercicesChapterIdExerciseIdRoute
   '/exercices/$chapterId/': typeof ExercicesChapterIdIndexRoute
@@ -77,24 +86,27 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/planning'
     | '/cours/$chapterId'
+    | '/demonstrations/$demoId'
+    | '/demonstrations/'
     | '/exercices/'
     | '/exercices/$chapterId/$exerciseId'
     | '/exercices/$chapterId/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/planning'
     | '/cours/$chapterId'
+    | '/demonstrations/$demoId'
+    | '/demonstrations'
     | '/exercices'
     | '/exercices/$chapterId/$exerciseId'
     | '/exercices/$chapterId'
   id:
     | '__root__'
     | '/'
-    | '/planning'
     | '/cours/$chapterId'
+    | '/demonstrations/$demoId'
+    | '/demonstrations/'
     | '/exercices/'
     | '/exercices/$chapterId/$exerciseId'
     | '/exercices/$chapterId/'
@@ -102,8 +114,9 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  PlanningRoute: typeof PlanningRoute
   CoursChapterIdRoute: typeof CoursChapterIdRoute
+  DemonstrationsDemoIdRoute: typeof DemonstrationsDemoIdRoute
+  DemonstrationsIndexRoute: typeof DemonstrationsIndexRoute
   ExercicesIndexRoute: typeof ExercicesIndexRoute
   ExercicesChapterIdExerciseIdRoute: typeof ExercicesChapterIdExerciseIdRoute
   ExercicesChapterIdIndexRoute: typeof ExercicesChapterIdIndexRoute
@@ -111,13 +124,6 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/planning': {
-      id: '/planning'
-      path: '/planning'
-      fullPath: '/planning'
-      preLoaderRoute: typeof PlanningRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
@@ -130,6 +136,20 @@ declare module '@tanstack/react-router' {
       path: '/exercices'
       fullPath: '/exercices/'
       preLoaderRoute: typeof ExercicesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demonstrations/': {
+      id: '/demonstrations/'
+      path: '/demonstrations'
+      fullPath: '/demonstrations/'
+      preLoaderRoute: typeof DemonstrationsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demonstrations/$demoId': {
+      id: '/demonstrations/$demoId'
+      path: '/demonstrations/$demoId'
+      fullPath: '/demonstrations/$demoId'
+      preLoaderRoute: typeof DemonstrationsDemoIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/cours/$chapterId': {
@@ -158,8 +178,9 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  PlanningRoute: PlanningRoute,
   CoursChapterIdRoute: CoursChapterIdRoute,
+  DemonstrationsDemoIdRoute: DemonstrationsDemoIdRoute,
+  DemonstrationsIndexRoute: DemonstrationsIndexRoute,
   ExercicesIndexRoute: ExercicesIndexRoute,
   ExercicesChapterIdExerciseIdRoute: ExercicesChapterIdExerciseIdRoute,
   ExercicesChapterIdIndexRoute: ExercicesChapterIdIndexRoute,

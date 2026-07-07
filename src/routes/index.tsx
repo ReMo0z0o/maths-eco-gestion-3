@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import SiteHeader from "@/components/SiteHeader";
 import { chapters } from "@/data/chapters";
 import { exercisesForChapter, allExercises } from "@/data/exercises";
-import { planning } from "@/data/planning";
+import { allDemos } from "@/data/demos";
 import { useProgress } from "@/hooks/use-progress";
 
 export const Route = createFileRoute("/")({
@@ -129,13 +129,13 @@ function Index() {
               ✏️ S'entraîner aux exercices
             </Link>
             <Link
-              to="/planning"
+              to="/demonstrations"
               className="inline-flex items-center gap-2 rounded-lg border border-input bg-background px-5 py-2.5 text-sm font-semibold shadow-sm transition-colors hover:bg-muted"
             >
-              🗓️ Planning des TPs
+              🎓 Démonstrations d'examen
             </Link>
           </div>
-          <dl className="mt-10 grid max-w-xl grid-cols-3 gap-4 font-sans-ui">
+          <dl className="mt-10 grid max-w-2xl grid-cols-2 gap-4 font-sans-ui sm:grid-cols-4">
             <div className="rounded-xl border border-border bg-card p-3 text-center shadow-sm">
               <dt className="text-[11px] uppercase tracking-wide text-muted-foreground">
                 Chapitres
@@ -153,6 +153,12 @@ function Index() {
                 Type examen
               </dt>
               <dd className="text-2xl font-bold text-primary">⭐ {examCount}</dd>
+            </div>
+            <div className="rounded-xl border border-border bg-card p-3 text-center shadow-sm">
+              <dt className="text-[11px] uppercase tracking-wide text-muted-foreground">
+                Démonstrations
+              </dt>
+              <dd className="text-2xl font-bold text-primary">🎓 {allDemos.length}</dd>
             </div>
           </dl>
         </div>
@@ -177,8 +183,8 @@ function Index() {
             },
             {
               step: "3",
-              title: "Vise les exercices type examen",
-              text: "Les exercices marqués ⭐ sont annoncés « type examen » par les assistantes : assure-toi de les maîtriser parfaitement. Coche tes exercices réussis pour suivre ta progression.",
+              title: "Apprends les démonstrations",
+              text: "Les exercices marqués ⭐ sont « type examen » : maîtrise-les parfaitement. Et apprends par cœur les démonstrations exigées, expliquées en détail avec la rédaction exacte à reproduire sur ta feuille.",
             },
           ].map((item) => (
             <div key={item.step} className="rounded-2xl border border-border bg-card p-5 shadow-sm">
@@ -217,23 +223,25 @@ function Index() {
         </div>
       </section>
 
-      {/* Planning teaser */}
+      {/* Démonstrations teaser */}
       <section className="border-t border-border bg-muted/40">
         <div className="container py-12">
           <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
             <div>
-              <h2 className="text-2xl font-bold tracking-tight">Suis le rythme des TPs</h2>
+              <h2 className="text-2xl font-bold tracking-tight">
+                🎓 Les démonstrations à connaître par cœur
+              </h2>
               <p className="mt-2 max-w-xl text-sm leading-relaxed text-foreground/80 sm:text-base">
-                {planning.length} séances de TP jalonnent le quadrimestre. Pour chacune, retrouve
-                les exercices préparatoires à faire avant la séance et les exercices qui y seront
-                résolus — tous corrigés ici en détail.
+                {allDemos.length} démonstrations sont exigées à l'examen. Pour chacune : l'énoncé
+                exact, l'explication détaillée pas à pas pour la comprendre, et la rédaction modèle
+                à reproduire telle quelle sur ta feuille d'examen.
               </p>
             </div>
             <Link
-              to="/planning"
+              to="/demonstrations"
               className="inline-flex shrink-0 items-center gap-2 rounded-lg bg-primary px-5 py-2.5 font-sans-ui text-sm font-semibold text-primary-foreground shadow-sm transition-colors hover:bg-primary/90"
             >
-              Voir le planning complet →
+              Réviser les démonstrations →
             </Link>
           </div>
         </div>
