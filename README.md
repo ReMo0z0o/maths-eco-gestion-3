@@ -12,8 +12,9 @@ scalaire, valeurs propres, formes quadratiques et intégrales doubles.
 - **Exercices pratiques** (`src/data/exercises/`) : les 61 exercices des TP résolus étape par
   étape (énoncé fidèle, méthode, étapes à révélation progressive, réponse finale vérifiée
   contre le solutionnaire officiel, liens vers la théorie). Rendu mathématique via KaTeX.
-- **Planning des TPs** (`src/data/planning.ts`) : les 9 séances avec exercices préparatoires
-  et exercices de séance, tous cliquables.
+- **Démonstrations d'examen** (`src/data/demos/`) : les 15 démonstrations à connaître par
+  cœur — énoncé exact, explication détaillée pas à pas, rédaction modèle à reproduire sur la
+  feuille d'examen, mode récitation et pièges classiques.
 - **Progression** : suivi local (localStorage) des exercices maîtrisés.
 - Les PDF officiels (énoncés + solutionnaire) sont téléchargeables depuis le pied de page
   (`public/pdf/`).
@@ -25,6 +26,7 @@ npm install
 npm run dev        # serveur de développement
 npm run build      # build de production (dist/client)
 node scripts/check-math.mjs   # vérifie la structure et le LaTeX de tous les exercices
+node scripts/check-demos.mjs  # idem pour les démonstrations d'examen
 ```
 
 Stack : TanStack Start (mode SPA) · React 19 · Tailwind CSS v4 · KaTeX.
