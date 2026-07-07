@@ -8,7 +8,7 @@
 <!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Hanken+Grotesk:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 
 <!-- KaTeX (inlined, offline) -->
 <style>
@@ -1110,26 +1110,26 @@ body {
    et le motif de "tranches" (découpage de Riemann).
    ============================================================ */
 :root{
-  --paper:#F2F4F8;
-  --paper-deep:#E7EAF2;
-  --card:#FFFFFF;
-  --ink:#1B2440;
-  --ink-soft:#4A5470;
-  --ink-faint:#8A93AC;
-  --cobalt:#2547D0;
-  --cobalt-deep:#1B36A0;
-  --cobalt-bg:#E7ECFB;
-  --coral:#E4573D;
-  --coral-bg:#FCEDE9;
-  --amber:#C98A08;
-  --amber-bg:#FCF3DD;
-  --mint:#189D74;
-  --mint-bg:#E3F6EE;
-  --line:#D8DDEA;
-  --mono:'Space Mono',ui-monospace,monospace;
+  --paper:#f7f7fb;
+  --paper-deep:#eef2ff;
+  --card:#ffffff;
+  --ink:#232946;
+  --ink-soft:#5a6079;
+  --ink-faint:#5a6079;
+  --cobalt:#4f46e5;
+  --cobalt-deep:#4338ca;
+  --cobalt-bg:#eef2ff;
+  --coral:#dc2626;
+  --coral-bg:#fef2f2;
+  --amber:#d97706;
+  --amber-bg:#fffbeb;
+  --mint:#059669;
+  --mint-bg:#ecfdf5;
+  --line:#e4e6f0;
+  --mono:'JetBrains Mono',monospace;
   --disp:'Fraunces',Georgia,serif;
   --body:'Hanken Grotesk',system-ui,sans-serif;
-  --shadow:0 1px 2px rgba(27,36,64,.05),0 10px 30px -18px rgba(27,36,64,.25);
+  --shadow:0 1px 3px rgba(35,41,70,.08);
   --r:14px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -1137,13 +1137,13 @@ html{scroll-behavior:smooth;scroll-padding-top:80px}
 body{
   font-family:var(--body);color:var(--ink);background:var(--paper);
   font-size:17px;line-height:1.65;
-  background-image:radial-gradient(rgba(37,71,208,.06) 1px,transparent 1px);
+  background-image:radial-gradient(rgba(79,70,229,.06) 1px,transparent 1px);
   background-size:26px 26px;
 }
 ::selection{background:var(--cobalt);color:#fff}
 
 /* ---------- progress bar ---------- */
-#progress{position:fixed;top:0;left:0;height:4px;width:0;background:linear-gradient(90deg,var(--cobalt),var(--mint));z-index:100;transition:width .15s linear}
+#progress{position:fixed;top:0;left:0;height:4px;width:0;background:var(--cobalt);z-index:100;transition:width .15s linear}
 
 /* ---------- layout ---------- */
 .wrap{display:grid;grid-template-columns:264px minmax(0,1fr);max-width:1240px;margin:0 auto;gap:34px;padding:0 22px}
@@ -1154,7 +1154,7 @@ aside.nav{position:sticky;top:0;align-self:start;height:100vh;overflow-y:auto;pa
 .nav .brand{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);margin:0 0 4px 12px}
 .nav .brand b{color:var(--cobalt)}
 .nav .chap{font-family:var(--disp);font-weight:600;font-size:19px;margin:0 0 18px 12px;line-height:1.25}
-.nav a{display:flex;gap:9px;align-items:baseline;padding:6.5px 12px;border-radius:9px;color:var(--ink-soft);text-decoration:none;font-size:14.2px;font-weight:500;border-left:3px solid transparent}
+.nav a{display:flex;gap:9px;align-items:baseline;padding:6.5px 12px;border-radius:10px;color:var(--ink-soft);text-decoration:none;font-size:14.2px;font-weight:500;border-left:3px solid transparent}
 .nav a .n{font-family:var(--mono);font-size:11px;color:var(--ink-faint);min-width:20px}
 .nav a:hover{background:var(--paper-deep);color:var(--ink)}
 .nav a.active{background:var(--cobalt-bg);color:var(--cobalt-deep);border-left-color:var(--cobalt);font-weight:700}
@@ -1162,14 +1162,14 @@ aside.nav{position:sticky;top:0;align-self:start;height:100vh;overflow-y:auto;pa
 .nav .grp{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);margin:16px 0 6px 12px}
 
 /* ---------- hero ---------- */
-.hero{position:relative;overflow:hidden;background:var(--ink);color:#EDF0FA;border-radius:0 0 26px 26px;padding:64px 54px 56px;margin:0 -2px 46px}
-.hero .glyph{position:absolute;right:-10px;top:-88px;font-family:var(--disp);font-weight:400;font-size:430px;line-height:1;color:rgba(120,150,255,.13);user-select:none;pointer-events:none}
-.hero .eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:.2em;text-transform:uppercase;color:#93A6EE;margin-bottom:14px}
+.hero{position:relative;overflow:hidden;background:var(--ink);color:#e6e8f5;border-radius:0 0 26px 26px;padding:64px 54px 56px;margin:0 -2px 46px}
+.hero .glyph{position:absolute;right:-10px;top:-88px;font-family:var(--disp);font-weight:400;font-size:430px;line-height:1;color:rgba(129,140,248,.13);user-select:none;pointer-events:none}
+.hero .eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:.2em;text-transform:uppercase;color:#818cf8;margin-bottom:14px}
 .hero h1{font-family:var(--disp);font-weight:600;font-size:clamp(34px,4.6vw,54px);line-height:1.06;max-width:760px}
-.hero h1 em{font-style:italic;color:#9FB4FF}
-.hero p.lead{max-width:640px;margin-top:18px;font-size:17.5px;color:#C4CCE8}
+.hero h1 em{font-style:italic;color:#818cf8}
+.hero p.lead{max-width:640px;margin-top:18px;font-size:17.5px;color:rgba(230,232,245,.85)}
 .hero .meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
-.hero .meta span{font-family:var(--mono);font-size:12px;padding:7px 13px;border:1px solid rgba(160,180,255,.35);border-radius:999px;color:#B9C6F5}
+.hero .meta span{font-family:var(--mono);font-size:12px;padding:7px 13px;border:1px solid rgba(129,140,248,.4);border-radius:999px;color:#e6e8f5}
 .hero .slices{position:absolute;left:0;bottom:0;width:100%;height:10px;display:flex}
 .hero .slices i{flex:1;background:var(--cobalt);opacity:.9}
 .hero .slices i:nth-child(2n){background:var(--mint);opacity:.75}
@@ -1192,11 +1192,11 @@ hr.thin{border:0;border-top:1px dashed var(--line);margin:30px 0}
 /* ---------- callouts ---------- */
 .callout{border-radius:12px;padding:18px 20px 15px;margin:20px 0;border:1px solid;position:relative}
 .callout .tag{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;display:inline-block;margin-bottom:6px}
-.callout.intuition{background:var(--cobalt-bg);border-color:#C3CFF4}
+.callout.intuition{background:var(--cobalt-bg);border-color:rgba(79,70,229,.25)}
 .callout.intuition .tag{color:var(--cobalt-deep)}
-.callout.piege{background:var(--coral-bg);border-color:#F3CDC4}
+.callout.piege{background:var(--coral-bg);border-color:rgba(220,38,38,.22)}
 .callout.piege .tag{color:var(--coral)}
-.callout.maitrise{background:var(--amber-bg);border-color:#EBD9A8}
+.callout.maitrise{background:var(--amber-bg);border-color:rgba(217,119,6,.3)}
 .callout.maitrise .tag{color:var(--amber)}
 .callout.note{background:var(--paper-deep);border-color:var(--line)}
 .callout.note .tag{color:var(--ink-soft)}
@@ -1204,9 +1204,9 @@ hr.thin{border:0;border-top:1px dashed var(--line);margin:30px 0}
 /* ---------- definition / theorem boxes ---------- */
 .defbox,.thmbox{border-radius:12px;margin:22px 0;overflow:hidden;border:1px solid var(--line)}
 .defbox .hd,.thmbox .hd{font-family:var(--mono);font-size:12px;letter-spacing:.15em;text-transform:uppercase;padding:9px 18px;font-weight:700}
-.defbox .hd{background:var(--ink);color:#DCE3FA}
+.defbox .hd{background:var(--ink);color:#e6e8f5}
 .thmbox .hd{background:var(--cobalt);color:#fff}
-.defbox .bd,.thmbox .bd{padding:16px 20px;background:#FBFCFE}
+.defbox .bd,.thmbox .bd{padding:16px 20px;background:#f7f7fb}
 .thmbox.mint .hd{background:var(--mint)}
 
 /* ---------- method box ---------- */
@@ -1217,45 +1217,45 @@ hr.thin{border:0;border-top:1px dashed var(--line);margin:30px 0}
 .method li::marker{font-family:var(--mono);font-weight:700;color:var(--cobalt)}
 
 /* ---------- worked example ---------- */
-.ex{border:1px solid var(--line);border-left:4px solid var(--ink);border-radius:10px;background:#FBFCFE;padding:18px 22px;margin:22px 0}
+.ex{border:1px solid var(--line);border-left:4px solid var(--ink);border-radius:10px;background:#f7f7fb;padding:18px 22px;margin:22px 0}
 .ex .hd{font-family:var(--mono);font-size:12px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-soft);font-weight:700;margin-bottom:8px}
-.result{display:inline-block;background:var(--mint-bg);border:1.5px solid var(--mint);color:#0E6B4E;border-radius:10px;padding:7px 16px;font-weight:700;margin-top:10px}
+.result{display:inline-block;background:var(--mint-bg);border:1.5px solid var(--mint);color:#059669;border-radius:10px;padding:7px 16px;font-weight:700;margin-top:10px}
 
 /* ---------- self-test exercises + solution toggle ---------- */
 .exo{border:1px solid var(--line);border-radius:12px;margin:18px 0;background:#fff;overflow:hidden}
 .exo .q{padding:16px 20px}
 .exo .q .lbl{font-family:var(--mono);font-size:11.5px;letter-spacing:.13em;color:var(--cobalt);font-weight:700;text-transform:uppercase;display:block;margin-bottom:5px}
-.exo button.tgl{display:block;width:100%;text-align:left;background:var(--mint-bg);border:0;border-top:1px solid #CBE9DC;color:#0E6B4E;font-family:var(--mono);font-size:12.5px;font-weight:700;letter-spacing:.08em;padding:10px 20px;cursor:pointer}
-.exo button.tgl:hover{background:#D4F0E3}
-.exo .sol{display:none;padding:16px 20px;background:#F6FCF9;border-top:1px dashed #BFE5D3}
+.exo button.tgl{display:block;width:100%;text-align:left;background:var(--mint-bg);border:0;border-top:1px solid rgba(5,150,105,.28);color:#059669;font-family:var(--mono);font-size:12.5px;font-weight:700;letter-spacing:.08em;padding:10px 20px;cursor:pointer}
+.exo button.tgl:hover{background:rgba(5,150,105,.14)}
+.exo .sol{display:none;padding:16px 20px;background:#ecfdf5;border-top:1px dashed rgba(5,150,105,.35)}
 .exo .sol.open{display:block}
 
 /* ---------- quiz ---------- */
 .quiz{border:2px solid var(--ink);border-radius:14px;margin:26px 0;overflow:hidden}
 .quiz .hd{background:var(--ink);color:#fff;padding:11px 20px;font-weight:800;display:flex;justify-content:space-between;align-items:center}
-.quiz .hd .sc{font-family:var(--mono);font-size:12.5px;color:#9FB4FF}
+.quiz .hd .sc{font-family:var(--mono);font-size:12.5px;color:#818cf8}
 .qq{padding:18px 22px;border-top:1px solid var(--line)}
 .qq .qt{font-weight:700;margin-bottom:10px}
 .qq .opts{display:grid;gap:8px}
-.qq .opts button{text-align:left;border:1.5px solid var(--line);background:#fff;border-radius:9px;padding:10px 14px;font-size:15.5px;cursor:pointer;font-family:var(--body);color:var(--ink)}
+.qq .opts button{text-align:left;border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:10px 14px;font-size:15.5px;cursor:pointer;font-family:var(--body);color:var(--ink)}
 .qq .opts button:hover{border-color:var(--cobalt);background:var(--cobalt-bg)}
 .qq .opts button.good{border-color:var(--mint);background:var(--mint-bg);font-weight:700}
 .qq .opts button.bad{border-color:var(--coral);background:var(--coral-bg)}
-.qq .fb{display:none;margin-top:10px;font-size:14.5px;border-radius:9px;padding:10px 14px}
+.qq .fb{display:none;margin-top:10px;font-size:14.5px;border-radius:10px;padding:10px 14px}
 .qq .fb.show{display:block}
-.qq .fb.ok{background:var(--mint-bg);color:#0E6B4E}
-.qq .fb.ko{background:var(--coral-bg);color:#A33520}
+.qq .fb.ok{background:var(--mint-bg);color:#059669}
+.qq .fb.ko{background:var(--coral-bg);color:#dc2626}
 
 /* ---------- widgets ---------- */
-.widget{border:2px dashed var(--cobalt);border-radius:14px;padding:20px 22px;margin:26px 0;background:linear-gradient(180deg,#FDFDFF,#F5F7FE)}
+.widget{border:2px dashed var(--cobalt);border-radius:14px;padding:20px 22px;margin:26px 0;background:linear-gradient(180deg,#ffffff,#eef2ff)}
 .widget .hd{font-family:var(--mono);font-size:12px;letter-spacing:.15em;text-transform:uppercase;color:var(--cobalt);font-weight:700;margin-bottom:10px}
 .widget canvas{background:#fff;border:1px solid var(--line);border-radius:10px;max-width:100%;display:block}
 .wrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0}
-.btn{font-family:var(--body);font-weight:700;font-size:13.5px;border:1.5px solid var(--line);background:#fff;color:var(--ink-soft);border-radius:999px;padding:7px 14px;cursor:pointer}
+.btn{font-family:var(--body);font-weight:700;font-size:13.5px;border:1.5px solid var(--line);background:#fff;color:var(--ink);border-radius:10px;padding:7px 14px;cursor:pointer}
 .btn:hover{border-color:var(--cobalt);color:var(--cobalt)}
 .btn.on{background:var(--cobalt);border-color:var(--cobalt);color:#fff}
 .btn.mintb.on{background:var(--mint);border-color:var(--mint)}
-.wout{font-family:var(--mono);font-size:13px;background:var(--ink);color:#C9D4F6;border-radius:9px;padding:10px 14px;margin-top:10px;line-height:1.7}
+.wout{font-family:var(--mono);font-size:13px;background:var(--ink);color:#e6e8f5;border-radius:10px;padding:10px 14px;margin-top:10px;line-height:1.7}
 .wout b{color:#fff}
 input[type=range]{accent-color:var(--cobalt)}
 
@@ -1270,18 +1270,18 @@ figure.fig figcaption{font-size:13.5px;color:var(--ink-soft);margin-top:6px}
 table.tb{border-collapse:collapse;width:100%;margin:16px 0;font-size:15.5px}
 .tb th{background:var(--ink);color:#fff;padding:9px 13px;text-align:left;font-weight:700;font-size:14px}
 .tb td{border:1px solid var(--line);padding:9px 13px;background:#fff}
-.tb tr:nth-child(2n) td{background:#F8FAFD}
+.tb tr:nth-child(2n) td{background:#f7f7fb}
 
 /* ---------- TP cards ---------- */
 .tp{border:1px solid var(--line);border-radius:14px;margin:26px 0;overflow:hidden;background:#fff}
 .tp .tphd{display:flex;align-items:center;gap:12px;padding:14px 20px;background:var(--paper-deep);border-bottom:1px solid var(--line)}
 .tp .tphd .id{font-family:var(--mono);font-weight:700;font-size:15px;color:var(--cobalt-deep)}
 .tp .tphd .badge{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;border-radius:999px;padding:3px 10px;font-weight:700;text-transform:uppercase}
-.badge.exam{background:var(--coral);color:#fff}
+.badge.exam{background:var(--amber);color:#fff}
 .badge.prep{background:var(--amber);color:#fff}
 .badge.tpb{background:var(--cobalt);color:#fff}
 .tp .bd{padding:16px 22px}
-.tp .enonce{background:var(--paper-deep);border-radius:9px;padding:12px 16px;margin-bottom:14px;font-size:15.5px}
+.tp .enonce{background:var(--paper-deep);border-radius:10px;padding:12px 16px;margin-bottom:14px;font-size:15.5px}
 .tp .enonce .lbl{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;color:var(--ink-faint);text-transform:uppercase;font-weight:700;display:block;margin-bottom:4px}
 
 /* ---------- checklist ---------- */
@@ -1306,6 +1306,19 @@ footer{max-width:1240px;margin:0 auto;padding:10px 22px 60px;color:var(--ink-fai
 }
 .katex{font-size:1.06em}
 .katex-display{overflow-x:auto;overflow-y:hidden;padding:4px 0}
+</style>
+<style id="uniform-skin">
+/* Skin commun — barre latérale sombre (identique aux autres chapitres) */
+aside.nav{background:#232946;border-radius:0 0 14px 14px;padding-left:10px;padding-right:10px;scrollbar-color:rgba(255,255,255,.3) transparent}
+.nav .brand{color:rgba(230,232,245,.55)}
+.nav .brand b{color:#818cf8}
+.nav .chap{color:#ffffff}
+.nav .grp{color:rgba(230,232,245,.5)}
+.nav a{color:rgba(230,232,245,.8)}
+.nav a .n{color:rgba(230,232,245,.45)}
+.nav a:hover{background:rgba(255,255,255,.08);color:#ffffff}
+.nav a.active{background:#4f46e5;color:#ffffff;border-left-color:#818cf8}
+.nav a.active .n{color:rgba(255,255,255,.85)}
 </style>
 </head>
 <body>
@@ -1332,7 +1345,7 @@ footer{max-width:1240px;margin:0 auto;padding:10px 22px 60px;color:var(--ink-fai
 
 <div class="hero" id="top">
   <div class="glyph">&#8748;</div>
-  <p class="eyebrow">Chapitre 8 / 8 · Slides 262–286 · TP8 (sem. du 1er déc.)</p>
+  <p class="eyebrow">Chapitre 8 / 8 · Slides 262–286 · TP8</p>
   <h1>Intégrales <em>doubles</em> : mesurer un volume sous une surface</h1>
   <p class="lead">Dernier chapitre du cours — et le seul qui ne parle pas d'algèbre linéaire, mais d'<strong>analyse</strong>. On part de zéro : on ré-explique d'abord l'intégrale simple, puis on construit pas à pas l'intégrale double, le théorème de Fubini et le calcul sur des régions quelconques. Tout est vérifié, tout est démontré, tout est exercé.</p>
   <div class="meta">
@@ -1360,27 +1373,27 @@ footer{max-width:1240px;margin:0 auto;padding:10px 22px 60px;color:var(--ink-fai
 <figure class="fig">
 <svg viewBox="0 0 640 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Analogie entre intégrale simple (aire) et intégrale double (volume)">
   <!-- Left: 1D -->
-  <g font-family="Hanken Grotesk, sans-serif" font-size="13" fill="#1B2440">
-    <line x1="40" y1="200" x2="280" y2="200" stroke="#1B2440" stroke-width="1.6"/>
-    <line x1="55" y1="215" x2="55" y2="40" stroke="#1B2440" stroke-width="1.6"/>
-    <path d="M80,150 C120,90 200,110 250,80 L250,200 L80,200 Z" fill="#2547D0" opacity="0.18"/>
-    <path d="M80,150 C120,90 200,110 250,80" fill="none" stroke="#2547D0" stroke-width="2.5"/>
+  <g font-family="Hanken Grotesk, sans-serif" font-size="13" fill="#232946">
+    <line x1="40" y1="200" x2="280" y2="200" stroke="#232946" stroke-width="1.6"/>
+    <line x1="55" y1="215" x2="55" y2="40" stroke="#232946" stroke-width="1.6"/>
+    <path d="M80,150 C120,90 200,110 250,80 L250,200 L80,200 Z" fill="#4f46e5" opacity="0.18"/>
+    <path d="M80,150 C120,90 200,110 250,80" fill="none" stroke="#4f46e5" stroke-width="2.5"/>
     <text x="82" y="222">a</text><text x="245" y="222">b</text>
     <text x="120" y="238" font-style="italic">1 variable : une AIRE</text>
-    <text x="130" y="165" fill="#1B36A0" font-weight="700">&#8747; f(x) dx</text>
+    <text x="130" y="165" fill="#4338ca" font-weight="700">&#8747; f(x) dx</text>
   </g>
   <!-- Right: 2D -->
-  <g font-family="Hanken Grotesk, sans-serif" font-size="13" fill="#1B2440">
-    <line x1="380" y1="200" x2="600" y2="200" stroke="#1B2440" stroke-width="1.6"/>
-    <line x1="400" y1="215" x2="400" y2="40" stroke="#1B2440" stroke-width="1.6"/>
-    <line x1="400" y1="200" x2="352" y2="240" stroke="#1B2440" stroke-width="1.6"/>
-    <ellipse cx="480" cy="205" rx="65" ry="22" fill="#189D74" opacity="0.25" stroke="#189D74"/>
-    <text x="465" y="210" fill="#0E6B4E" font-weight="700">R</text>
-    <path d="M420,110 C460,80 520,120 560,90 L560,130 C520,160 460,120 420,150 Z" fill="#2547D0" opacity="0.22" stroke="#2547D0" stroke-width="2"/>
-    <line x1="430" y1="140" x2="430" y2="196" stroke="#2547D0" stroke-width="1.4" stroke-dasharray="4 3"/>
-    <line x1="545" y1="105" x2="545" y2="192" stroke="#2547D0" stroke-width="1.4" stroke-dasharray="4 3"/>
+  <g font-family="Hanken Grotesk, sans-serif" font-size="13" fill="#232946">
+    <line x1="380" y1="200" x2="600" y2="200" stroke="#232946" stroke-width="1.6"/>
+    <line x1="400" y1="215" x2="400" y2="40" stroke="#232946" stroke-width="1.6"/>
+    <line x1="400" y1="200" x2="352" y2="240" stroke="#232946" stroke-width="1.6"/>
+    <ellipse cx="480" cy="205" rx="65" ry="22" fill="#059669" opacity="0.25" stroke="#059669"/>
+    <text x="465" y="210" fill="#059669" font-weight="700">R</text>
+    <path d="M420,110 C460,80 520,120 560,90 L560,130 C520,160 460,120 420,150 Z" fill="#4f46e5" opacity="0.22" stroke="#4f46e5" stroke-width="2"/>
+    <line x1="430" y1="140" x2="430" y2="196" stroke="#4f46e5" stroke-width="1.4" stroke-dasharray="4 3"/>
+    <line x1="545" y1="105" x2="545" y2="192" stroke="#4f46e5" stroke-width="1.4" stroke-dasharray="4 3"/>
     <text x="428" y="238" font-style="italic">2 variables : un VOLUME</text>
-    <text x="452" y="70" fill="#1B36A0" font-weight="700">&#8748; f(x,y) dA</text>
+    <text x="452" y="70" fill="#4338ca" font-weight="700">&#8748; f(x,y) dA</text>
   </g>
 </svg>
 <figcaption>À gauche, l'intégrale simple mesure une aire. À droite, l'intégrale double mesure le volume compris entre la région \(R\) (au sol) et la surface \(z=f(x,y)\) (au-dessus).</figcaption>
@@ -1562,35 +1575,35 @@ où \(h_1\) et \(h_2\) sont des fonctions continues.</p>
 <div class="grid2">
 <figure class="fig">
 <svg viewBox="0 0 300 230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Région de type Rx : tranche verticale">
-  <line x1="30" y1="190" x2="280" y2="190" stroke="#1B2440" stroke-width="1.5"/>
-  <line x1="42" y1="205" x2="42" y2="25" stroke="#1B2440" stroke-width="1.5"/>
-  <path d="M75,150 C110,165 200,160 245,140 L245,140 C240,90 190,55 140,70 C100,82 80,110 75,150 Z" fill="#2547D0" opacity="0.15" stroke="#2547D0" stroke-width="2"/>
-  <line x1="75" y1="150" x2="75" y2="190" stroke="#8A93AC" stroke-dasharray="4 3"/>
-  <line x1="245" y1="140" x2="245" y2="190" stroke="#8A93AC" stroke-dasharray="4 3"/>
-  <line x1="160" y1="63" x2="160" y2="159" stroke="#E4573D" stroke-width="3"/>
-  <circle cx="160" cy="63" r="4" fill="#E4573D"/><circle cx="160" cy="159" r="4" fill="#E4573D"/>
-  <g font-family="Hanken Grotesk, sans-serif" font-size="12.5" fill="#1B2440">
+  <line x1="30" y1="190" x2="280" y2="190" stroke="#232946" stroke-width="1.5"/>
+  <line x1="42" y1="205" x2="42" y2="25" stroke="#232946" stroke-width="1.5"/>
+  <path d="M75,150 C110,165 200,160 245,140 L245,140 C240,90 190,55 140,70 C100,82 80,110 75,150 Z" fill="#4f46e5" opacity="0.15" stroke="#4f46e5" stroke-width="2"/>
+  <line x1="75" y1="150" x2="75" y2="190" stroke="#5a6079" stroke-dasharray="4 3"/>
+  <line x1="245" y1="140" x2="245" y2="190" stroke="#5a6079" stroke-dasharray="4 3"/>
+  <line x1="160" y1="63" x2="160" y2="159" stroke="#dc2626" stroke-width="3"/>
+  <circle cx="160" cy="63" r="4" fill="#dc2626"/><circle cx="160" cy="159" r="4" fill="#dc2626"/>
+  <g font-family="Hanken Grotesk, sans-serif" font-size="12.5" fill="#232946">
     <text x="70" y="207">a</text><text x="240" y="207">b</text>
-    <text x="156" y="207" fill="#E4573D" font-weight="700">x</text>
-    <text x="168" y="60" fill="#E4573D">y = g&#8322;(x) (plafond)</text>
-    <text x="168" y="172" fill="#E4573D">y = g&#8321;(x) (plancher)</text>
+    <text x="156" y="207" fill="#dc2626" font-weight="700">x</text>
+    <text x="168" y="60" fill="#dc2626">y = g&#8322;(x) (plafond)</text>
+    <text x="168" y="172" fill="#dc2626">y = g&#8321;(x) (plancher)</text>
   </g>
 </svg>
 <figcaption>Type \(R_x\) : \(x\) fixé entre \(a\) et \(b\), l'aiguille verticale va de \(g_1(x)\) à \(g_2(x)\).</figcaption>
 </figure>
 <figure class="fig">
 <svg viewBox="0 0 300 230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Région de type Ry : tranche horizontale">
-  <line x1="30" y1="190" x2="280" y2="190" stroke="#1B2440" stroke-width="1.5"/>
-  <line x1="42" y1="205" x2="42" y2="25" stroke="#1B2440" stroke-width="1.5"/>
-  <path d="M110,170 C90,140 95,90 125,55 C170,50 220,70 225,110 C228,145 200,170 165,172 Z" fill="#189D74" opacity="0.15" stroke="#189D74" stroke-width="2"/>
-  <line x1="42" y1="55" x2="30" y2="55" stroke="#8A93AC"/><line x1="42" y1="172" x2="30" y2="172" stroke="#8A93AC"/>
-  <line x1="98" y1="112" x2="226" y2="112" stroke="#E4573D" stroke-width="3"/>
-  <circle cx="98" cy="112" r="4" fill="#E4573D"/><circle cx="226" cy="112" r="4" fill="#E4573D"/>
-  <g font-family="Hanken Grotesk, sans-serif" font-size="12.5" fill="#1B2440">
+  <line x1="30" y1="190" x2="280" y2="190" stroke="#232946" stroke-width="1.5"/>
+  <line x1="42" y1="205" x2="42" y2="25" stroke="#232946" stroke-width="1.5"/>
+  <path d="M110,170 C90,140 95,90 125,55 C170,50 220,70 225,110 C228,145 200,170 165,172 Z" fill="#059669" opacity="0.15" stroke="#059669" stroke-width="2"/>
+  <line x1="42" y1="55" x2="30" y2="55" stroke="#5a6079"/><line x1="42" y1="172" x2="30" y2="172" stroke="#5a6079"/>
+  <line x1="98" y1="112" x2="226" y2="112" stroke="#dc2626" stroke-width="3"/>
+  <circle cx="98" cy="112" r="4" fill="#dc2626"/><circle cx="226" cy="112" r="4" fill="#dc2626"/>
+  <g font-family="Hanken Grotesk, sans-serif" font-size="12.5" fill="#232946">
     <text x="16" y="59">d</text><text x="16" y="176">c</text>
-    <text x="46" y="108" fill="#E4573D" font-weight="700">y</text>
-    <text x="60" y="132" fill="#E4573D">x = h&#8321;(y)</text>
-    <text x="204" y="100" fill="#E4573D">x = h&#8322;(y)</text>
+    <text x="46" y="108" fill="#dc2626" font-weight="700">y</text>
+    <text x="60" y="132" fill="#dc2626">x = h&#8321;(y)</text>
+    <text x="204" y="100" fill="#dc2626">x = h&#8322;(y)</text>
   </g>
 </svg>
 <figcaption>Type \(R_y\) : \(y\) fixé entre \(c\) et \(d\), l'aiguille horizontale va de \(h_1(y)\) à \(h_2(y)\).</figcaption>
@@ -1932,20 +1945,20 @@ $$\iint_R f(x,y)\,dA = \int_c^d\left(\int_{h_1(y)}^{h_2(y)} f(x,y)\,dx\right)dy$
 <p><strong>Étape 1 — dessin.</strong> Trois frontières : la diagonale montante \(y=x\), la diagonale descendante \(y=3-x\), et l'axe vertical \(x=0\). Intersections : \(y=x\) et \(y=3-x\) se coupent quand \(x = 3-x\), soit \(x=\tfrac32\) → point \(\big(\tfrac32,\tfrac32\big)\) ; avec \(x=0\) on obtient \((0,0)\) et \((0,3)\). \(R\) est le triangle de sommets \((0,0)\), \((0,3)\), \(\big(\tfrac32,\tfrac32\big)\).</p>
 <figure class="fig">
 <svg viewBox="0 0 340 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Triangle délimité par y=x, y=3-x, x=0">
-  <line x1="40" y1="210" x2="320" y2="210" stroke="#1B2440" stroke-width="1.5"/>
-  <line x1="60" y1="235" x2="60" y2="20" stroke="#1B2440" stroke-width="1.5"/>
-  <polygon points="60,210 60,30 150,120" fill="#2547D0" opacity="0.16"/>
-  <line x1="60" y1="210" x2="220" y2="50" stroke="#2547D0" stroke-width="2.2"/>
-  <line x1="60" y1="30" x2="240" y2="210" stroke="#189D74" stroke-width="2.2"/>
-  <line x1="105" y1="165" x2="105" y2="75" stroke="#E4573D" stroke-width="3"/>
-  <g font-family="Hanken Grotesk, sans-serif" font-size="12.5" fill="#1B2440">
-    <text x="196" y="45" fill="#1B36A0" font-weight="700">y = x</text>
-    <text x="216" y="200" fill="#0E6B4E" font-weight="700">y = 3 &#8722; x</text>
+  <line x1="40" y1="210" x2="320" y2="210" stroke="#232946" stroke-width="1.5"/>
+  <line x1="60" y1="235" x2="60" y2="20" stroke="#232946" stroke-width="1.5"/>
+  <polygon points="60,210 60,30 150,120" fill="#4f46e5" opacity="0.16"/>
+  <line x1="60" y1="210" x2="220" y2="50" stroke="#4f46e5" stroke-width="2.2"/>
+  <line x1="60" y1="30" x2="240" y2="210" stroke="#059669" stroke-width="2.2"/>
+  <line x1="105" y1="165" x2="105" y2="75" stroke="#dc2626" stroke-width="3"/>
+  <g font-family="Hanken Grotesk, sans-serif" font-size="12.5" fill="#232946">
+    <text x="196" y="45" fill="#4338ca" font-weight="700">y = x</text>
+    <text x="216" y="200" fill="#059669" font-weight="700">y = 3 &#8722; x</text>
     <text x="154" y="118">(3/2, 3/2)</text>
     <text x="44" y="225">0</text><text x="44" y="34">3</text>
-    <text x="100" y="228" fill="#E4573D" font-weight="700">x</text>
-    <text x="112" y="92" fill="#E4573D">plafond : 3 &#8722; x</text>
-    <text x="112" y="162" fill="#E4573D">plancher : x</text>
+    <text x="100" y="228" fill="#dc2626" font-weight="700">x</text>
+    <text x="112" y="92" fill="#dc2626">plafond : 3 &#8722; x</text>
+    <text x="112" y="162" fill="#dc2626">plancher : x</text>
   </g>
 </svg>
 <figcaption>L'aiguille verticale en position \(x\) : plancher \(y=x\), plafond \(y=3-x\).</figcaption>
@@ -2119,7 +2132,7 @@ Sans regarder plus haut : écris les 4 étapes de la définition de \(\iint_R f\
 <section class="sec" id="s8">
 <p class="eyebrow">Section 08 · Solutionnaire TP8 (Ch. 8)</p>
 <h2><span class="num">8</span>Solutionnaire complet : exercices 8.1 → 8.6</h2>
-<p class="sub">Selon la fiche officielle, le TP8 (semaine du 1er décembre) demande en <strong>préparation</strong> les exercices <b>8.2a, 8.3d, 8.3f</b> et traite <strong>au TP</strong> les exercices <b>8.4, 8.5, 8.6</b> — ces trois derniers étant marqués <b>type examen (!)</b>. Chaque solution suit la méthode en 5 étapes de la section 6. Tous les résultats ont été vérifiés par calcul formel indépendant.</p>
+<p class="sub">Selon la fiche officielle, le TP8 demande en <strong>préparation</strong> les exercices <b>8.2a, 8.3d, 8.3f</b> et traite <strong>au TP</strong> les exercices <b>8.4, 8.5, 8.6</b> — ces trois derniers étant marqués <b>type examen (!)</b>. Chaque solution suit la méthode en 5 étapes de la section 6. Tous les résultats ont été vérifiés par calcul formel indépendant.</p>
 
 <!-- ============ 8.1 ============ -->
 <div class="tp">
@@ -2239,18 +2252,18 @@ a) \(\displaystyle\int_0^1\int_0^{x^2} \frac{30y}{x^5+1}\,dy\,dx\) &nbsp;&nbsp; 
 
 <figure class="fig">
 <svg viewBox="0 0 320 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Domaine de 8.4a : sous la parabole y=x2 entre x=0 et x=1">
-  <line x1="30" y1="200" x2="300" y2="200" stroke="#1B2440" stroke-width="1.5"/>
-  <line x1="50" y1="225" x2="50" y2="20" stroke="#1B2440" stroke-width="1.5"/>
-  <path d="M50,200 Q150,200 250,40 L250,200 Z" fill="#2547D0" opacity="0.16"/>
-  <path d="M50,200 Q150,200 250,40" fill="none" stroke="#2547D0" stroke-width="2.4"/>
-  <line x1="250" y1="200" x2="250" y2="40" stroke="#8A93AC" stroke-dasharray="4 3"/>
-  <line x1="170" y1="200" x2="170" y2="143" stroke="#E4573D" stroke-width="3"/>
-  <g font-family="Hanken Grotesk, sans-serif" font-size="12.5" fill="#1B2440">
-    <text x="230" y="30" fill="#1B36A0" font-weight="700">y = x&#178;</text>
+  <line x1="30" y1="200" x2="300" y2="200" stroke="#232946" stroke-width="1.5"/>
+  <line x1="50" y1="225" x2="50" y2="20" stroke="#232946" stroke-width="1.5"/>
+  <path d="M50,200 Q150,200 250,40 L250,200 Z" fill="#4f46e5" opacity="0.16"/>
+  <path d="M50,200 Q150,200 250,40" fill="none" stroke="#4f46e5" stroke-width="2.4"/>
+  <line x1="250" y1="200" x2="250" y2="40" stroke="#5a6079" stroke-dasharray="4 3"/>
+  <line x1="170" y1="200" x2="170" y2="143" stroke="#dc2626" stroke-width="3"/>
+  <g font-family="Hanken Grotesk, sans-serif" font-size="12.5" fill="#232946">
+    <text x="230" y="30" fill="#4338ca" font-weight="700">y = x&#178;</text>
     <text x="245" y="217">1</text><text x="38" y="217">0</text>
     <text x="256" y="46">(1, 1)</text>
-    <text x="165" y="217" fill="#E4573D" font-weight="700">x</text>
-    <text x="178" y="165" fill="#E4573D">de y = 0 à y = x&#178;</text>
+    <text x="165" y="217" fill="#dc2626" font-weight="700">x</text>
+    <text x="178" y="165" fill="#dc2626">de y = 0 à y = x&#178;</text>
   </g>
 </svg>
 <figcaption>Domaine de 8.4a : à chaque \(x\in[0,1]\), l'aiguille verticale monte de \(y=0\) à \(y=x^2\).</figcaption>
@@ -2269,19 +2282,19 @@ $$\int_0^1 \frac{15x^4}{x^5+1}\,dx = 3\int_0^1 \frac{5x^4}{x^5+1}\,dx = 3\Big[\l
 
 <figure class="fig">
 <svg viewBox="0 0 340 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Domaine de 8.4b : entre x=y et x=2y pour y entre 1 et 2">
-  <line x1="25" y1="200" x2="325" y2="200" stroke="#1B2440" stroke-width="1.5"/>
-  <line x1="45" y1="220" x2="45" y2="20" stroke="#1B2440" stroke-width="1.5"/>
-  <polygon points="105,115 165,115 285,30 165,30" fill="#189D74" opacity="0.16" transform="translate(0,0)"/>
-  <line x1="45" y1="200" x2="176" y2="15" stroke="#2547D0" stroke-width="2.2"/>
-  <line x1="45" y1="200" x2="297" y2="23" stroke="#189D74" stroke-width="2.2"/>
-  <line x1="45" y1="115" x2="35" y2="115" stroke="#8A93AC"/><line x1="45" y1="30" x2="35" y2="30" stroke="#8A93AC"/>
-  <line x1="135" y1="72.5" x2="225" y2="72.5" stroke="#E4573D" stroke-width="3"/>
-  <g font-family="Hanken Grotesk, sans-serif" font-size="12.5" fill="#1B2440">
+  <line x1="25" y1="200" x2="325" y2="200" stroke="#232946" stroke-width="1.5"/>
+  <line x1="45" y1="220" x2="45" y2="20" stroke="#232946" stroke-width="1.5"/>
+  <polygon points="105,115 165,115 285,30 165,30" fill="#059669" opacity="0.16" transform="translate(0,0)"/>
+  <line x1="45" y1="200" x2="176" y2="15" stroke="#4f46e5" stroke-width="2.2"/>
+  <line x1="45" y1="200" x2="297" y2="23" stroke="#059669" stroke-width="2.2"/>
+  <line x1="45" y1="115" x2="35" y2="115" stroke="#5a6079"/><line x1="45" y1="30" x2="35" y2="30" stroke="#5a6079"/>
+  <line x1="135" y1="72.5" x2="225" y2="72.5" stroke="#dc2626" stroke-width="3"/>
+  <g font-family="Hanken Grotesk, sans-serif" font-size="12.5" fill="#232946">
     <text x="20" y="119">1</text><text x="20" y="34">2</text>
-    <text x="118" y="24" fill="#1B36A0" font-weight="700">x = y</text>
-    <text x="255" y="76" fill="#0E6B4E" font-weight="700">x = 2y</text>
-    <text x="50" y="69" fill="#E4573D" font-weight="700">y</text>
-    <text x="140" y="64" fill="#E4573D">de x = y à x = 2y</text>
+    <text x="118" y="24" fill="#4338ca" font-weight="700">x = y</text>
+    <text x="255" y="76" fill="#059669" font-weight="700">x = 2y</text>
+    <text x="50" y="69" fill="#dc2626" font-weight="700">y</text>
+    <text x="140" y="64" fill="#dc2626">de x = y à x = 2y</text>
   </g>
 </svg>
 <figcaption>Domaine de 8.4b : à chaque hauteur \(y\in[1,2]\), l'aiguille horizontale va du mur \(x=y\) au mur \(x=2y\).</figcaption>
@@ -2307,18 +2320,18 @@ Calculez \(\displaystyle\iint_R y^2\,dA\) où \(R\) est la région délimitée p
 
 <figure class="fig">
 <svg viewBox="0 0 300 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Domaine de 8.5 : triangle (0,0),(0,1),(1,1)">
-  <line x1="25" y1="205" x2="280" y2="205" stroke="#1B2440" stroke-width="1.5"/>
-  <line x1="60" y1="225" x2="60" y2="20" stroke="#1B2440" stroke-width="1.5"/>
-  <polygon points="60,205 60,35 230,35" fill="#2547D0" opacity="0.16"/>
-  <line x1="60" y1="205" x2="252" y2="13" stroke="#2547D0" stroke-width="2.2"/>
-  <line x1="30" y1="35" x2="275" y2="35" stroke="#189D74" stroke-width="2.2"/>
-  <line x1="60" y1="112" x2="153" y2="112" stroke="#E4573D" stroke-width="3"/>
-  <circle cx="60" cy="205" r="3.5" fill="#1B2440"/><circle cx="60" cy="35" r="3.5" fill="#1B2440"/><circle cx="230" cy="35" r="3.5" fill="#1B2440"/>
-  <g font-family="Hanken Grotesk, sans-serif" font-size="12.5" fill="#1B2440">
-    <text x="222" y="26" fill="#1B36A0" font-weight="700">y = x</text>
-    <text x="246" y="52" fill="#0E6B4E" font-weight="700">y = 1</text>
-    <text x="36" y="120" fill="#E4573D" font-weight="700">y</text>
-    <text x="90" y="104" fill="#E4573D">de x = 0 à x = y</text>
+  <line x1="25" y1="205" x2="280" y2="205" stroke="#232946" stroke-width="1.5"/>
+  <line x1="60" y1="225" x2="60" y2="20" stroke="#232946" stroke-width="1.5"/>
+  <polygon points="60,205 60,35 230,35" fill="#4f46e5" opacity="0.16"/>
+  <line x1="60" y1="205" x2="252" y2="13" stroke="#4f46e5" stroke-width="2.2"/>
+  <line x1="30" y1="35" x2="275" y2="35" stroke="#059669" stroke-width="2.2"/>
+  <line x1="60" y1="112" x2="153" y2="112" stroke="#dc2626" stroke-width="3"/>
+  <circle cx="60" cy="205" r="3.5" fill="#232946"/><circle cx="60" cy="35" r="3.5" fill="#232946"/><circle cx="230" cy="35" r="3.5" fill="#232946"/>
+  <g font-family="Hanken Grotesk, sans-serif" font-size="12.5" fill="#232946">
+    <text x="222" y="26" fill="#4338ca" font-weight="700">y = x</text>
+    <text x="246" y="52" fill="#059669" font-weight="700">y = 1</text>
+    <text x="36" y="120" fill="#dc2626" font-weight="700">y</text>
+    <text x="90" y="104" fill="#dc2626">de x = 0 à x = y</text>
     <text x="44" y="220">0</text><text x="40" y="40">1</text><text x="236" y="52">(1,1)</text>
   </g>
 </svg>
@@ -2351,21 +2364,21 @@ $$\int_1^2\int_{1/x}^{x} \frac{x}{y^3}\,dy\,dx$$</div>
 
 <figure class="fig">
 <svg viewBox="0 0 320 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Domaine de 8.6 : entre y=1/x et y=x pour x de 1 à 2">
-  <line x1="25" y1="220" x2="300" y2="220" stroke="#1B2440" stroke-width="1.5"/>
-  <line x1="45" y1="240" x2="45" y2="15" stroke="#1B2440" stroke-width="1.5"/>
-  <path d="M150,132 L255,44 L255,176 C210,168 178,152 150,132 Z" fill="#2547D0" opacity="0.16"/>
-  <path d="M97,44 Q120,103 150,132 Q196,159 255,176" fill="none" stroke="#189D74" stroke-width="2.2"/>
-  <line x1="66" y1="202" x2="276" y2="26" stroke="#2547D0" stroke-width="2.2"/>
-  <line x1="255" y1="220" x2="255" y2="40" stroke="#8A93AC" stroke-dasharray="4 3"/>
-  <line x1="202" y1="88" x2="202" y2="161" stroke="#E4573D" stroke-width="3"/>
-  <circle cx="150" cy="132" r="3.5" fill="#1B2440"/>
-  <g font-family="Hanken Grotesk, sans-serif" font-size="12.5" fill="#1B2440">
-    <text x="248" y="22" fill="#1B36A0" font-weight="700">y = x</text>
-    <text x="262" y="180" fill="#0E6B4E" font-weight="700">y = 1/x</text>
+  <line x1="25" y1="220" x2="300" y2="220" stroke="#232946" stroke-width="1.5"/>
+  <line x1="45" y1="240" x2="45" y2="15" stroke="#232946" stroke-width="1.5"/>
+  <path d="M150,132 L255,44 L255,176 C210,168 178,152 150,132 Z" fill="#4f46e5" opacity="0.16"/>
+  <path d="M97,44 Q120,103 150,132 Q196,159 255,176" fill="none" stroke="#059669" stroke-width="2.2"/>
+  <line x1="66" y1="202" x2="276" y2="26" stroke="#4f46e5" stroke-width="2.2"/>
+  <line x1="255" y1="220" x2="255" y2="40" stroke="#5a6079" stroke-dasharray="4 3"/>
+  <line x1="202" y1="88" x2="202" y2="161" stroke="#dc2626" stroke-width="3"/>
+  <circle cx="150" cy="132" r="3.5" fill="#232946"/>
+  <g font-family="Hanken Grotesk, sans-serif" font-size="12.5" fill="#232946">
+    <text x="248" y="22" fill="#4338ca" font-weight="700">y = x</text>
+    <text x="262" y="180" fill="#059669" font-weight="700">y = 1/x</text>
     <text x="126" y="150">(1,1)</text>
     <text x="260" y="52">(2,2)</text><text x="260" y="200">(2,&#189;)</text>
     <text x="143" y="235">1</text><text x="250" y="235">2</text>
-    <text x="197" y="235" fill="#E4573D" font-weight="700">x</text>
+    <text x="197" y="235" fill="#dc2626" font-weight="700">x</text>
   </g>
 </svg>
 <figcaption>Domaine de 8.6 : à chaque \(x\in[1,2]\), l'aiguille verticale monte de \(y=1/x\) à \(y=x\).</figcaption>
@@ -2535,8 +2548,8 @@ Array.prototype.forEach.call(document.querySelectorAll(".quiz"), function(quiz){
     { // triangle exo 8.5
       win:[-0.35,1.55,-0.35,1.45],
       shade:function(P){ return poly([P(0,0),P(1,1),P(0,1)]); },
-      curves:[ {f:function(x){return x;},x0:-0.2,x1:1.35,lab:"y = x",col:"#2547D0"},
-               {f:function(x){return 1;},x0:-0.25,x1:1.45,lab:"y = 1",col:"#189D74"} ],
+      curves:[ {f:function(x){return x;},x0:-0.2,x1:1.35,lab:"y = x",col:"#4f46e5"},
+               {f:function(x){return 1;},x0:-0.25,x1:1.45,lab:"y = 1",col:"#059669"} ],
       rx:{a:0,b:1,g1:function(x){return x;},g2:function(x){return 1;},
           txt:"R = { 0 \u2264 x \u2264 1  et  x \u2264 y \u2264 1 }   (plancher y=x, plafond y=1)"},
       ry:{c:0,d:1,h1:function(y){return 0;},h2:function(y){return y;},
@@ -2552,8 +2565,8 @@ Array.prototype.forEach.call(document.querySelectorAll(".quiz"), function(quiz){
         for(x=1;x>=-1.001;x-=0.05){ var q=P(x,1+x*x); ctx.lineTo(q[0],q[1]); }
         ctx.closePath();
       },
-      curves:[ {f:function(x){return 2*x*x;},x0:-1.15,x1:1.15,lab:"y = 2x\u00b2",col:"#189D74"},
-               {f:function(x){return 1+x*x;},x0:-1.2,x1:1.2,lab:"y = 1+x\u00b2",col:"#2547D0"} ],
+      curves:[ {f:function(x){return 2*x*x;},x0:-1.15,x1:1.15,lab:"y = 2x\u00b2",col:"#059669"},
+               {f:function(x){return 1+x*x;},x0:-1.2,x1:1.2,lab:"y = 1+x\u00b2",col:"#4f46e5"} ],
       rx:{a:-1,b:1,g1:function(x){return 2*x*x;},g2:function(x){return 1+x*x;},
           txt:"R = { \u22121 \u2264 x \u2264 1  et  2x\u00b2 \u2264 y \u2264 1+x\u00b2 }   \u2192 \u222c(x+2y) dA = 32/15"},
       ry:null,
@@ -2569,8 +2582,8 @@ Array.prototype.forEach.call(document.querySelectorAll(".quiz"), function(quiz){
         for(x=2;x>=1-0.001;x-=0.04){ var q=P(x,x); ctx.lineTo(q[0],q[1]); }
         ctx.closePath();
       },
-      curves:[ {f:function(x){return 1/x;},x0:0.55,x1:2.5,lab:"y = 1/x",col:"#189D74"},
-               {f:function(x){return x;},x0:-0.2,x1:2.35,lab:"y = x",col:"#2547D0"} ],
+      curves:[ {f:function(x){return 1/x;},x0:0.55,x1:2.5,lab:"y = 1/x",col:"#059669"},
+               {f:function(x){return x;},x0:-0.2,x1:2.35,lab:"y = x",col:"#4f46e5"} ],
       rx:{a:1,b:2,g1:function(x){return 1/x;},g2:function(x){return x;},
           txt:"R = { 1 \u2264 x \u2264 2  et  1/x \u2264 y \u2264 x }   \u2192 c'est l'int\u00e9grale de l'exo 8.6"},
       ry:null,
@@ -2594,17 +2607,17 @@ Array.prototype.forEach.call(document.querySelectorAll(".quiz"), function(quiz){
     ctx.clearRect(0,0,W,H);
     /* axes */
     var o = P(0,0);
-    ctx.strokeStyle="#1B2440"; ctx.lineWidth=1.4;
+    ctx.strokeStyle="#232946"; ctx.lineWidth=1.4;
     ctx.beginPath(); ctx.moveTo(10,o[1]); ctx.lineTo(W-10,o[1]); ctx.stroke();
     ctx.beginPath(); ctx.moveTo(o[0],H-10); ctx.lineTo(o[0],10); ctx.stroke();
     /* unit ticks */
-    ctx.fillStyle="#8A93AC"; ctx.font="11px 'Space Mono',monospace";
+    ctx.fillStyle="#5a6079"; ctx.font="11px 'JetBrains Mono',monospace";
     for(var t=Math.ceil(win[0]); t<=win[1]; t++){ if(t===0) continue; var pt=P(t,0); ctx.fillRect(pt[0]-0.5,o[1]-3,1,6); ctx.fillText(t,pt[0]-3,o[1]+16); }
     for(t=Math.ceil(win[2]); t<=win[3]; t++){ if(t===0) continue; var py=P(0,t); ctx.fillRect(o[0]-3,py[1]-0.5,6,1); ctx.fillText(t,o[0]-16,py[1]+4); }
     /* shading */
     R.shade(P);
-    ctx.fillStyle="rgba(37,71,208,0.14)"; ctx.fill();
-    ctx.strokeStyle="rgba(37,71,208,0.5)"; ctx.lineWidth=1; ctx.stroke();
+    ctx.fillStyle="rgba(79,70,229,0.14)"; ctx.fill();
+    ctx.strokeStyle="rgba(79,70,229,0.5)"; ctx.lineWidth=1; ctx.stroke();
     /* boundary curves */
     R.curves.forEach(function(c){
       ctx.strokeStyle=c.col; ctx.lineWidth=2.2; ctx.beginPath();
@@ -2621,7 +2634,7 @@ Array.prototype.forEach.call(document.querySelectorAll(".quiz"), function(quiz){
       if(R.rx){
         var x = R.rx.a + s*(R.rx.b - R.rx.a);
         var p1 = P(x, R.rx.g1(x)), p2 = P(x, R.rx.g2(x));
-        needle(p1,p2,"#E4573D");
+        needle(p1,p2,"#dc2626");
         out.innerHTML = "<b>Balayage vertical (type R\u2093)</b> \u2014 aiguille en x = " + x.toFixed(2) +
           " : de y = " + R.rx.g1(x).toFixed(2) + " \u00e0 y = " + R.rx.g2(x).toFixed(2) +
           "<br>" + R.rx.txt + "<br><span style='color:#8FB4A9'>" + R.name + "</span>";
@@ -2630,7 +2643,7 @@ Array.prototype.forEach.call(document.querySelectorAll(".quiz"), function(quiz){
       if(R.ry){
         var y = R.ry.c + s*(R.ry.d - R.ry.c);
         var q1 = P(R.ry.h1(y), y), q2 = P(R.ry.h2(y), y);
-        needle(q1,q2,"#E4573D");
+        needle(q1,q2,"#dc2626");
         out.innerHTML = "<b>Balayage horizontal (type R\u1d67)</b> \u2014 aiguille en y = " + y.toFixed(2) +
           " : de x = " + R.ry.h1(y).toFixed(2) + " \u00e0 x = " + R.ry.h2(y).toFixed(2) +
           "<br>" + R.ry.txt + "<br><span style='color:#8FB4A9'>" + R.name + "</span>";
@@ -2698,9 +2711,9 @@ Array.prototype.forEach.call(document.querySelectorAll(".quiz"), function(quiz){
       }
     }
     /* frame + axes labels */
-    ctx.strokeStyle="#1B2440"; ctx.lineWidth=1.4;
+    ctx.strokeStyle="#232946"; ctx.lineWidth=1.4;
     ctx.strokeRect(X(a),Y(d),X(b)-X(a),Y(c)-Y(d));
-    ctx.fillStyle="#4A5470"; ctx.font="12px 'Space Mono',monospace";
+    ctx.fillStyle="#5a6079"; ctx.font="12px 'JetBrains Mono',monospace";
     ctx.fillText("x=0",X(a)-8,H-12); ctx.fillText("x=2",X(b)-14,H-12);
     ctx.fillText("y=1",8,Y(c)+4); ctx.fillText("y=3",8,Y(d)+8);
     var err = Math.abs(S-EXACT);

@@ -8,24 +8,24 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
 :root{
-  --paper:#F3F1EA; --paper-2:#FBFAF5; --ink:#1A2724; --green:#15694F; --green-deep:#0F4A38;
-  --board:#15231E; --board-2:#1E322B; --chalk:#ECE8DC; --chalk-dim:#9FB0A8;
-  --amber:#E3A23A; --amber-soft:#F4E4BE; --amber-line:#C98A2A;
-  --rust:#BE5638; --rust-soft:#F2D9CF;
-  --sage:#586B63; --line:#DBD5C7; --line-soft:#E6E1D4;
+  --paper:#f7f7fb; --paper-2:#ffffff; --ink:#232946; --green:#4f46e5; --green-deep:#4338ca;
+  --board:#232946; --board-2:rgba(255,255,255,.08); --chalk:#e6e8f5; --chalk-dim:#a3aacd;
+  --amber:#818cf8; --amber-soft:#fffbeb; --amber-line:#b45309;
+  --rust:#dc2626; --rust-soft:#fef2f2;
+  --sage:#5a6079; --line:#e4e6f0; --line-soft:#e4e6f0;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{
   margin:0; background:var(--paper); color:var(--ink);
-  font-family:"Source Serif 4",Georgia,serif; font-size:18px; line-height:1.72;
+  font-family:"Hanken Grotesk",system-ui,sans-serif; font-size:18px; line-height:1.72;
   -webkit-font-smoothing:antialiased;
 }
-h1,h2,h3,h4,.disp{font-family:"Space Grotesk",system-ui,sans-serif; line-height:1.18; letter-spacing:-.01em}
+h1,h2,h3,h4,.disp{font-family:"Fraunces",Georgia,serif; line-height:1.18; letter-spacing:-.01em}
 .mono{font-family:"JetBrains Mono",ui-monospace,monospace}
 
 /* ---------- Layout ---------- */
@@ -34,13 +34,13 @@ h1,h2,h3,h4,.disp{font-family:"Space Grotesk",system-ui,sans-serif; line-height:
   width:288px; flex:0 0 288px; background:var(--board); color:var(--chalk);
   position:sticky; top:0; height:100vh; overflow-y:auto; padding:26px 20px 40px;
 }
-.brand{font-family:"Space Grotesk",sans-serif; font-weight:700; font-size:18px; color:#fff; line-height:1.25}
+.brand{font-family:"Fraunces",Georgia,serif; font-weight:700; font-size:18px; color:#fff; line-height:1.25}
 .brand .sub{display:block; font-family:"JetBrains Mono",monospace; font-weight:400; font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--amber); margin-top:8px}
 .nav{margin-top:26px; list-style:none; padding:0}
 .nav li{margin:2px 0}
 .nav button{
   width:100%; text-align:left; background:none; border:none; color:var(--chalk-dim);
-  font-family:"Space Grotesk",sans-serif; font-size:14.5px; font-weight:500; cursor:pointer;
+  font-family:"Hanken Grotesk",system-ui,sans-serif; font-size:14.5px; font-weight:500; cursor:pointer;
   padding:9px 12px 9px 40px; border-radius:9px; position:relative; line-height:1.3; transition:.15s;
 }
 .nav button .num{position:absolute; left:12px; top:9px; font-family:"JetBrains Mono",monospace; font-size:11px; color:var(--amber); opacity:.7}
@@ -49,7 +49,7 @@ h1,h2,h3,h4,.disp{font-family:"Space Grotesk",system-ui,sans-serif; line-height:
 .nav button.on .num{color:#fff; opacity:.9}
 .progress-wrap{margin-top:26px; padding:14px 12px; background:var(--board-2); border-radius:11px}
 .progress-wrap .lbl{font-family:"JetBrains Mono",monospace; font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--chalk-dim)}
-.bar{height:6px; background:#0c1714; border-radius:99px; margin-top:9px; overflow:hidden}
+.bar{height:6px; background:#1a1e3a; border-radius:99px; margin-top:9px; overflow:hidden}
 .bar i{display:block; height:100%; width:0; background:linear-gradient(90deg,var(--green),var(--amber)); border-radius:99px; transition:width .4s}
 
 .main{flex:1 1 auto; min-width:0}
@@ -63,20 +63,20 @@ h1,h2,h3,h4,.disp{font-family:"Space Grotesk",system-ui,sans-serif; line-height:
   align-items:center; gap:14px; padding:12px 16px}
 .topbar .brand{font-size:15px}
 .topbar .sub{display:none}
-.menubtn{background:var(--green); border:none; color:#fff; width:42px; height:38px; border-radius:9px; font-size:18px; cursor:pointer}
-.scrim{display:none; position:fixed; inset:0; background:rgba(10,16,14,.55); z-index:40}
+.menubtn{background:var(--green); border:none; color:#fff; width:42px; height:38px; border-radius:10px; font-size:18px; cursor:pointer}
+.scrim{display:none; position:fixed; inset:0; background:rgba(16,19,35,.55); z-index:40}
 
 /* ---------- Typography blocks ---------- */
 .eyebrow{font-family:"JetBrains Mono",monospace; font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--green); margin:0 0 14px}
 h1.title{font-size:clamp(30px,5vw,46px); font-weight:700; margin:0 0 10px}
-h2{font-size:28px; font-weight:700; margin:46px 0 14px; color:var(--green-deep)}
-h2 .h-num{font-family:"JetBrains Mono",monospace; font-size:15px; color:var(--amber); margin-right:10px; vertical-align:middle}
+h2{font-size:28px; font-weight:700; margin:46px 0 14px; color:var(--ink)}
+h2 .h-num{font-family:"JetBrains Mono",monospace; font-size:15px; color:#4f46e5; margin-right:10px; vertical-align:middle}
 h3{font-size:21px; font-weight:600; margin:34px 0 10px}
-h4{font-size:16.5px; font-weight:600; margin:22px 0 8px; color:var(--green-deep)}
+h4{font-size:16.5px; font-weight:600; margin:22px 0 8px; color:var(--ink)}
 p{margin:0 0 16px}
-.lead{font-size:20.5px; line-height:1.6; color:#2a3a35; margin-bottom:24px}
-strong{font-weight:600; color:var(--green-deep)}
-em{color:#3a4a45}
+.lead{font-size:20.5px; line-height:1.6; color:#3d4364; margin-bottom:24px}
+strong{font-weight:600; color:var(--ink)}
+em{color:#5a6079}
 ul,ol{margin:0 0 18px; padding-left:24px}
 li{margin:7px 0}
 a{color:var(--green)}
@@ -84,27 +84,27 @@ hr.soft{border:none; border-top:1px solid var(--line); margin:40px 0}
 .kw{font-weight:600; color:var(--rust); font-style:normal}
 
 /* ---------- Cards / callouts ---------- */
-.card{background:var(--paper-2); border:1px solid var(--line); border-radius:16px; padding:22px 24px; margin:24px 0}
-.callout{border-radius:16px; padding:20px 22px 20px 56px; margin:24px 0; position:relative; border:1px solid}
+.card{background:var(--paper-2); border:1px solid var(--line); border-radius:14px; padding:22px 24px; margin:24px 0; box-shadow:0 1px 3px rgba(35,41,70,.08)}
+.callout{border-radius:14px; padding:20px 22px 20px 56px; margin:24px 0; position:relative; border:1px solid}
 .callout .ico{position:absolute; left:18px; top:19px; width:26px; height:26px; border-radius:8px; display:grid; place-items:center; font-size:15px; font-weight:700}
-.callout .ctit{font-family:"Space Grotesk",sans-serif; font-weight:700; font-size:13px; letter-spacing:.04em; text-transform:uppercase; margin:0 0 6px}
+.callout .ctit{font-family:"Hanken Grotesk",system-ui,sans-serif; font-weight:700; font-size:13px; letter-spacing:.04em; text-transform:uppercase; margin:0 0 6px}
 .callout p:last-child,.callout ul:last-child{margin-bottom:0}
-.c-master{background:#EAF3EE; border-color:#BFD9CC}
-.c-master .ico{background:var(--green); color:#fff}
-.c-master .ctit{color:var(--green-deep)}
-.c-trap{background:#FBEAE3; border-color:#EBC6B7}
+.c-master{background:#ecfdf5; border-color:#a7f3d0}
+.c-master .ico{background:#059669; color:#fff}
+.c-master .ctit{color:#047857}
+.c-trap{background:#fef2f2; border-color:#fecaca}
 .c-trap .ico{background:var(--rust); color:#fff}
-.c-trap .ctit{color:#9a3f27}
-.c-idea{background:#FBF1DC; border-color:#EAD4A4}
-.c-idea .ico{background:var(--amber); color:#3a2c10}
-.c-idea .ctit{color:#8a6516}
-.c-note{background:#EDEEF0; border-color:#D3D6DB}
-.c-note .ico{background:#5b6b74; color:#fff}
-.c-note .ctit{color:#46535c}
+.c-trap .ctit{color:#b91c1c}
+.c-idea{background:#fffbeb; border-color:#fde68a}
+.c-idea .ico{background:#d97706; color:#fff}
+.c-idea .ctit{color:#b45309}
+.c-note{background:#f0f1f7; border-color:#d7daea}
+.c-note .ico{background:#5a6079; color:#fff}
+.c-note .ctit{color:#5a6079}
 
 /* ---------- Board (dark working panel) ---------- */
-.board{background:var(--board); color:var(--chalk); border-radius:18px; padding:24px 24px 26px; margin:26px 0;
-  box-shadow:0 14px 34px -22px rgba(12,24,20,.7)}
+.board{background:var(--board); color:var(--chalk); border-radius:14px; padding:24px 24px 26px; margin:26px 0;
+  box-shadow:0 14px 34px -22px rgba(35,41,70,.5)}
 .board .blabel{font-family:"JetBrains Mono",monospace; font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--amber); margin-bottom:14px}
 .board .katex{color:var(--chalk)}
 .board p{color:var(--chalk-dim)}
@@ -117,60 +117,60 @@ hr.soft{border:none; border-top:1px solid var(--line); margin:40px 0}
 .mtx::after{right:-2px; border-left:none; border-radius:0 5px 5px 0}
 .mtx .row{display:grid; grid-auto-flow:column}
 .mtx .cell{font-family:"JetBrains Mono",monospace; font-size:15px; min-width:42px; height:36px; display:grid; place-items:center; padding:0 6px}
-.mtx .cell.aug{border-left:2px dashed rgba(160,176,168,.5)}
-.mtx .cell.pivot{background:var(--amber); color:#241a06; border-radius:7px; font-weight:700}
+.mtx .cell.aug{border-left:2px dashed rgba(163,170,205,.5)}
+.mtx .cell.pivot{background:#d97706; color:#fff; border-radius:7px; font-weight:700}
 .mtx .cell.zero{color:var(--chalk-dim)}
 .board .mtx{color:var(--chalk)}
 .light .mtx{color:var(--green-deep)}
 .light .mtx .cell{color:var(--ink)}
-.light .mtx .cell.zero{color:#9aa7a0}
-.light .mtx .cell.aug{border-left-color:rgba(21,105,79,.35)}
+.light .mtx .cell.zero{color:#9aa1c4}
+.light .mtx .cell.aug{border-left-color:rgba(79,70,229,.35)}
 
 /* anatomy labels */
 .anat{display:flex; flex-wrap:wrap; gap:14px 26px; align-items:center; justify-content:center; margin:8px 0 4px}
 .tagcol{text-align:center}
 .tagcol .t{font-family:"JetBrains Mono",monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--amber); margin-top:8px}
-.dim{font-family:"JetBrains Mono",monospace; font-size:12px; color:var(--amber); background:rgba(227,162,58,.14); padding:2px 8px; border-radius:6px}
+.dim{font-family:"JetBrains Mono",monospace; font-size:12px; color:var(--amber); background:rgba(129,140,248,.14); padding:2px 8px; border-radius:6px}
 
 /* ---------- Step-through widget ---------- */
 .stepper{margin-top:8px}
 .step-stage{min-height:188px; display:grid; place-items:center; text-align:center}
-.step-cap{font-family:"Source Serif 4",serif; color:var(--chalk); font-size:16px; margin-top:16px; min-height:46px; display:flex; align-items:center; justify-content:center; gap:8px}
+.step-cap{font-family:"Hanken Grotesk",system-ui,sans-serif; color:var(--chalk); font-size:16px; margin-top:16px; min-height:46px; display:flex; align-items:center; justify-content:center; gap:8px}
 .step-cap .op{font-family:"JetBrains Mono",monospace; font-size:14px; color:var(--amber)}
 .step-ctrl{display:flex; align-items:center; justify-content:center; gap:14px; margin-top:14px}
-.sbtn{background:var(--board-2); color:var(--chalk); border:1px solid #2e463d; border-radius:10px; padding:9px 18px; font-family:"Space Grotesk",sans-serif; font-weight:500; font-size:14px; cursor:pointer; transition:.15s}
+.sbtn{background:var(--board-2); color:var(--chalk); border:1px solid rgba(255,255,255,.15); border-radius:10px; padding:9px 18px; font-family:"Hanken Grotesk",system-ui,sans-serif; font-weight:500; font-size:14px; cursor:pointer; transition:.15s}
 .sbtn:hover:not(:disabled){background:var(--green); border-color:var(--green)}
 .sbtn:disabled{opacity:.38; cursor:default}
 .dots{display:flex; gap:7px}
-.dots i{width:8px; height:8px; border-radius:99px; background:#33493f}
+.dots i{width:8px; height:8px; border-radius:99px; background:rgba(255,255,255,.18)}
 .dots i.on{background:var(--amber)}
 
 /* ---------- Interactive figure ---------- */
-.fig{background:var(--board); border-radius:18px; padding:20px; margin:26px 0}
+.fig{background:var(--board); border-radius:14px; padding:20px; margin:26px 0}
 .fig .blabel{font-family:"JetBrains Mono",monospace; font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--amber); margin-bottom:12px}
-.fig canvas{width:100%; height:auto; display:block; border-radius:12px; background:#101d18; touch-action:none}
+.fig canvas{width:100%; height:auto; display:block; border-radius:12px; background:#1b1f3c; touch-action:none}
 .controls{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px 18px; margin-top:16px}
 .ctrl{display:flex; flex-direction:column; gap:5px}
 .ctrl label{font-family:"JetBrains Mono",monospace; font-size:12px; color:var(--chalk-dim); display:flex; justify-content:space-between}
 .ctrl label b{color:var(--amber); font-weight:700}
-input[type=range]{-webkit-appearance:none; appearance:none; height:5px; border-radius:99px; background:#33493f; outline:none}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none; appearance:none; width:17px; height:17px; border-radius:50%; background:var(--amber); cursor:pointer; border:2px solid #1a2c25}
-input[type=range]::-moz-range-thumb{width:17px; height:17px; border-radius:50%; background:var(--amber); cursor:pointer; border:2px solid #1a2c25}
-.verdict{margin-top:14px; padding:12px 16px; border-radius:11px; font-family:"Space Grotesk",sans-serif; font-weight:500; font-size:15px; text-align:center}
+input[type=range]{-webkit-appearance:none; appearance:none; height:5px; border-radius:99px; background:rgba(255,255,255,.18); outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none; appearance:none; width:17px; height:17px; border-radius:50%; background:var(--amber); cursor:pointer; border:2px solid #232946}
+input[type=range]::-moz-range-thumb{width:17px; height:17px; border-radius:50%; background:var(--amber); cursor:pointer; border:2px solid #232946}
+.verdict{margin-top:14px; padding:12px 16px; border-radius:11px; font-family:"Hanken Grotesk",system-ui,sans-serif; font-weight:500; font-size:15px; text-align:center}
 .presets{display:flex; flex-wrap:wrap; gap:8px; margin-top:14px}
-.pbtn{background:var(--board-2); border:1px solid #2e463d; color:var(--chalk); border-radius:99px; padding:7px 15px; font-family:"Space Grotesk",sans-serif; font-size:13px; font-weight:500; cursor:pointer; transition:.15s}
+.pbtn{background:var(--board-2); border:1px solid rgba(255,255,255,.15); color:var(--chalk); border-radius:99px; padding:7px 15px; font-family:"Hanken Grotesk",system-ui,sans-serif; font-size:13px; font-weight:500; cursor:pointer; transition:.15s}
 .pbtn:hover{border-color:var(--amber); color:#fff}
 .legend-row{display:flex; flex-wrap:wrap; gap:16px; margin-top:14px; font-family:"JetBrains Mono",monospace; font-size:12px; color:var(--chalk-dim)}
 .legend-row span{display:inline-flex; align-items:center; gap:7px}
 .legend-row span::before{content:""; width:16px; height:3px; border-radius:2px; background:var(--c)}
 
 /* ---------- Exercises ---------- */
-.exo{border:1px solid var(--line); border-radius:16px; margin:20px 0; overflow:hidden; background:var(--paper-2)}
-.exo-head{display:flex; align-items:center; gap:12px; padding:16px 22px; background:#EDF1ED; border-bottom:1px solid var(--line-soft)}
+.exo{border:1px solid var(--line); border-radius:14px; margin:20px 0; overflow:hidden; background:var(--paper-2); box-shadow:0 1px 3px rgba(35,41,70,.08)}
+.exo-head{display:flex; align-items:center; gap:12px; padding:16px 22px; background:#eef2ff; border-bottom:1px solid var(--line-soft)}
 .exo-badge{font-family:"JetBrains Mono",monospace; font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:#fff; background:var(--green); padding:4px 10px; border-radius:7px}
-.exo-title{font-family:"Space Grotesk",sans-serif; font-weight:600; font-size:16px}
+.exo-title{font-family:"Fraunces",Georgia,serif; font-weight:600; font-size:16px}
 .exo-body{padding:18px 22px 6px}
-.reveal{margin:6px 22px 20px; background:none; border:1.5px solid var(--green); color:var(--green-deep); font-family:"Space Grotesk",sans-serif; font-weight:600; font-size:14px; padding:9px 18px; border-radius:10px; cursor:pointer; transition:.15s; display:inline-flex; align-items:center; gap:8px}
+.reveal{margin:6px 22px 20px; background:none; border:1.5px solid var(--green); color:var(--green-deep); font-family:"Hanken Grotesk",system-ui,sans-serif; font-weight:600; font-size:14px; padding:9px 18px; border-radius:10px; cursor:pointer; transition:.15s; display:inline-flex; align-items:center; gap:8px}
 .reveal:hover{background:var(--green); color:#fff}
 .reveal .chev{transition:transform .2s}
 .reveal.open .chev{transform:rotate(90deg)}
@@ -184,23 +184,23 @@ input[type=range]::-moz-range-thumb{width:17px; height:17px; border-radius:50%; 
 .check li{display:flex; gap:14px; align-items:flex-start; padding:13px 16px; border:1px solid var(--line); border-radius:12px; margin:8px 0; background:var(--paper-2); cursor:pointer; transition:.15s}
 .check li:hover{border-color:var(--green)}
 .check .box{flex:0 0 24px; width:24px; height:24px; border:2px solid var(--sage); border-radius:7px; display:grid; place-items:center; margin-top:1px; transition:.15s; font-weight:700; color:#fff; font-size:14px}
-.check li.done{background:#EAF3EE; border-color:var(--green)}
-.check li.done .box{background:var(--green); border-color:var(--green)}
+.check li.done{background:#ecfdf5; border-color:#059669}
+.check li.done .box{background:#059669; border-color:#059669}
 .check li.done .txt{color:var(--sage)}
 .check .txt{flex:1}
 
 /* ---------- footer nav ---------- */
 .pagenav{display:flex; justify-content:space-between; gap:14px; margin-top:54px; padding-top:26px; border-top:1px solid var(--line)}
 .pagenav button{flex:1; max-width:300px; text-align:left; background:var(--paper-2); border:1px solid var(--line); border-radius:14px; padding:14px 18px; cursor:pointer; transition:.15s; font-family:inherit}
-.pagenav button:hover:not(:disabled){border-color:var(--green); background:#fff}
+.pagenav button:hover:not(:disabled){border-color:var(--green); background:#eef2ff}
 .pagenav button:disabled{opacity:.35; cursor:default}
 .pagenav .dir{font-family:"JetBrains Mono",monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--green); display:block}
-.pagenav .tt{font-family:"Space Grotesk",sans-serif; font-weight:600; font-size:14.5px; color:var(--ink); display:block; margin-top:3px}
+.pagenav .tt{font-family:"Hanken Grotesk",system-ui,sans-serif; font-weight:600; font-size:14.5px; color:var(--ink); display:block; margin-top:3px}
 .pagenav .next{text-align:right}
 
 .tip-inline{font-size:15.5px; color:var(--sage); font-style:italic}
 .formula-row{display:flex; flex-wrap:wrap; gap:14px; align-items:center; justify-content:center; margin:18px 0}
-.pill{display:inline-block; font-family:"JetBrains Mono",monospace; font-size:13px; background:#EAF3EE; border:1px solid #C6DCD0; color:var(--green-deep); padding:4px 11px; border-radius:8px}
+.pill{display:inline-block; font-family:"JetBrains Mono",monospace; font-size:13px; background:#ecfdf5; border:1px solid #a7f3d0; color:#047857; padding:4px 11px; border-radius:8px}
 
 @media(max-width:880px){
   .sidebar{position:fixed; left:0; top:0; z-index:50; transform:translateX(-100%); transition:transform .28s; box-shadow:8px 0 30px -10px rgba(0,0,0,.4)}
@@ -270,7 +270,7 @@ input[type=range]::-moz-range-thumb{width:17px; height:17px; border-radius:50%; 
     <div class="callout c-idea">
       <div class="ico">★</div>
       <div class="ctit">Le code couleur des encadrés</div>
-      <p style="margin-bottom:0"><span class="kw" style="color:var(--green-deep)">Vert</span> = ce que tu dois <strong>absolument maîtriser</strong>. <span class="kw">Rouge</span> = un <strong>piège fréquent</strong> où presque tout le monde se trompe. <span style="color:#8a6516; font-weight:600">Ambre</span> = une <strong>intuition</strong> pour comprendre en profondeur. Gris = une note technique.</p>
+      <p style="margin-bottom:0"><span class="kw" style="color:#047857">Vert</span> = ce que tu dois <strong>absolument maîtriser</strong>. <span class="kw">Rouge</span> = un <strong>piège fréquent</strong> où presque tout le monde se trompe. <span style="color:#b45309; font-weight:600">Ambre</span> = une <strong>intuition</strong> pour comprendre en profondeur. Gris = une note technique.</p>
     </div>
 
     <div class="callout c-note">
@@ -293,11 +293,11 @@ input[type=range]::-moz-range-thumb{width:17px; height:17px; border-radius:50%; 
 
     <h2><span class="h-num">A</span>Une équation linéaire</h2>
     <p>Une équation est une <strong>balance</strong>&nbsp;: ce qu'il y a à gauche du signe « = » vaut exactement ce qu'il y a à droite. Les lettres (<span class="mono">x, y, z…</span>) sont les <strong>inconnues</strong>&nbsp;: des nombres qu'on ne connaît pas encore et qu'on cherche.</p>
-    <p>Le mot <span class="kw" style="color:var(--green-deep)">linéaire</span> a un sens très précis&nbsp;: chaque inconnue apparaît <strong>seule, à la puissance 1</strong>, multipliée par un nombre. Pas de carré, pas de produit entre inconnues, pas de racine.</p>
+    <p>Le mot <span class="kw" style="color:#047857">linéaire</span> a un sens très précis&nbsp;: chaque inconnue apparaît <strong>seule, à la puissance 1</strong>, multipliée par un nombre. Pas de carré, pas de produit entre inconnues, pas de racine.</p>
 
     <div class="card">
       <p style="margin-bottom:8px"><strong>Linéaire</strong> (autorisé)&nbsp;: <span class="pill">2x + y + z = 170</span> <span class="pill">3x − z = 120</span></p>
-      <p style="margin-bottom:0"><span class="kw">Pas linéaire</span> (interdit ici)&nbsp;: <span class="pill" style="background:#FBEAE3; border-color:#EBC6B7; color:#9a3f27">x² + y = 4</span> <span class="pill" style="background:#FBEAE3; border-color:#EBC6B7; color:#9a3f27">x·y = 6</span> <span class="pill" style="background:#FBEAE3; border-color:#EBC6B7; color:#9a3f27">√x = 2</span></p>
+      <p style="margin-bottom:0"><span class="kw">Pas linéaire</span> (interdit ici)&nbsp;: <span class="pill" style="background:#fef2f2; border-color:#fecaca; color:#b91c1c">x² + y = 4</span> <span class="pill" style="background:#fef2f2; border-color:#fecaca; color:#b91c1c">x·y = 6</span> <span class="pill" style="background:#fef2f2; border-color:#fecaca; color:#b91c1c">√x = 2</span></p>
     </div>
 
     <p>Les nombres devant les inconnues s'appellent les <strong>coefficients</strong>. Le nombre tout seul à droite s'appelle le <strong>second membre</strong>. Dans <span class="mono">2x + y + z = 170</span>, les coefficients sont 2, 1, 1 et le second membre est 170.</p>
@@ -525,7 +525,7 @@ input[type=range]::-moz-range-thumb{width:17px; height:17px; border-radius:50%; 
     <div class="callout c-idea">
       <div class="ico">★</div>
       <div class="ctit">Pourquoi « ambre » dans les schémas ?</div>
-      <p style="margin-bottom:0">Dans les visuels qui suivent, les cases <span style="background:var(--amber); color:#241a06; padding:1px 8px; border-radius:5px; font-family:'JetBrains Mono',monospace; font-weight:700">1</span> en ambre sont les <strong>pivots</strong> (comme le surligneur jaune du prof). Le but de toute la méthode est d'obtenir un pivot par ligne, avec des zéros partout autour.</p>
+      <p style="margin-bottom:0">Dans les visuels qui suivent, les cases <span style="background:#d97706; color:#fff; padding:1px 8px; border-radius:5px; font-family:'JetBrains Mono',monospace; font-weight:700">1</span> en ambre sont les <strong>pivots</strong> (comme le surligneur jaune du prof). Le but de toute la méthode est d'obtenir un pivot par ligne, avec des zéros partout autour.</p>
     </div>
 
     <h2><span class="h-num">›</span>Visualiser, étape par étape</h2>
@@ -612,7 +612,7 @@ input[type=range]::-moz-range-thumb{width:17px; height:17px; border-radius:50%; 
   <!-- ============ 4 · COMBIEN DE SOLUTIONS ============ -->
   <section class="page" id="p4">
     <p class="eyebrow">Section 04</p>
-    <h1 class="title">Combien de solutions&nbsp;?<br><span style="color:var(--amber)">0, 1 ou ∞</span></h1>
+    <h1 class="title">Combien de solutions&nbsp;?<br><span style="color:#4f46e5">0, 1 ou ∞</span></h1>
     <p class="lead">On sait résoudre. Maintenant, comprenons <em>pourquoi</em> un système tombe dans l'une des trois cases — et comment écrire proprement le cas « infinité de solutions », là où la majorité des étudiants perd des points.</p>
 
     <h2><span class="h-num">›</span>L'intuition géométrique (le déclic)</h2>
@@ -1043,7 +1043,7 @@ input[type=range]::-moz-range-thumb{width:17px; height:17px; border-radius:50%; 
 
     <h2><span class="h-num">›</span>Trois questions, trois traductions</h2>
     <div class="card">
-      <h4 style="margin-top:0">Portefeuille <span style="color:var(--green)">sans risque</span></h4>
+      <h4 style="margin-top:0">Portefeuille <span style="color:#059669">sans risque</span></h4>
       <p style="margin-bottom:0">Il rapporte <strong>la même chose quel que soit le scénario</strong>. Traduction&nbsp;: <span class="mono">R X</span> est un multiple de <span class="mono">(1, 1, …, 1)</span> (toutes ses composantes égales).</p>
     </div>
     <div class="card">
@@ -1064,12 +1064,12 @@ input[type=range]::-moz-range-thumb{width:17px; height:17px; border-radius:50%; 
     </div>
     <p>La dernière ligne dit <span class="mono">0 = a − 2b + c</span>. Donc un vecteur de rendements n'est atteignable <strong>que si</strong> <span class="mono">a − 2b + c = 0</span>. Cette petite équation contient toutes les réponses&nbsp;:</p>
     <div class="card light">
-      <p style="margin-top:0"><strong style="color:var(--green-deep)">✓ Un portefeuille sans risque existe.</strong> Prends <span class="mono">X = (½, ½)</span>. Alors&nbsp;:</p>
+      <p style="margin-top:0"><strong style="color:#047857">✓ Un portefeuille sans risque existe.</strong> Prends <span class="mono">X = (½, ½)</span>. Alors&nbsp;:</p>
       <div style="text-align:center">\[ RX=\begin{pmatrix} 1 & 3 \\ 2 & 2 \\ 3 & 1 \end{pmatrix}\begin{pmatrix} ½ \\ ½ \end{pmatrix}=\begin{pmatrix} 2 \\ 2 \\ 2 \end{pmatrix}=2\begin{pmatrix} 1 \\ 1 \\ 1 \end{pmatrix} \]</div>
       <p style="margin-bottom:0">Même rendement (2&nbsp;€ par euro) dans les 3 scénarios&nbsp;: <strong>aucun risque</strong>. Et au passage <span class="mono">(2,2,2)</span> vérifie bien <span class="mono">2 − 4 + 2 = 0</span>.</p>
     </div>
     <div class="card light">
-      <p style="margin-top:0"><strong style="color:#9a3f27">✗ Aucun état n'est assurable.</strong> Pour assurer le scénario 1, il faudrait <span class="mono">RX = (k, 0, 0)</span> avec <span class="mono">k &gt; 0</span>. Or la condition impose <span class="mono">a − 2b + c = k − 0 + 0 = k = 0</span>&nbsp;: contradiction. Idem pour les scénarios 2 et 3. <strong>Les rendements « purs » (0,…,k,…,0) ne sont jamais atteignables ici.</strong></p>
+      <p style="margin-top:0"><strong style="color:#b91c1c">✗ Aucun état n'est assurable.</strong> Pour assurer le scénario 1, il faudrait <span class="mono">RX = (k, 0, 0)</span> avec <span class="mono">k &gt; 0</span>. Or la condition impose <span class="mono">a − 2b + c = k − 0 + 0 = k = 0</span>&nbsp;: contradiction. Idem pour les scénarios 2 et 3. <strong>Les rendements « purs » (0,…,k,…,0) ne sont jamais atteignables ici.</strong></p>
     </div>
     <div class="card light">
       <p style="margin:0"><strong style="color:var(--sage)">✗ Aucun portefeuille n'est duplicable.</strong> Résoudre <span class="mono">R Z = O</span> (avec <span class="mono">Z = X − Y</span>)&nbsp;: les deux colonnes de <span class="mono">R</span> ne sont pas proportionnelles, donc le seul <span class="mono">Z</span> possible est <span class="mono">O</span>. Conclusion <span class="mono">X = Y</span>&nbsp;: deux portefeuilles distincts ne peuvent pas avoir les mêmes rendements.</p>
@@ -1157,7 +1157,7 @@ input[type=range]::-moz-range-thumb{width:17px; height:17px; border-radius:50%; 
     <div class="callout c-idea">
       <div class="ico">★</div>
       <div class="ctit">Comment réviser efficacement</div>
-      <p style="margin-bottom:0">Pour chaque case non cochée, retourne à la section concernée, relis l'encadré <span style="color:var(--green-deep); font-weight:600">« À maîtriser »</span>, puis refais l'exercice <strong>en cachant la correction</strong>. Refais-le jusqu'à ne plus avoir besoin de la solution. C'est cette répétition active — pas la relecture passive — qui ancre les méthodes.</p>
+      <p style="margin-bottom:0">Pour chaque case non cochée, retourne à la section concernée, relis l'encadré <span style="color:#047857; font-weight:600">« À maîtriser »</span>, puis refais l'exercice <strong>en cachant la correction</strong>. Refais-le jusqu'à ne plus avoir besoin de la solution. C'est cette répétition active — pas la relecture passive — qui ancre les méthodes.</p>
     </div>
     <div class="callout c-note">
       <div class="ico">i</div>
