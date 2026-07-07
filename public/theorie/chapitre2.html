@@ -1,0 +1,1524 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Comprendre les systèmes linéaires — Guide complet</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --paper:#F3F1EA; --paper-2:#FBFAF5; --ink:#1A2724; --green:#15694F; --green-deep:#0F4A38;
+  --board:#15231E; --board-2:#1E322B; --chalk:#ECE8DC; --chalk-dim:#9FB0A8;
+  --amber:#E3A23A; --amber-soft:#F4E4BE; --amber-line:#C98A2A;
+  --rust:#BE5638; --rust-soft:#F2D9CF;
+  --sage:#586B63; --line:#DBD5C7; --line-soft:#E6E1D4;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:"Source Serif 4",Georgia,serif; font-size:18px; line-height:1.72;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4,.disp{font-family:"Space Grotesk",system-ui,sans-serif; line-height:1.18; letter-spacing:-.01em}
+.mono{font-family:"JetBrains Mono",ui-monospace,monospace}
+
+/* ---------- Layout ---------- */
+.shell{display:flex; min-height:100vh}
+.sidebar{
+  width:288px; flex:0 0 288px; background:var(--board); color:var(--chalk);
+  position:sticky; top:0; height:100vh; overflow-y:auto; padding:26px 20px 40px;
+}
+.brand{font-family:"Space Grotesk",sans-serif; font-weight:700; font-size:18px; color:#fff; line-height:1.25}
+.brand .sub{display:block; font-family:"JetBrains Mono",monospace; font-weight:400; font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--amber); margin-top:8px}
+.nav{margin-top:26px; list-style:none; padding:0}
+.nav li{margin:2px 0}
+.nav button{
+  width:100%; text-align:left; background:none; border:none; color:var(--chalk-dim);
+  font-family:"Space Grotesk",sans-serif; font-size:14.5px; font-weight:500; cursor:pointer;
+  padding:9px 12px 9px 40px; border-radius:9px; position:relative; line-height:1.3; transition:.15s;
+}
+.nav button .num{position:absolute; left:12px; top:9px; font-family:"JetBrains Mono",monospace; font-size:11px; color:var(--amber); opacity:.7}
+.nav button:hover{background:var(--board-2); color:var(--chalk)}
+.nav button.on{background:var(--green); color:#fff}
+.nav button.on .num{color:#fff; opacity:.9}
+.progress-wrap{margin-top:26px; padding:14px 12px; background:var(--board-2); border-radius:11px}
+.progress-wrap .lbl{font-family:"JetBrains Mono",monospace; font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--chalk-dim)}
+.bar{height:6px; background:#0c1714; border-radius:99px; margin-top:9px; overflow:hidden}
+.bar i{display:block; height:100%; width:0; background:linear-gradient(90deg,var(--green),var(--amber)); border-radius:99px; transition:width .4s}
+
+.main{flex:1 1 auto; min-width:0}
+.content{max-width:820px; margin:0 auto; padding:54px 30px 90px}
+.page{display:none; animation:fade .35s ease}
+.page.active{display:block}
+@keyframes fade{from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:none}}
+
+/* ---------- Topbar (mobile) ---------- */
+.topbar{display:none; position:sticky; top:0; z-index:30; background:var(--board); color:#fff;
+  align-items:center; gap:14px; padding:12px 16px}
+.topbar .brand{font-size:15px}
+.topbar .sub{display:none}
+.menubtn{background:var(--green); border:none; color:#fff; width:42px; height:38px; border-radius:9px; font-size:18px; cursor:pointer}
+.scrim{display:none; position:fixed; inset:0; background:rgba(10,16,14,.55); z-index:40}
+
+/* ---------- Typography blocks ---------- */
+.eyebrow{font-family:"JetBrains Mono",monospace; font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--green); margin:0 0 14px}
+h1.title{font-size:clamp(30px,5vw,46px); font-weight:700; margin:0 0 10px}
+h2{font-size:28px; font-weight:700; margin:46px 0 14px; color:var(--green-deep)}
+h2 .h-num{font-family:"JetBrains Mono",monospace; font-size:15px; color:var(--amber); margin-right:10px; vertical-align:middle}
+h3{font-size:21px; font-weight:600; margin:34px 0 10px}
+h4{font-size:16.5px; font-weight:600; margin:22px 0 8px; color:var(--green-deep)}
+p{margin:0 0 16px}
+.lead{font-size:20.5px; line-height:1.6; color:#2a3a35; margin-bottom:24px}
+strong{font-weight:600; color:var(--green-deep)}
+em{color:#3a4a45}
+ul,ol{margin:0 0 18px; padding-left:24px}
+li{margin:7px 0}
+a{color:var(--green)}
+hr.soft{border:none; border-top:1px solid var(--line); margin:40px 0}
+.kw{font-weight:600; color:var(--rust); font-style:normal}
+
+/* ---------- Cards / callouts ---------- */
+.card{background:var(--paper-2); border:1px solid var(--line); border-radius:16px; padding:22px 24px; margin:24px 0}
+.callout{border-radius:16px; padding:20px 22px 20px 56px; margin:24px 0; position:relative; border:1px solid}
+.callout .ico{position:absolute; left:18px; top:19px; width:26px; height:26px; border-radius:8px; display:grid; place-items:center; font-size:15px; font-weight:700}
+.callout .ctit{font-family:"Space Grotesk",sans-serif; font-weight:700; font-size:13px; letter-spacing:.04em; text-transform:uppercase; margin:0 0 6px}
+.callout p:last-child,.callout ul:last-child{margin-bottom:0}
+.c-master{background:#EAF3EE; border-color:#BFD9CC}
+.c-master .ico{background:var(--green); color:#fff}
+.c-master .ctit{color:var(--green-deep)}
+.c-trap{background:#FBEAE3; border-color:#EBC6B7}
+.c-trap .ico{background:var(--rust); color:#fff}
+.c-trap .ctit{color:#9a3f27}
+.c-idea{background:#FBF1DC; border-color:#EAD4A4}
+.c-idea .ico{background:var(--amber); color:#3a2c10}
+.c-idea .ctit{color:#8a6516}
+.c-note{background:#EDEEF0; border-color:#D3D6DB}
+.c-note .ico{background:#5b6b74; color:#fff}
+.c-note .ctit{color:#46535c}
+
+/* ---------- Board (dark working panel) ---------- */
+.board{background:var(--board); color:var(--chalk); border-radius:18px; padding:24px 24px 26px; margin:26px 0;
+  box-shadow:0 14px 34px -22px rgba(12,24,20,.7)}
+.board .blabel{font-family:"JetBrains Mono",monospace; font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--amber); margin-bottom:14px}
+.board .katex{color:var(--chalk)}
+.board p{color:var(--chalk-dim)}
+.board strong{color:#fff}
+
+/* ---------- Matrix component (custom, highlightable) ---------- */
+.mtx{display:inline-grid; gap:0; padding:6px 4px; position:relative; vertical-align:middle; margin:4px 2px}
+.mtx::before,.mtx::after{content:""; position:absolute; top:0; bottom:0; width:8px; border:2px solid currentColor}
+.mtx::before{left:-2px; border-right:none; border-radius:5px 0 0 5px}
+.mtx::after{right:-2px; border-left:none; border-radius:0 5px 5px 0}
+.mtx .row{display:grid; grid-auto-flow:column}
+.mtx .cell{font-family:"JetBrains Mono",monospace; font-size:15px; min-width:42px; height:36px; display:grid; place-items:center; padding:0 6px}
+.mtx .cell.aug{border-left:2px dashed rgba(160,176,168,.5)}
+.mtx .cell.pivot{background:var(--amber); color:#241a06; border-radius:7px; font-weight:700}
+.mtx .cell.zero{color:var(--chalk-dim)}
+.board .mtx{color:var(--chalk)}
+.light .mtx{color:var(--green-deep)}
+.light .mtx .cell{color:var(--ink)}
+.light .mtx .cell.zero{color:#9aa7a0}
+.light .mtx .cell.aug{border-left-color:rgba(21,105,79,.35)}
+
+/* anatomy labels */
+.anat{display:flex; flex-wrap:wrap; gap:14px 26px; align-items:center; justify-content:center; margin:8px 0 4px}
+.tagcol{text-align:center}
+.tagcol .t{font-family:"JetBrains Mono",monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--amber); margin-top:8px}
+.dim{font-family:"JetBrains Mono",monospace; font-size:12px; color:var(--amber); background:rgba(227,162,58,.14); padding:2px 8px; border-radius:6px}
+
+/* ---------- Step-through widget ---------- */
+.stepper{margin-top:8px}
+.step-stage{min-height:188px; display:grid; place-items:center; text-align:center}
+.step-cap{font-family:"Source Serif 4",serif; color:var(--chalk); font-size:16px; margin-top:16px; min-height:46px; display:flex; align-items:center; justify-content:center; gap:8px}
+.step-cap .op{font-family:"JetBrains Mono",monospace; font-size:14px; color:var(--amber)}
+.step-ctrl{display:flex; align-items:center; justify-content:center; gap:14px; margin-top:14px}
+.sbtn{background:var(--board-2); color:var(--chalk); border:1px solid #2e463d; border-radius:10px; padding:9px 18px; font-family:"Space Grotesk",sans-serif; font-weight:500; font-size:14px; cursor:pointer; transition:.15s}
+.sbtn:hover:not(:disabled){background:var(--green); border-color:var(--green)}
+.sbtn:disabled{opacity:.38; cursor:default}
+.dots{display:flex; gap:7px}
+.dots i{width:8px; height:8px; border-radius:99px; background:#33493f}
+.dots i.on{background:var(--amber)}
+
+/* ---------- Interactive figure ---------- */
+.fig{background:var(--board); border-radius:18px; padding:20px; margin:26px 0}
+.fig .blabel{font-family:"JetBrains Mono",monospace; font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--amber); margin-bottom:12px}
+.fig canvas{width:100%; height:auto; display:block; border-radius:12px; background:#101d18; touch-action:none}
+.controls{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px 18px; margin-top:16px}
+.ctrl{display:flex; flex-direction:column; gap:5px}
+.ctrl label{font-family:"JetBrains Mono",monospace; font-size:12px; color:var(--chalk-dim); display:flex; justify-content:space-between}
+.ctrl label b{color:var(--amber); font-weight:700}
+input[type=range]{-webkit-appearance:none; appearance:none; height:5px; border-radius:99px; background:#33493f; outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none; appearance:none; width:17px; height:17px; border-radius:50%; background:var(--amber); cursor:pointer; border:2px solid #1a2c25}
+input[type=range]::-moz-range-thumb{width:17px; height:17px; border-radius:50%; background:var(--amber); cursor:pointer; border:2px solid #1a2c25}
+.verdict{margin-top:14px; padding:12px 16px; border-radius:11px; font-family:"Space Grotesk",sans-serif; font-weight:500; font-size:15px; text-align:center}
+.presets{display:flex; flex-wrap:wrap; gap:8px; margin-top:14px}
+.pbtn{background:var(--board-2); border:1px solid #2e463d; color:var(--chalk); border-radius:99px; padding:7px 15px; font-family:"Space Grotesk",sans-serif; font-size:13px; font-weight:500; cursor:pointer; transition:.15s}
+.pbtn:hover{border-color:var(--amber); color:#fff}
+.legend-row{display:flex; flex-wrap:wrap; gap:16px; margin-top:14px; font-family:"JetBrains Mono",monospace; font-size:12px; color:var(--chalk-dim)}
+.legend-row span{display:inline-flex; align-items:center; gap:7px}
+.legend-row span::before{content:""; width:16px; height:3px; border-radius:2px; background:var(--c)}
+
+/* ---------- Exercises ---------- */
+.exo{border:1px solid var(--line); border-radius:16px; margin:20px 0; overflow:hidden; background:var(--paper-2)}
+.exo-head{display:flex; align-items:center; gap:12px; padding:16px 22px; background:#EDF1ED; border-bottom:1px solid var(--line-soft)}
+.exo-badge{font-family:"JetBrains Mono",monospace; font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:#fff; background:var(--green); padding:4px 10px; border-radius:7px}
+.exo-title{font-family:"Space Grotesk",sans-serif; font-weight:600; font-size:16px}
+.exo-body{padding:18px 22px 6px}
+.reveal{margin:6px 22px 20px; background:none; border:1.5px solid var(--green); color:var(--green-deep); font-family:"Space Grotesk",sans-serif; font-weight:600; font-size:14px; padding:9px 18px; border-radius:10px; cursor:pointer; transition:.15s; display:inline-flex; align-items:center; gap:8px}
+.reveal:hover{background:var(--green); color:#fff}
+.reveal .chev{transition:transform .2s}
+.reveal.open .chev{transform:rotate(90deg)}
+.solution{display:none; margin:0 22px 22px; padding:18px 20px; background:#fff; border:1px dashed var(--green); border-left:4px solid var(--green); border-radius:0 12px 12px 0}
+.solution.show{display:block; animation:fade .3s}
+.solution .sol-lbl{font-family:"JetBrains Mono",monospace; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--green); margin-bottom:10px}
+.solution .light .mtx{margin:6px 8px}
+
+/* ---------- Checklist ---------- */
+.check{list-style:none; padding:0; margin:20px 0}
+.check li{display:flex; gap:14px; align-items:flex-start; padding:13px 16px; border:1px solid var(--line); border-radius:12px; margin:8px 0; background:var(--paper-2); cursor:pointer; transition:.15s}
+.check li:hover{border-color:var(--green)}
+.check .box{flex:0 0 24px; width:24px; height:24px; border:2px solid var(--sage); border-radius:7px; display:grid; place-items:center; margin-top:1px; transition:.15s; font-weight:700; color:#fff; font-size:14px}
+.check li.done{background:#EAF3EE; border-color:var(--green)}
+.check li.done .box{background:var(--green); border-color:var(--green)}
+.check li.done .txt{color:var(--sage)}
+.check .txt{flex:1}
+
+/* ---------- footer nav ---------- */
+.pagenav{display:flex; justify-content:space-between; gap:14px; margin-top:54px; padding-top:26px; border-top:1px solid var(--line)}
+.pagenav button{flex:1; max-width:300px; text-align:left; background:var(--paper-2); border:1px solid var(--line); border-radius:14px; padding:14px 18px; cursor:pointer; transition:.15s; font-family:inherit}
+.pagenav button:hover:not(:disabled){border-color:var(--green); background:#fff}
+.pagenav button:disabled{opacity:.35; cursor:default}
+.pagenav .dir{font-family:"JetBrains Mono",monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--green); display:block}
+.pagenav .tt{font-family:"Space Grotesk",sans-serif; font-weight:600; font-size:14.5px; color:var(--ink); display:block; margin-top:3px}
+.pagenav .next{text-align:right}
+
+.tip-inline{font-size:15.5px; color:var(--sage); font-style:italic}
+.formula-row{display:flex; flex-wrap:wrap; gap:14px; align-items:center; justify-content:center; margin:18px 0}
+.pill{display:inline-block; font-family:"JetBrains Mono",monospace; font-size:13px; background:#EAF3EE; border:1px solid #C6DCD0; color:var(--green-deep); padding:4px 11px; border-radius:8px}
+
+@media(max-width:880px){
+  .sidebar{position:fixed; left:0; top:0; z-index:50; transform:translateX(-100%); transition:transform .28s; box-shadow:8px 0 30px -10px rgba(0,0,0,.4)}
+  .sidebar.open{transform:none}
+  .topbar{display:flex}
+  .content{padding:30px 20px 70px}
+  body{font-size:17px}
+  .scrim.show{display:block}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.001s !important; transition-duration:.001s !important; scroll-behavior:auto}
+}
+:focus-visible{outline:3px solid var(--amber); outline-offset:2px; border-radius:4px}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <button class="menubtn" id="menubtn" aria-label="Ouvrir le menu">&#9776;</button>
+  <span class="brand">Systèmes linéaires</span>
+</div>
+<div class="scrim" id="scrim"></div>
+
+<div class="shell">
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">Les systèmes linéaires<span class="sub">Guide complet · de zéro</span></div>
+    <ul class="nav" id="nav">
+      <li><button data-go="0" class="on"><span class="num">00</span>Bienvenue</button></li>
+      <li><button data-go="1"><span class="num">01</span>Les fondations</button></li>
+      <li><button data-go="2"><span class="num">02</span>Définitions &amp; vocabulaire</button></li>
+      <li><button data-go="3"><span class="num">03</span>La méthode de Gauss-Jordan</button></li>
+      <li><button data-go="4"><span class="num">04</span>Combien de solutions&nbsp;?</button></li>
+      <li><button data-go="5"><span class="num">05</span>Matrices inversibles</button></li>
+      <li><button data-go="6"><span class="num">06</span>Vecteurs &amp; comb. linéaires</button></li>
+      <li><button data-go="7"><span class="num">07</span>Application&nbsp;: portefeuilles</button></li>
+      <li><button data-go="8"><span class="num">08</span>Synthèse &amp; auto-éval</button></li>
+    </ul>
+    <div class="progress-wrap">
+      <div class="lbl">Progression</div>
+      <div class="bar"><i id="barfill"></i></div>
+    </div>
+  </aside>
+
+  <div class="main">
+  <div class="content">
+
+  <!-- ============ 0 · BIENVENUE ============ -->
+  <section class="page active" id="p0">
+    <p class="eyebrow">Mathématiques pour l'économie et la gestion · Chapitre 2</p>
+    <h1 class="title">Les systèmes linéaires,<br>expliqués vraiment de zéro</h1>
+    <p class="lead">Tu n'as besoin d'aucune connaissance préalable. On part de « c'est quoi une équation&nbsp;? » et on arrive à résoudre n'importe quel système, inverser une matrice, et comprendre l'application financière. Chaque idée est expliquée, illustrée, puis testée par un exercice corrigé.</p>
+
+    <div class="card">
+      <h4 style="margin-top:0">Pourquoi ce chapitre est important</h4>
+      <p style="margin-bottom:0">Un <strong>système linéaire</strong>, c'est plusieurs conditions chiffrées qui doivent être vraies <em>en même temps</em>, et on cherche les valeurs qui satisfont tout. C'est l'outil de base de presque toute l'économie quantitative&nbsp;: équilibres de marché, allocations de budget, et surtout l'<strong>économétrie</strong> (la régression, le cœur de l'éco appliquée, n'est rien d'autre qu'un grand système écrit avec des matrices). Maîtriser ce chapitre, c'est poser les fondations de tout le reste.</p>
+    </div>
+
+    <h3>Comment utiliser ce guide</h3>
+    <ul>
+      <li>Avance <strong>section par section</strong> avec le menu de gauche (ou les boutons en bas de page). L'ordre est pensé pour construire ta compréhension brique par brique.</li>
+      <li>Repère les <strong>encadrés colorés</strong>&nbsp;: ils condensent l'essentiel.</li>
+      <li>Les <strong>visuels interactifs</strong> (déplace les curseurs&nbsp;!) sont là pour rendre les idées concrètes, pas juste pour décorer.</li>
+      <li>Fais chaque <strong>exercice</strong> en cachant d'abord la solution. C'est en bloquant qu'on repère ses points faibles.</li>
+    </ul>
+
+    <div class="callout c-idea">
+      <div class="ico">★</div>
+      <div class="ctit">Le code couleur des encadrés</div>
+      <p style="margin-bottom:0"><span class="kw" style="color:var(--green-deep)">Vert</span> = ce que tu dois <strong>absolument maîtriser</strong>. <span class="kw">Rouge</span> = un <strong>piège fréquent</strong> où presque tout le monde se trompe. <span style="color:#8a6516; font-weight:600">Ambre</span> = une <strong>intuition</strong> pour comprendre en profondeur. Gris = une note technique.</p>
+    </div>
+
+    <div class="callout c-note">
+      <div class="ico">i</div>
+      <div class="ctit">Repérer tes faiblesses</div>
+      <p style="margin-bottom:0">Je ne peux pas deviner ce qui te bloque sans te voir essayer. La meilleure méthode&nbsp;: parcours le guide, fais les exercices solution cachée, puis remplis la <strong>checklist finale</strong> (section 08). Les cases que tu n'arrives pas à cocher = tes points faibles. Dis-moi lesquelles et on les travaillera ensemble en profondeur.</p>
+    </div>
+
+    <div class="pagenav">
+      <button disabled><span class="dir">Début</span><span class="tt">—</span></button>
+      <button class="next" data-go="1"><span class="dir">Commencer →</span><span class="tt">01 · Les fondations</span></button>
+    </div>
+  </section>
+
+  <!-- ============ 1 · LES FONDATIONS ============ -->
+  <section class="page" id="p1">
+    <p class="eyebrow">Section 01 · à lire en premier</p>
+    <h1 class="title">Les fondations</h1>
+    <p class="lead">Quatre briques minuscules suffisent pour tout comprendre&nbsp;: une équation linéaire, une matrice, un vecteur, et la multiplication <span class="mono">A·X</span>. Si tu as déjà ces notions, lis-les quand même rapidement&nbsp;: c'est le vocabulaire de tout le chapitre.</p>
+
+    <h2><span class="h-num">A</span>Une équation linéaire</h2>
+    <p>Une équation est une <strong>balance</strong>&nbsp;: ce qu'il y a à gauche du signe « = » vaut exactement ce qu'il y a à droite. Les lettres (<span class="mono">x, y, z…</span>) sont les <strong>inconnues</strong>&nbsp;: des nombres qu'on ne connaît pas encore et qu'on cherche.</p>
+    <p>Le mot <span class="kw" style="color:var(--green-deep)">linéaire</span> a un sens très précis&nbsp;: chaque inconnue apparaît <strong>seule, à la puissance 1</strong>, multipliée par un nombre. Pas de carré, pas de produit entre inconnues, pas de racine.</p>
+
+    <div class="card">
+      <p style="margin-bottom:8px"><strong>Linéaire</strong> (autorisé)&nbsp;: <span class="pill">2x + y + z = 170</span> <span class="pill">3x − z = 120</span></p>
+      <p style="margin-bottom:0"><span class="kw">Pas linéaire</span> (interdit ici)&nbsp;: <span class="pill" style="background:#FBEAE3; border-color:#EBC6B7; color:#9a3f27">x² + y = 4</span> <span class="pill" style="background:#FBEAE3; border-color:#EBC6B7; color:#9a3f27">x·y = 6</span> <span class="pill" style="background:#FBEAE3; border-color:#EBC6B7; color:#9a3f27">√x = 2</span></p>
+    </div>
+
+    <p>Les nombres devant les inconnues s'appellent les <strong>coefficients</strong>. Le nombre tout seul à droite s'appelle le <strong>second membre</strong>. Dans <span class="mono">2x + y + z = 170</span>, les coefficients sont 2, 1, 1 et le second membre est 170.</p>
+
+    <h2><span class="h-num">B</span>Un système</h2>
+    <p>Un <strong>système</strong>, c'est plusieurs équations regroupées par une grande accolade <span class="mono">{</span>. La règle d'or&nbsp;:</p>
+    <div class="callout c-master">
+      <div class="ico">✓</div>
+      <div class="ctit">À retenir</div>
+      <p style="margin-bottom:0">Résoudre un système, c'est trouver les valeurs des inconnues qui rendent <strong>toutes les équations vraies à la fois</strong> — pas une par une, mais <em>simultanément</em>.</p>
+    </div>
+    <p>Exemple concret tiré du cours&nbsp;: un industriel produit 3 articles A, B, C avec 3 machines. On connaît la consommation totale d'électricité de chaque machine, on cherche combien d'articles ont été fabriqués. Cela donne&nbsp;:</p>
+    <div class="board">
+      <div class="blabel">Le système des machines</div>
+      <div style="text-align:center">
+        \[ \begin{cases} 2x + y + z = 170 \\ 3x \phantom{+ y} + z = 120 \\ \phantom{2x +} 2y + z = 200 \end{cases} \]
+      </div>
+      <p style="text-align:center; margin-bottom:0">où \(x, y, z\) = quantités d'articles A, B, C. On verra que la solution est \(x=20,\ y=70,\ z=60\).</p>
+    </div>
+
+    <h2><span class="h-num">C</span>Matrice et vecteur</h2>
+    <p>Une <strong>matrice</strong> est simplement un tableau rectangulaire de nombres, encadré par des parenthèses. Sa <strong>dimension</strong> se note <span class="mono">(lignes × colonnes)</span> — toujours dans cet ordre, les lignes d'abord.</p>
+    <p>Un <strong>vecteur-colonne</strong> est un cas particulier&nbsp;: une matrice à <em>une seule colonne</em>. C'est juste une liste verticale de nombres.</p>
+    <div class="card light" style="text-align:center">
+      <div class="anat">
+        <div class="tagcol">
+          <div class="mtx"><div class="row"><span class="cell">2</span><span class="cell">1</span><span class="cell">1</span></div><div class="row"><span class="cell">3</span><span class="cell zero">0</span><span class="cell">1</span></div><div class="row"><span class="cell zero">0</span><span class="cell">2</span><span class="cell">1</span></div></div>
+          <div class="t">matrice <span class="dim">3 × 3</span></div>
+        </div>
+        <div class="tagcol">
+          <div class="mtx"><div class="row"><span class="cell">x</span></div><div class="row"><span class="cell">y</span></div><div class="row"><span class="cell">z</span></div></div>
+          <div class="t">vecteur <span class="dim">3 × 1</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="callout c-trap">
+      <div class="ico">!</div>
+      <div class="ctit">Piège fréquent · l'ordre lignes × colonnes</div>
+      <p style="margin-bottom:0">Une matrice <span class="mono">(p × n)</span> a <strong>p&nbsp;lignes</strong> et <strong>n&nbsp;colonnes</strong>. On inverse tout le temps les deux. Astuce mnémo&nbsp;: « <strong>L</strong>ignes d'abord » (L vient avant C dans l'alphabet). Une dimension <span class="mono">(2 × 5)</span> est donc large et plate, pas haute.</p>
+    </div>
+
+    <h2><span class="h-num">D</span>La multiplication A·X (la clé)</h2>
+    <p>C'est <em>la</em> mécanique qui va nous permettre d'écrire un système entier en trois symboles. Voici la recette pour multiplier une matrice <span class="mono">A</span> par un vecteur <span class="mono">X</span>&nbsp;:</p>
+    <div class="callout c-idea">
+      <div class="ico">★</div>
+      <div class="ctit">Recette « ligne par colonne »</div>
+      <p style="margin-bottom:0">Pour chaque <strong>ligne</strong> de A&nbsp;: on multiplie ses nombres un par un avec ceux de la colonne X, et on additionne le tout. Le résultat est une nouvelle colonne — une réponse par ligne de A.</p>
+    </div>
+    <div class="board">
+      <div class="blabel">Exemple détaillé</div>
+      <div style="text-align:center">
+        \[ \begin{pmatrix} 2 & 1 & 1 \\ 3 & 0 & 1 \\ 0 & 2 & 1 \end{pmatrix} \begin{pmatrix} x \\ y \\ z \end{pmatrix} = \begin{pmatrix} 2x + 1y + 1z \\ 3x + 0y + 1z \\ 0x + 2y + 1z \end{pmatrix} \]
+      </div>
+      <p style="text-align:center; margin-bottom:0">Regarde&nbsp;: chaque ligne du résultat est exactement <strong>le membre de gauche d'une équation</strong> du système des machines&nbsp;!</p>
+    </div>
+    <p>Conséquence magnifique&nbsp;: si on appelle <span class="mono">A</span> le tableau des coefficients, <span class="mono">X</span> la colonne des inconnues et <span class="mono">B</span> la colonne des seconds membres, alors le système tout entier s'écrit&nbsp;:</p>
+    <div class="formula-row"><span class="pill" style="font-size:20px; padding:10px 22px; background:var(--green); color:#fff; border-color:var(--green)">A X = B</span></div>
+    <p style="text-align:center" class="tip-inline">Trois lettres qui remplacent tout un paquet d'équations. C'est l'écriture qu'on utilisera partout.</p>
+
+    <div class="callout c-master">
+      <div class="ico">✓</div>
+      <div class="ctit">À maîtriser absolument dans cette section</div>
+      <ul style="margin-bottom:0">
+        <li>Reconnaître une équation <strong>linéaire</strong> (puissance 1 seulement).</li>
+        <li>Lire une dimension <span class="mono">(p × n)</span> = p lignes, n colonnes.</li>
+        <li>Savoir effectuer une multiplication <span class="mono">A·X</span> ligne par colonne.</li>
+        <li>Comprendre que <span class="mono">AX = B</span> est juste une réécriture compacte du système.</li>
+      </ul>
+    </div>
+
+    <div class="exo">
+      <div class="exo-head"><span class="exo-badge">Exo 1.1</span><span class="exo-title">Du texte vers <span class="mono">AX = B</span></span></div>
+      <div class="exo-body"><p>Un commerçant vend des stylos à 2&nbsp;€ et des cahiers à 3&nbsp;€. Il écoule 50&nbsp;articles au total, pour une recette de 130&nbsp;€. Note <span class="mono">x</span> = nombre de stylos, <span class="mono">y</span> = nombre de cahiers. Écris le système, puis sa forme matricielle <span class="mono">AX = B</span>.</p></div>
+      <button class="reveal"><span class="chev">▸</span> Voir la solution</button>
+      <div class="solution">
+        <div class="sol-lbl">Correction</div>
+        <p>« 50 articles au total » donne <span class="mono">x + y = 50</span>. « 130&nbsp;€ de recette » donne <span class="mono">2x + 3y = 130</span> (chaque stylo rapporte 2&nbsp;€, chaque cahier 3&nbsp;€). Le système&nbsp;:</p>
+        <div style="text-align:center">\[ \begin{cases} x + y = 50 \\ 2x + 3y = 130 \end{cases} \qquad\Longleftrightarrow\qquad \underbrace{\begin{pmatrix} 1 & 1 \\ 2 & 3 \end{pmatrix}}_{A}\underbrace{\begin{pmatrix} x \\ y \end{pmatrix}}_{X}=\underbrace{\begin{pmatrix} 50 \\ 130 \end{pmatrix}}_{B} \]</div>
+        <p style="margin-bottom:0"><strong>Vérif rapide</strong>&nbsp;(la solution est x=20, y=30, on le calculera en section 03)&nbsp;: 20+30 = 50 ✓ et 2·20 + 3·30 = 40 + 90 = 130 ✓.</p>
+      </div>
+    </div>
+
+    <div class="pagenav">
+      <button data-go="0"><span class="dir">← Précédent</span><span class="tt">00 · Bienvenue</span></button>
+      <button class="next" data-go="2"><span class="dir">Suivant →</span><span class="tt">02 · Définitions &amp; vocabulaire</span></button>
+    </div>
+  </section>
+
+  <!-- ============ 2 · VOCABULAIRE ============ -->
+  <section class="page" id="p2">
+    <p class="eyebrow">Section 02</p>
+    <h1 class="title">Définitions &amp; vocabulaire</h1>
+    <p class="lead">Ces mots vont revenir à chaque exercice et à l'examen. Les confondre coûte des points bêtement. Prends 10&nbsp;minutes pour les ancrer&nbsp;: c'est un investissement très rentable.</p>
+
+    <h2><span class="h-num">›</span>Le mot le plus important&nbsp;: « solution »</h2>
+    <p>Une <strong>solution</strong> d'un système est un vecteur de nombres qui vérifie <em>toutes</em> les équations en même temps. Pour un système à n inconnues, une solution est un vecteur à n composantes <span class="mono">(x₁, …, xₙ)</span>.</p>
+
+    <h2><span class="h-num">›</span>Les 4 mots de classification</h2>
+    <div class="card">
+      <h4 style="margin-top:0">Compatible ou Incompatible&nbsp;?</h4>
+      <p style="margin-bottom:0">Un système est <strong>compatible</strong> s'il possède <em>au moins une</em> solution. S'il n'en a <em>aucune</em>, il est <span class="kw">incompatible</span> (synonyme&nbsp;: <span class="kw">impossible</span>). C'est la première question à se poser&nbsp;: « est-ce que ça a une chance d'avoir une réponse&nbsp;? »</p>
+    </div>
+    <div class="card">
+      <h4 style="margin-top:0">Déterminé ou Indéterminé&nbsp;?</h4>
+      <p style="margin-bottom:0">Cette question ne se pose que <em>si</em> le système est compatible. Il est <strong>déterminé</strong> quand il a <em>exactement une</em> solution (unique). Il est <strong>indéterminé</strong> quand il en a <em>une infinité</em>.</p>
+    </div>
+    <div class="card">
+      <h4 style="margin-top:0">Homogène</h4>
+      <p style="margin-bottom:0">Un système est <strong>homogène</strong> quand <em>tous</em> ses seconds membres sont nuls (B = 0). Particularité&nbsp;: il a <em>toujours</em> au moins la solution « tout à zéro », appelée <strong>solution triviale</strong> <span class="mono">x₁ = … = xₙ = 0</span>. Un système homogène n'est donc jamais impossible.</p>
+    </div>
+
+    <div class="callout c-trap">
+      <div class="ico">!</div>
+      <div class="ctit">Piège fréquent · « déterminé » ≠ « compatible »</div>
+      <p style="margin-bottom:0">Un système peut être <strong>compatible mais indéterminé</strong> (infinité de solutions). « Compatible » répond à « <em>y a-t-il une solution&nbsp;?</em> », « déterminé » répond à « <em>combien&nbsp;?</em> ». Ne réponds jamais « déterminé » avant d'avoir confirmé que le système est compatible.</p>
+    </div>
+
+    <h2><span class="h-num">›</span>La grande règle&nbsp;: 0, 1 ou ∞</h2>
+    <div class="callout c-master">
+      <div class="ico">✓</div>
+      <div class="ctit">Le théorème fondamental à connaître par cœur</div>
+      <p style="margin-bottom:0">Un système linéaire a <strong>soit aucune solution, soit exactement une, soit une infinité</strong>. Jamais exactement 2, jamais exactement 7. C'est l'une des trois cases — toujours. (On verra <em>pourquoi</em> géométriquement en section 04.)</p>
+    </div>
+
+    <h3>Trois exemples express (issus du cours)</h3>
+    <div class="board light" style="background:var(--paper-2); border:1px solid var(--line); color:var(--ink)">
+      <p><strong>Impossible</strong> &mdash; \(\begin{cases} x_1 + 2x_2 = 3 \\ 2x_1 + 4x_2 = 1 \end{cases}\) &nbsp; La 2ᵉ équation dit que \(2x_1+4x_2\) vaut 1, mais c'est exactement le double de la 1ʳᵉ, donc ça devrait valoir 6. Contradiction&nbsp;: aucune solution.</p>
+      <p><strong>Déterminé</strong> &mdash; \(\begin{cases} x_1 + 2x_2 = 3 \\ x_1 + 4x_2 = 1 \end{cases}\) &nbsp; Solution unique \((x_1,x_2)=(5,\,-1)\).</p>
+      <p style="margin-bottom:0"><strong>Indéterminé</strong> &mdash; \(\begin{cases} x_1 + 2x_2 + 2x_3 = 7 \\ -x_1 + x_2 + 4x_3 = 2 \end{cases}\) &nbsp; Une infinité de solutions, qu'on écrira sous forme de vecteur (section 04).</p>
+    </div>
+
+    <h2><span class="h-num">›</span>Systèmes équivalents</h2>
+    <p>Deux systèmes sont <strong>équivalents</strong> s'ils ont <em>exactement le même ensemble de solutions</em>. C'est l'idée centrale de toute la méthode qui suit&nbsp;: on va transformer un système compliqué en un système équivalent <em>beaucoup plus simple</em> à lire, sans jamais changer ses solutions.</p>
+
+    <div class="callout c-idea">
+      <div class="ico">★</div>
+      <div class="ctit">L'image à garder en tête</div>
+      <p style="margin-bottom:0">Résoudre un système, c'est comme déballer un cadeau&nbsp;: on enlève les couches une à une (transformations qui ne cassent rien) jusqu'à voir la réponse en clair. Les « couches » sont les trois transformations élémentaires de la section suivante.</p>
+    </div>
+
+    <div class="exo">
+      <div class="exo-head"><span class="exo-badge">Exo 2.1</span><span class="exo-title">Vérifier une solution</span></div>
+      <div class="exo-body"><p>Le vecteur <span class="mono">(1, 2)</span> est-il solution du système <span class="mono">{ x + y = 3 ; 2x − y = 0 }</span>&nbsp;? Le système est-il déterminé&nbsp;?</p></div>
+      <button class="reveal"><span class="chev">▸</span> Voir la solution</button>
+      <div class="solution">
+        <div class="sol-lbl">Correction</div>
+        <p>On remplace x par 1 et y par 2 dans <em>chaque</em> équation&nbsp;:</p>
+        <ul>
+          <li>Éq. 1&nbsp;: \(1 + 2 = 3\) ✓</li>
+          <li>Éq. 2&nbsp;: \(2\cdot 1 - 2 = 0\) ✓</li>
+        </ul>
+        <p style="margin-bottom:0">Les deux sont vérifiées simultanément, donc <strong>oui, (1,2) est une solution</strong>. Comme on a 2 équations « vraiment différentes » à 2 inconnues, le système est <strong>déterminé</strong>&nbsp;: (1,2) est <em>la</em> solution unique.</p>
+      </div>
+    </div>
+
+    <div class="exo">
+      <div class="exo-head"><span class="exo-badge">Exo 2.2</span><span class="exo-title">Classer trois systèmes</span></div>
+      <div class="exo-body">
+        <p>Pour chacun, dis s'il est compatible / impossible, déterminé / indéterminé, et s'il est homogène&nbsp;:</p>
+        <p style="margin-bottom:0">(a) <span class="mono">{ x + y = 0 ; x − y = 0 }</span> &nbsp;·&nbsp; (b) <span class="mono">{ x + y = 2 ; 2x + 2y = 5 }</span> &nbsp;·&nbsp; (c) <span class="mono">{ x + y = 2 ; 2x + 2y = 4 }</span></p>
+      </div>
+      <button class="reveal"><span class="chev">▸</span> Voir la solution</button>
+      <div class="solution">
+        <div class="sol-lbl">Correction</div>
+        <p><strong>(a)</strong> Seconds membres tous nuls → <strong>homogène</strong>. La seule solution est (0,0) → compatible et <strong>déterminé</strong>.</p>
+        <p><strong>(b)</strong> La 2ᵉ équation est le double de la gauche de la 1ʳᵉ (2x+2y), mais elle vaut 5 au lieu de 4. Contradiction → <strong>impossible / incompatible</strong>. (Non homogène, car les seconds membres ne sont pas nuls.)</p>
+        <p style="margin-bottom:0"><strong>(c)</strong> Ici la 2ᵉ équation est <em>exactement</em> le double de la 1ʳᵉ (4 = 2·2)&nbsp;: elle n'apporte aucune information nouvelle. Il reste en réalité une seule contrainte → <strong>compatible et indéterminé</strong> (infinité de solutions). (Non homogène.)</p>
+      </div>
+    </div>
+
+    <div class="pagenav">
+      <button data-go="1"><span class="dir">← Précédent</span><span class="tt">01 · Les fondations</span></button>
+      <button class="next" data-go="3"><span class="dir">Suivant →</span><span class="tt">03 · La méthode de Gauss-Jordan</span></button>
+    </div>
+  </section>
+
+  <!-- ============ 3 · GAUSS-JORDAN ============ -->
+  <section class="page" id="p3">
+    <p class="eyebrow">Section 03 · le cœur du chapitre</p>
+    <h1 class="title">La méthode de Gauss-Jordan</h1>
+    <p class="lead">C'est la recette mécanique qui résout n'importe quel système, sans avoir à « deviner » par quelle inconnue commencer. Si tu ne devais maîtriser qu'une seule chose dans ce chapitre, ce serait celle-ci. On va la décomposer lentement.</p>
+
+    <h2><span class="h-num">›</span>Idée générale</h2>
+    <p>On transforme le système en un système <strong>équivalent</strong> (mêmes solutions) de plus en plus simple, jusqu'à pouvoir lire la réponse directement. Pour transformer sans casser les solutions, on n'a le droit qu'à <strong>trois opérations</strong>, dites <strong>transformations élémentaires</strong>&nbsp;:</p>
+
+    <div class="board">
+      <div class="blabel">Les 3 transformations autorisées (sur les lignes)</div>
+      <ol style="color:var(--chalk); margin:0; padding-left:22px">
+        <li style="margin:10px 0"><strong>Permuter</strong> deux lignes (changer leur ordre).</li>
+        <li style="margin:10px 0"><strong>Multiplier</strong> (ou diviser) toute une ligne par un nombre <em>non nul</em>.</li>
+        <li style="margin:10px 0"><strong>Ajouter</strong> à une ligne un multiple d'une <em>autre</em> ligne.</li>
+      </ol>
+    </div>
+    <div class="callout c-trap">
+      <div class="ico">!</div>
+      <div class="ctit">Piège fréquent · le « non nul » et l'« autre »</div>
+      <p style="margin-bottom:0">Multiplier une ligne par <strong>0</strong> est interdit (on perdrait l'équation). Et à l'opération 3, on ajoute le multiple d'une <strong>autre</strong> ligne — pas d'elle-même. « Remplacer L₂ par L₂ − 2L₁ » est correct&nbsp;; « L₂ par L₂ − 2L₂ » détruit la ligne.</p>
+    </div>
+
+    <h2><span class="h-num">›</span>La matrice complétée</h2>
+    <p>Pour aller plus vite, on arrête de réécrire les <span class="mono">x, y, z</span> à chaque ligne. On garde seulement les nombres&nbsp;: les coefficients <span class="mono">A</span> <em>et</em> les seconds membres <span class="mono">B</span>, séparés par une barre verticale. C'est la <strong>matrice complétée</strong>, notée <span class="mono">(A | B)</span>.</p>
+    <div class="card light" style="text-align:center">
+      <p style="margin-bottom:14px">Le système \(\begin{cases} 2x + 3y = 1 \\ 5x + 7y = 2 \end{cases}\) &nbsp;devient la matrice complétée&nbsp;:</p>
+      <div class="mtx" style="color:var(--green-deep)"><div class="row"><span class="cell">2</span><span class="cell">3</span><span class="cell aug">1</span></div><div class="row"><span class="cell">5</span><span class="cell">7</span><span class="cell aug">2</span></div></div>
+      <p style="margin:14px 0 0" class="tip-inline">La barre pointillée sépare les coefficients (gauche) du second membre (droite).</p>
+    </div>
+
+    <h2><span class="h-num">›</span>Les deux phases</h2>
+    <p>La méthode se déroule en deux temps. Le mot-clé est <strong>pivot</strong>&nbsp;: c'est le premier nombre non nul qu'on « installe » sur la diagonale, en bas duquel on va faire le ménage.</p>
+    <div class="card">
+      <h4 style="margin-top:0">Phase 1 — l'échelonnement (on descend)</h4>
+      <p>On travaille de haut en bas, de gauche à droite&nbsp;:</p>
+      <ol style="margin-bottom:0">
+        <li>Amener un <strong>pivot</strong> en haut à gauche (permuter si besoin pour qu'il ne soit pas nul).</li>
+        <li>Diviser sa ligne pour transformer le pivot en <strong>1</strong>.</li>
+        <li>Faire apparaître des <strong>0 en-dessous</strong> du pivot (avec l'opération 3).</li>
+        <li>Recommencer sur la ligne suivante, et ainsi de suite.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h4 style="margin-top:0">Phase 2 — la réduction (on remonte)</h4>
+      <p style="margin-bottom:0">Maintenant on fait apparaître des <strong>0 au-dessus</strong> de chaque pivot aussi. Quand c'est fini, la partie gauche est devenue la matrice identité, et on <strong>lit la solution dans la colonne de droite</strong>.</p>
+    </div>
+
+    <div class="callout c-idea">
+      <div class="ico">★</div>
+      <div class="ctit">Pourquoi « ambre » dans les schémas ?</div>
+      <p style="margin-bottom:0">Dans les visuels qui suivent, les cases <span style="background:var(--amber); color:#241a06; padding:1px 8px; border-radius:5px; font-family:'JetBrains Mono',monospace; font-weight:700">1</span> en ambre sont les <strong>pivots</strong> (comme le surligneur jaune du prof). Le but de toute la méthode est d'obtenir un pivot par ligne, avec des zéros partout autour.</p>
+    </div>
+
+    <h2><span class="h-num">›</span>Visualiser, étape par étape</h2>
+    <p>Voici le système \(\begin{cases} 2x + 3y - 2z = 2 \\ 2x + 4y + 2z = -4 \\ 6x + 4y + 8z = 2 \end{cases}\) résolu en entier. Clique sur <strong>Suivant</strong> et observe le pivot descendre, puis les zéros se former au-dessus. La solution est \((3,\,-2,\,-1)\).</p>
+
+    <div class="board stepper">
+      <div class="blabel" id="step-counter">Étape 1 / 7</div>
+      <div class="step-stage"><div id="step-matrix"></div></div>
+      <div class="step-cap" id="step-cap"></div>
+      <div class="step-ctrl">
+        <button class="sbtn" id="step-prev">◂ Précédent</button>
+        <div class="dots" id="step-dots"></div>
+        <button class="sbtn" id="step-next">Suivant ▸</button>
+      </div>
+    </div>
+    <p class="tip-inline" style="text-align:center">Astuce de lecture&nbsp;: tant qu'un pivot n'est pas un « 1 » ambre entouré de zéros, le travail n'est pas fini sur cette colonne.</p>
+
+    <div class="callout c-master">
+      <div class="ico">✓</div>
+      <div class="ctit">À maîtriser absolument</div>
+      <ul style="margin-bottom:0">
+        <li>Citer et appliquer les <strong>3 transformations élémentaires</strong> sans erreur.</li>
+        <li>Écrire une matrice complétée <span class="mono">(A | B)</span> à partir d'un système.</li>
+        <li>Dérouler l'<strong>échelonnement</strong> puis la <strong>réduction</strong> jusqu'à <span class="mono">(I | solution)</span>.</li>
+        <li>Noter proprement chaque opération (ex.&nbsp;: <span class="mono">L₂ → L₂ − 2L₁</span>) — l'examen attend ces annotations.</li>
+      </ul>
+    </div>
+
+    <div class="exo">
+      <div class="exo-head"><span class="exo-badge">Exo 3.1</span><span class="exo-title">Un système 2×2 complet</span></div>
+      <div class="exo-body"><p>Résous par Gauss-Jordan, en notant chaque opération&nbsp;: <span class="mono">{ x + y = 5 ; 2x − y = 1 }</span>.</p></div>
+      <button class="reveal"><span class="chev">▸</span> Voir la solution</button>
+      <div class="solution light">
+        <div class="sol-lbl">Correction pas à pas</div>
+        <p>Matrice complétée de départ, puis on crée le pivot et les zéros&nbsp;:</p>
+        <div style="text-align:center; line-height:3">
+          <div class="mtx"><div class="row"><span class="cell pivot">1</span><span class="cell">1</span><span class="cell aug">5</span></div><div class="row"><span class="cell">2</span><span class="cell">−1</span><span class="cell aug">1</span></div></div>
+          <span style="font-family:'JetBrains Mono',monospace; color:var(--amber-line); margin:0 8px">L₂→L₂−2L₁</span>
+          <div class="mtx"><div class="row"><span class="cell pivot">1</span><span class="cell">1</span><span class="cell aug">5</span></div><div class="row"><span class="cell zero">0</span><span class="cell">−3</span><span class="cell aug">−9</span></div></div>
+        </div>
+        <div style="text-align:center; line-height:3">
+          <span style="font-family:'JetBrains Mono',monospace; color:var(--amber-line); margin:0 8px">L₂→L₂÷(−3)</span>
+          <div class="mtx"><div class="row"><span class="cell pivot">1</span><span class="cell">1</span><span class="cell aug">5</span></div><div class="row"><span class="cell zero">0</span><span class="cell pivot">1</span><span class="cell aug">3</span></div></div>
+          <span style="font-family:'JetBrains Mono',monospace; color:var(--amber-line); margin:0 8px">L₁→L₁−L₂</span>
+          <div class="mtx"><div class="row"><span class="cell pivot">1</span><span class="cell zero">0</span><span class="cell aug">2</span></div><div class="row"><span class="cell zero">0</span><span class="cell pivot">1</span><span class="cell aug">3</span></div></div>
+        </div>
+        <p style="margin-bottom:0">Lecture directe&nbsp;: <strong>x = 2, y = 3</strong>. Vérif&nbsp;: 2+3 = 5 ✓ et 2·2 − 3 = 1 ✓.</p>
+      </div>
+    </div>
+
+    <div class="exo">
+      <div class="exo-head"><span class="exo-badge">Exo 3.2</span><span class="exo-title">Un système 3×3 (solution unique)</span></div>
+      <div class="exo-body"><p>Résous <span class="mono">{ x + 2y + z = 8 ; 2x + y − z = 1 ; x − y + 2z = 5 }</span>.</p></div>
+      <button class="reveal"><span class="chev">▸</span> Voir la solution</button>
+      <div class="solution light">
+        <div class="sol-lbl">Correction pas à pas</div>
+        <p><strong>Échelonnement.</strong> Le pivot (1,1) est déjà 1. On annule sous lui&nbsp;:</p>
+        <div style="text-align:center; line-height:3">
+          <div class="mtx"><div class="row"><span class="cell pivot">1</span><span class="cell">2</span><span class="cell">1</span><span class="cell aug">8</span></div><div class="row"><span class="cell">2</span><span class="cell">1</span><span class="cell">−1</span><span class="cell aug">1</span></div><div class="row"><span class="cell">1</span><span class="cell">−1</span><span class="cell">2</span><span class="cell aug">5</span></div></div>
+          <span style="font-family:'JetBrains Mono',monospace; color:var(--amber-line); margin:0 6px">L₂−2L₁ ; L₃−L₁</span>
+          <div class="mtx"><div class="row"><span class="cell pivot">1</span><span class="cell">2</span><span class="cell">1</span><span class="cell aug">8</span></div><div class="row"><span class="cell zero">0</span><span class="cell">−3</span><span class="cell">−3</span><span class="cell aug">−15</span></div><div class="row"><span class="cell zero">0</span><span class="cell">−3</span><span class="cell">1</span><span class="cell aug">−3</span></div></div>
+        </div>
+        <div style="text-align:center; line-height:3">
+          <span style="font-family:'JetBrains Mono',monospace; color:var(--amber-line); margin:0 6px">L₂÷(−3) ; puis L₃+3L₂</span>
+          <div class="mtx"><div class="row"><span class="cell pivot">1</span><span class="cell">2</span><span class="cell">1</span><span class="cell aug">8</span></div><div class="row"><span class="cell zero">0</span><span class="cell pivot">1</span><span class="cell">1</span><span class="cell aug">5</span></div><div class="row"><span class="cell zero">0</span><span class="cell zero">0</span><span class="cell">4</span><span class="cell aug">12</span></div></div>
+          <span style="font-family:'JetBrains Mono',monospace; color:var(--amber-line); margin:0 6px">L₃÷4</span>
+          <div class="mtx"><div class="row"><span class="cell pivot">1</span><span class="cell">2</span><span class="cell">1</span><span class="cell aug">8</span></div><div class="row"><span class="cell zero">0</span><span class="cell pivot">1</span><span class="cell">1</span><span class="cell aug">5</span></div><div class="row"><span class="cell zero">0</span><span class="cell zero">0</span><span class="cell pivot">1</span><span class="cell aug">3</span></div></div>
+        </div>
+        <p><strong>Réduction</strong> (on remonte, zéros au-dessus des pivots)&nbsp;:</p>
+        <div style="text-align:center; line-height:3">
+          <span style="font-family:'JetBrains Mono',monospace; color:var(--amber-line); margin:0 6px">L₂−L₃ ; L₁−L₃ ; puis L₁−2L₂</span>
+          <div class="mtx"><div class="row"><span class="cell pivot">1</span><span class="cell zero">0</span><span class="cell zero">0</span><span class="cell aug">1</span></div><div class="row"><span class="cell zero">0</span><span class="cell pivot">1</span><span class="cell zero">0</span><span class="cell aug">2</span></div><div class="row"><span class="cell zero">0</span><span class="cell zero">0</span><span class="cell pivot">1</span><span class="cell aug">3</span></div></div>
+        </div>
+        <p style="margin-bottom:0">Solution&nbsp;: <strong>x = 1, y = 2, z = 3</strong>. (Vérifie dans la 1ʳᵉ équation&nbsp;: 1 + 2·2 + 3 = 8 ✓.)</p>
+      </div>
+    </div>
+
+    <div class="pagenav">
+      <button data-go="2"><span class="dir">← Précédent</span><span class="tt">02 · Définitions</span></button>
+      <button class="next" data-go="4"><span class="dir">Suivant →</span><span class="tt">04 · Combien de solutions ?</span></button>
+    </div>
+  </section>
+
+  <!-- ============ 4 · COMBIEN DE SOLUTIONS ============ -->
+  <section class="page" id="p4">
+    <p class="eyebrow">Section 04</p>
+    <h1 class="title">Combien de solutions&nbsp;?<br><span style="color:var(--amber)">0, 1 ou ∞</span></h1>
+    <p class="lead">On sait résoudre. Maintenant, comprenons <em>pourquoi</em> un système tombe dans l'une des trois cases — et comment écrire proprement le cas « infinité de solutions », là où la majorité des étudiants perd des points.</p>
+
+    <h2><span class="h-num">›</span>L'intuition géométrique (le déclic)</h2>
+    <p>Avec 2 inconnues, <strong>chaque équation est une droite</strong> dans le plan. Résoudre le système = trouver les points qui sont sur <em>toutes</em> les droites à la fois, c'est-à-dire leurs <strong>intersections</strong>. Trois situations, trois cases&nbsp;:</p>
+    <ul>
+      <li><strong>Les droites se croisent en 1 point</strong> → 1 solution (déterminé).</li>
+      <li><strong>Les droites sont parallèles distinctes</strong> → 0 intersection → impossible.</li>
+      <li><strong>Les droites sont confondues</strong> (la même) → tous les points conviennent → ∞ solutions.</li>
+    </ul>
+    <p>Déplace les curseurs ci-dessous pour bouger la 2ᵉ droite et fais apparaître chaque cas&nbsp;:</p>
+
+    <div class="fig">
+      <div class="blabel">Géométrie des solutions · 2 équations = 2 droites</div>
+      <canvas id="lineCanvas" width="760" height="420"></canvas>
+      <div class="presets">
+        <button class="pbtn" data-line="1,-1,0">→ 1 solution</button>
+        <button class="pbtn" data-line="1,1,5">→ 0 solution (parallèles)</button>
+        <button class="pbtn" data-line="2,2,4">→ ∞ solutions (confondues)</button>
+      </div>
+      <div class="controls">
+        <div class="ctrl"><label>Droite 2 · a₂ <b id="va2">1</b></label><input type="range" id="a2" min="-4" max="4" step="1" value="1"></div>
+        <div class="ctrl"><label>Droite 2 · b₂ <b id="vb2">-1</b></label><input type="range" id="b2" min="-4" max="4" step="1" value="-1"></div>
+        <div class="ctrl"><label>Droite 2 · c₂ <b id="vc2">0</b></label><input type="range" id="c2" min="-6" max="6" step="1" value="0"></div>
+      </div>
+      <div class="legend-row">
+        <span style="--c:#4FB286">Droite 1 : x + y = 2 (fixe)</span>
+        <span style="--c:#E3A23A">Droite 2 (mobile)</span>
+      </div>
+      <div class="verdict" id="lineVerdict"></div>
+    </div>
+
+    <div class="callout c-idea">
+      <div class="ico">★</div>
+      <div class="ctit">Et avec 3 inconnues ?</div>
+      <p style="margin-bottom:0">Chaque équation devient un <strong>plan</strong> dans l'espace. Trois plans peuvent se couper en 1 point (1 solution), se couper le long d'une droite ou d'un plan (∞ solutions), ou n'avoir aucun point commun (impossible). Même logique, une dimension de plus.</p>
+    </div>
+
+    <h2><span class="h-num">›</span>Lire le résultat dans la matrice réduite</h2>
+    <p>Après Gauss-Jordan, on reconnaît le cas directement&nbsp;:</p>
+    <div class="board light" style="background:var(--paper-2); border:1px solid var(--line); color:var(--ink)">
+      <p><strong>Impossible</strong> — il apparaît une ligne du type <span class="mono">(0 0 0 | nombre non nul)</span>. Elle se lit « \(0 = \) un nombre non nul », ce qui est faux&nbsp;: aucune solution.</p>
+      <p><strong>Solution unique</strong> — la partie gauche devient l'identité <span class="mono">I</span>, et la colonne de droite <em>est</em> la solution.</p>
+      <p style="margin-bottom:0"><strong>Infinité</strong> — il reste moins de pivots que d'inconnues. Les inconnues « sans pivot » deviennent <strong>libres</strong>&nbsp;: elles prennent n'importe quelle valeur, et les autres se calculent à partir d'elles.</p>
+    </div>
+
+    <h2><span class="h-num">›</span>Le cas qui fait perdre des points&nbsp;: l'écriture vectorielle</h2>
+    <p>Quand il y a une infinité de solutions, il faut les écrire sous <strong>forme vectorielle</strong>. Prenons l'exemple du cours&nbsp;:</p>
+    <div class="board">
+      <div class="blabel">Système indéterminé</div>
+      <div style="text-align:center">\[ \begin{cases} x + 2y + 3z = 2 \\ 2x + 4y + z = -1 \\ 3x + 6y + 2z = -1 \end{cases} \]</div>
+      <p style="text-align:center; margin-bottom:0">Après Gauss-Jordan, il ne reste que deux contraintes&nbsp;: \(x + 2y = -1\) et \(z = 1\).</p>
+    </div>
+    <p>Ici <span class="mono">y</span> n'a pas de pivot&nbsp;: c'est la <strong>variable libre</strong>. On exprime tout en fonction d'elle&nbsp;: <span class="mono">x = −1 − 2y</span> et <span class="mono">z = 1</span>. Puis on « range » dans un vecteur&nbsp;:</p>
+    <div class="board">
+      <div class="blabel">La forme à savoir produire</div>
+      <div style="text-align:center">\[ \begin{pmatrix} x \\ y \\ z \end{pmatrix} = \begin{pmatrix} -1 \\ 0 \\ 1 \end{pmatrix} + y\begin{pmatrix} -2 \\ 1 \\ 0 \end{pmatrix},\qquad y \in \mathbb{R} \]</div>
+    </div>
+    <p>Lecture&nbsp;: le 1ᵉʳ vecteur est <strong>une</strong> solution particulière (prends y=0). Le 2ᵉ vecteur est la <strong>direction</strong> dans laquelle on peut glisser à l'infini en changeant y. Chaque valeur de y donne une solution différente.</p>
+
+    <div class="callout c-trap">
+      <div class="ico">!</div>
+      <div class="ctit">Pièges fréquents sur la forme vectorielle</div>
+      <ul style="margin-bottom:0">
+        <li>Ne pas oublier d'<strong>écrire « , y ∈ ℝ »</strong>&nbsp;: ça précise que y balaie tous les réels.</li>
+        <li>La composante de la variable libre dans le vecteur-direction vaut toujours <strong>1</strong> à sa propre position, 0 ailleurs (ici y donne le « 1 » au milieu).</li>
+        <li>Vérifie ton vecteur en réinjectant&nbsp;: il doit satisfaire le système pour <em>toute</em> valeur de y.</li>
+      </ul>
+    </div>
+
+    <h2><span class="h-num">›</span>Compter les « degrés de liberté »</h2>
+    <p>Le nombre de variables libres donne le « niveau » d'indétermination&nbsp;:</p>
+    <ul>
+      <li><strong>1 variable libre</strong> → « infinité <em>simple</em> » → on dit <strong>simplement indéterminé</strong> (une droite de solutions).</li>
+      <li><strong>2 variables libres</strong> → « infinité <em>double</em> » → <strong>doublement indéterminé</strong> (un plan de solutions). Exemple du cours&nbsp;: une seule équation <span class="mono">x + 2y + 3z = 6</span> laisse y <em>et</em> z libres.</li>
+    </ul>
+
+    <h2><span class="h-num">›</span>Deux règles de comptage très utiles</h2>
+    <div class="callout c-master">
+      <div class="ico">✓</div>
+      <div class="ctit">À connaître par cœur (gain de temps à l'examen)</div>
+      <ul style="margin-bottom:0">
+        <li>Si un système a <strong>plus d'inconnues que d'équations</strong> (<span class="mono">p &lt; n</span>), il <strong>ne peut pas</strong> avoir une solution unique&nbsp;: c'est soit impossible, soit une infinité.</li>
+        <li>Un système <strong>homogène</strong> (B = 0) a <em>toujours</em> la solution triviale (tout à 0). Donc&nbsp;: soit c'est la seule solution, soit il y en a une infinité — <strong>jamais « impossible »</strong>.</li>
+      </ul>
+    </div>
+
+    <div class="exo">
+      <div class="exo-head"><span class="exo-badge">Exo 4.1</span><span class="exo-title">Détecter un système impossible</span></div>
+      <div class="exo-body"><p>Montre que <span class="mono">{ x + y = 1 ; 2x + 2y = 5 }</span> est impossible, via Gauss-Jordan.</p></div>
+      <button class="reveal"><span class="chev">▸</span> Voir la solution</button>
+      <div class="solution light">
+        <div class="sol-lbl">Correction</div>
+        <div style="text-align:center; line-height:3">
+          <div class="mtx"><div class="row"><span class="cell pivot">1</span><span class="cell">1</span><span class="cell aug">1</span></div><div class="row"><span class="cell">2</span><span class="cell">2</span><span class="cell aug">5</span></div></div>
+          <span style="font-family:'JetBrains Mono',monospace; color:var(--amber-line); margin:0 8px">L₂→L₂−2L₁</span>
+          <div class="mtx"><div class="row"><span class="cell pivot">1</span><span class="cell">1</span><span class="cell aug">1</span></div><div class="row"><span class="cell zero">0</span><span class="cell zero">0</span><span class="cell aug">3</span></div></div>
+        </div>
+        <p style="margin-bottom:0">La 2ᵉ ligne se lit <span class="mono">0x + 0y = 3</span>, soit <strong>0 = 3</strong>&nbsp;: faux. Le système est donc <strong>impossible</strong>.</p>
+      </div>
+    </div>
+
+    <div class="exo">
+      <div class="exo-head"><span class="exo-badge">Exo 4.2</span><span class="exo-title">Écrire les solutions sous forme vectorielle</span></div>
+      <div class="exo-body"><p>Résous <span class="mono">{ x + y + z = 3 ; x + 2y + 3z = 4 }</span> et donne l'ensemble des solutions sous forme vectorielle.</p></div>
+      <button class="reveal"><span class="chev">▸</span> Voir la solution</button>
+      <div class="solution light">
+        <div class="sol-lbl">Correction</div>
+        <p>2 équations, 3 inconnues → <span class="mono">p &lt; n</span> → pas de solution unique possible. On échelonne&nbsp;:</p>
+        <div style="text-align:center; line-height:3">
+          <div class="mtx"><div class="row"><span class="cell pivot">1</span><span class="cell">1</span><span class="cell">1</span><span class="cell aug">3</span></div><div class="row"><span class="cell">1</span><span class="cell">2</span><span class="cell">3</span><span class="cell aug">4</span></div></div>
+          <span style="font-family:'JetBrains Mono',monospace; color:var(--amber-line); margin:0 6px">L₂−L₁ ; puis L₁−L₂</span>
+          <div class="mtx"><div class="row"><span class="cell pivot">1</span><span class="cell zero">0</span><span class="cell">−1</span><span class="cell aug">2</span></div><div class="row"><span class="cell zero">0</span><span class="cell pivot">1</span><span class="cell">2</span><span class="cell aug">1</span></div></div>
+        </div>
+        <p>Il reste&nbsp;: <span class="mono">x − z = 2</span> et <span class="mono">y + 2z = 1</span>. <strong>z est libre</strong> (pas de pivot). Donc <span class="mono">x = 2 + z</span> et <span class="mono">y = 1 − 2z</span>&nbsp;:</p>
+        <div style="text-align:center">\[ \begin{pmatrix} x \\ y \\ z \end{pmatrix} = \begin{pmatrix} 2 \\ 1 \\ 0 \end{pmatrix} + z\begin{pmatrix} 1 \\ -2 \\ 1 \end{pmatrix},\qquad z \in \mathbb{R} \]</div>
+        <p style="margin-bottom:0">Système <strong>simplement indéterminé</strong> (1 variable libre).</p>
+      </div>
+    </div>
+
+    <div class="pagenav">
+      <button data-go="3"><span class="dir">← Précédent</span><span class="tt">03 · Gauss-Jordan</span></button>
+      <button class="next" data-go="5"><span class="dir">Suivant →</span><span class="tt">05 · Matrices inversibles</span></button>
+    </div>
+  </section>
+
+  <section class="page" id="p5">
+    <p class="eyebrow">Section 05 · le même outil, retourné</p>
+    <h1 class="title">Systèmes linéaires &amp; matrices inversibles</h1>
+    <p class="lead">Bonne nouvelle&nbsp;: tu connais déjà presque tout. « Inverser une matrice » n'est rien d'autre que faire tourner Gauss-Jordan, mais sur un tableau un peu plus large. On va d'abord nommer proprement deux formes de matrices, puis voir le lien magique avec l'inverse.</p>
+
+    <h2><span class="h-num">›</span>Deux mots de vocabulaire : échelonnée &amp; réduite</h2>
+    <p>Ce sont juste des noms pour les deux « états d'avancement » de la méthode de Gauss-Jordan que tu as vus à la section 03.</p>
+    <div class="card light">
+      <h4 style="margin-top:0">Matrice échelonnée (après la phase 1)</h4>
+      <p style="margin-bottom:0">Chaque ligne non nulle commence par <strong>strictement plus de zéros</strong> que la ligne au-dessus. Visuellement, les premiers nombres non nuls forment un <strong>escalier qui descend vers la droite</strong>.</p>
+    </div>
+    <div class="card light">
+      <h4 style="margin-top:0">Matrice échelonnée réduite (après la phase 2)</h4>
+      <p style="margin-bottom:0">Une échelonnée où, en plus, chaque pivot vaut <strong>1</strong> et est <strong>seul dans sa colonne</strong> (des zéros au-dessus et en-dessous). Ces colonnes sont alors les vecteurs unitaires <span class="mono">E₁, E₂, …</span> C'est la forme « finie », celle où on lit la solution.</p>
+    </div>
+    <div style="text-align:center; line-height:2.6; margin:18px 0">
+      <span class="mono" style="color:var(--sage); font-size:13px">échelonnée (escalier)</span><br>
+      <div class="mtx"><div class="row"><span class="cell pivot">1</span><span class="cell">2</span><span class="cell">3</span></div><div class="row"><span class="cell zero">0</span><span class="cell pivot">1</span><span class="cell">4</span></div><div class="row"><span class="cell zero">0</span><span class="cell zero">0</span><span class="cell pivot">1</span></div></div>
+      <span style="display:inline-block; width:40px"></span>
+      <span class="mono" style="color:var(--sage); font-size:13px">échelonnée réduite (identité)</span><br>
+      <div class="mtx"><div class="row"><span class="cell pivot">1</span><span class="cell zero">0</span><span class="cell zero">0</span></div><div class="row"><span class="cell zero">0</span><span class="cell pivot">1</span><span class="cell zero">0</span></div><div class="row"><span class="cell zero">0</span><span class="cell zero">0</span><span class="cell pivot">1</span></div></div>
+    </div>
+
+    <h2><span class="h-num">›</span>L'idée clé : chaque opération = une multiplication</h2>
+    <p>Voici le pont entre « manipuler des lignes » et « les matrices ». Chacune des 3 transformations élémentaires revient à <strong>multiplier la matrice à gauche</strong> par une petite matrice <span class="mono">M</span>, appelée <strong>matrice élémentaire</strong>.</p>
+    <div class="callout c-idea">
+      <div class="ico">★</div>
+      <div class="ctit">Comment fabriquer cette matrice M ?</div>
+      <p style="margin-bottom:0">Recette imparable&nbsp;: prends la matrice <strong>identité</strong> <span class="mono">I</span>, et fais-lui subir <strong>exactement l'opération que tu veux appliquer</strong>. Le résultat est ton <span class="mono">M</span>. Multiplier <span class="mono">M × (ta matrice)</span> applique alors cette opération. Et comme la barre n'est qu'une décoration, <span class="mono">M(A | B) = (MA | MB)</span>.</p>
+    </div>
+
+    <p>Les trois cas, sur un exemple <span class="mono">A</span> à 3 lignes&nbsp;:</p>
+    <div class="board">
+      <div class="blabel">Les 3 matrices élémentaires (taille 3×3)</div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:18px">
+        <div>
+          <p style="color:#fff; font-weight:600; margin:0 0 8px">① Permuter L₁ ↔ L₃</p>
+          <p style="color:var(--chalk-dim); margin:0 0 8px; font-size:14px">On échange les lignes 1 et 3 de I&nbsp;:</p>
+          <div style="text-align:center">\[ M_1=\begin{pmatrix} 0 & 0 & 1 \\ 0 & 1 & 0 \\ 1 & 0 & 0 \end{pmatrix} \]</div>
+        </div>
+        <div>
+          <p style="color:#fff; font-weight:600; margin:0 0 8px">② Multiplier L₂ par r</p>
+          <p style="color:var(--chalk-dim); margin:0 0 8px; font-size:14px">On met r à la place du 2ᵉ « 1 » de I&nbsp;:</p>
+          <div style="text-align:center">\[ M_2=\begin{pmatrix} 1 & 0 & 0 \\ 0 & r & 0 \\ 0 & 0 & 1 \end{pmatrix} \]</div>
+        </div>
+        <div>
+          <p style="color:#fff; font-weight:600; margin:0 0 8px">③ L₁ ← L₁ + αL₂</p>
+          <p style="color:var(--chalk-dim); margin:0 0 8px; font-size:14px">On place α en ligne 1, colonne 2 de I&nbsp;:</p>
+          <div style="text-align:center">\[ M_3=\begin{pmatrix} 1 & \alpha & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1 \end{pmatrix} \]</div>
+        </div>
+      </div>
+    </div>
+    <div class="callout c-note">
+      <div class="ico">i</div>
+      <div class="ctit">Pourquoi on s'en soucie ?</div>
+      <p style="margin-bottom:0">Parce que chaque <span class="mono">M</span> est <strong>réversible</strong>&nbsp;: il existe toujours <span class="mono">M⁻¹</span> (lui aussi élémentaire) qui annule l'opération. Toute la méthode de Gauss-Jordan est donc une suite d'opérations réversibles — c'est pour ça qu'elle ne change jamais l'ensemble des solutions.</p>
+    </div>
+
+    <h2><span class="h-num">›</span>Inverser une matrice avec (A | I)</h2>
+    <p>L'<strong>inverse</strong> d'une matrice carrée <span class="mono">A</span>, noté <span class="mono">A⁻¹</span>, est la matrice qui vérifie <span class="mono">A · A⁻¹ = I</span> (l'identité). Toutes les matrices n'en ont pas une&nbsp;; quand elle existe, <span class="mono">A</span> est dite <strong>inversible</strong>.</p>
+    <p>Si en enchaînant des opérations <span class="mono">G = M_q ⋯ M_1</span> on ramène <span class="mono">A</span> à l'identité, c'est que <span class="mono">G·A = I</span>, donc <span class="mono">G</span> <strong>est</strong> l'inverse de <span class="mono">A</span>. L'astuce&nbsp;: on accole l'identité à droite de <span class="mono">A</span> et on déroule Gauss-Jordan sur le tout. Quand la gauche devient <span class="mono">I</span>, la droite est devenue <span class="mono">A⁻¹</span> toute seule&nbsp;:</p>
+    <div class="board" style="text-align:center">
+      <div class="blabel">Le principe en une ligne</div>
+      <p style="color:#fff; font-size:17px; margin:6px 0">\((\,A \mid I\,) \;\xrightarrow{\;\text{Gauss-Jordan}\;}\; (\,I \mid A^{-1}\,)\)</p>
+      <p style="margin-bottom:0">On applique les mêmes opérations des deux côtés de la barre&nbsp;; la droite garde la trace de tout le travail.</p>
+    </div>
+    <div class="callout c-idea">
+      <div class="ico">★</div>
+      <div class="ctit">Le lien profond avec les systèmes</div>
+      <p style="margin-bottom:0">Chercher <span class="mono">A⁻¹</span>, c'est chercher ses colonnes <span class="mono">X₁, …, Xₙ</span> telles que <span class="mono">A·Xᵢ = Eᵢ</span> (chaque colonne de l'identité). Autrement dit&nbsp;: <strong>inverser une matrice = résoudre n systèmes linéaires d'un coup</strong>, tous avec la même matrice <span class="mono">A</span> mais des seconds membres différents. D'où l'intérêt de tout traiter ensemble dans <span class="mono">(A | I)</span>.</p>
+    </div>
+
+    <h2><span class="h-num">›</span>Exemple complet</h2>
+    <p>Cherchons l'inverse de \( A=\begin{pmatrix} 1 & 1 & 0 \\ 1 & 0 & 1 \\ 0 & 1 & 1 \end{pmatrix}\). On part de <span class="mono">(A | I)</span> et on échelonne puis on réduit. Voici le point de départ et le point d'arrivée&nbsp;:</p>
+    <div style="text-align:center; line-height:3; overflow-x:auto">
+      <span class="mono" style="color:var(--sage); font-size:12px">départ&nbsp;: (A | I)</span><br>
+      <div class="mtx"><div class="row"><span class="cell">1</span><span class="cell">1</span><span class="cell">0</span><span class="cell aug">1</span><span class="cell">0</span><span class="cell">0</span></div><div class="row"><span class="cell">1</span><span class="cell">0</span><span class="cell">1</span><span class="cell aug">0</span><span class="cell">1</span><span class="cell">0</span></div><div class="row"><span class="cell">0</span><span class="cell">1</span><span class="cell">1</span><span class="cell aug">0</span><span class="cell">0</span><span class="cell">1</span></div></div>
+      <div style="font-family:'JetBrains Mono',monospace; color:var(--amber-line); margin:6px 0; font-size:14px">⋯ Gauss-Jordan (L₂−L₁, puis pivots successifs, divisions par 2) ⋯</div>
+      <span class="mono" style="color:var(--sage); font-size:12px">arrivée&nbsp;: (I | A⁻¹)</span><br>
+      <div class="mtx"><div class="row"><span class="cell pivot">1</span><span class="cell zero">0</span><span class="cell zero">0</span><span class="cell aug">½</span><span class="cell">½</span><span class="cell">−½</span></div><div class="row"><span class="cell zero">0</span><span class="cell pivot">1</span><span class="cell zero">0</span><span class="cell aug">½</span><span class="cell">−½</span><span class="cell">½</span></div><div class="row"><span class="cell zero">0</span><span class="cell zero">0</span><span class="cell pivot">1</span><span class="cell aug">−½</span><span class="cell">½</span><span class="cell">½</span></div></div>
+    </div>
+    <p>On lit l'inverse dans la partie droite (on factorise le ½ pour faire joli)&nbsp;:</p>
+    <div class="card light" style="text-align:center">
+      <div>\[ A^{-1}=\frac{1}{2}\begin{pmatrix} 1 & 1 & -1 \\ 1 & -1 & 1 \\ -1 & 1 & 1 \end{pmatrix} \]</div>
+      <p style="margin:10px 0 0" class="tip-inline">Vérification rapide&nbsp;: multiplie <span class="mono">A × A⁻¹</span>, tu dois retomber sur l'identité. C'est le test imparable.</p>
+    </div>
+
+    <div class="callout c-trap">
+      <div class="ico">!</div>
+      <div class="ctit">Piège fréquent · quand l'inverse n'existe pas</div>
+      <p style="margin-bottom:0">Si pendant l'échelonnement une ligne de la partie gauche devient <strong>entièrement nulle</strong>, c'est fini&nbsp;: <span class="mono">A</span> n'est <strong>pas inversible</strong> (on ne pourra jamais obtenir l'identité à gauche). Cela arrive dès que deux lignes/colonnes sont proportionnelles, ou plus généralement « redondantes ».</p>
+    </div>
+
+    <div class="callout c-master">
+      <div class="ico">✓</div>
+      <div class="ctit">À maîtriser absolument</div>
+      <ul style="margin-bottom:0">
+        <li>Reconnaître une matrice <strong>échelonnée</strong> et <strong>échelonnée réduite</strong>.</li>
+        <li>Construire une matrice élémentaire <span class="mono">M</span> à partir de l'identité.</li>
+        <li>Calculer un inverse via <span class="mono">(A | I) → (I | A⁻¹)</span> et le <strong>vérifier</strong> par <span class="mono">A·A⁻¹ = I</span>.</li>
+        <li>Repérer qu'une matrice <strong>n'est pas inversible</strong> (ligne nulle qui apparaît).</li>
+      </ul>
+    </div>
+
+    <div class="exo">
+      <div class="exo-head"><span class="exo-badge">Exo 5.1</span><span class="exo-title">Inverse d'une 2×2</span></div>
+      <div class="exo-body"><p>Calcule l'inverse de \( A=\begin{pmatrix} 2 & 1 \\ 1 & 1 \end{pmatrix}\) par la méthode <span class="mono">(A | I)</span>.</p></div>
+      <button class="reveal"><span class="chev">▸</span> Voir la solution</button>
+      <div class="solution light">
+        <div class="sol-lbl">Correction</div>
+        <div style="text-align:center; line-height:3; overflow-x:auto">
+          <div class="mtx"><div class="row"><span class="cell pivot">2</span><span class="cell">1</span><span class="cell aug">1</span><span class="cell">0</span></div><div class="row"><span class="cell">1</span><span class="cell">1</span><span class="cell aug">0</span><span class="cell">1</span></div></div>
+          <span style="font-family:'JetBrains Mono',monospace; color:var(--amber-line); margin:0 6px; font-size:13px">L₁→½L₁</span>
+          <div class="mtx"><div class="row"><span class="cell pivot">1</span><span class="cell">½</span><span class="cell aug">½</span><span class="cell">0</span></div><div class="row"><span class="cell">1</span><span class="cell">1</span><span class="cell aug">0</span><span class="cell">1</span></div></div>
+          <span style="font-family:'JetBrains Mono',monospace; color:var(--amber-line); margin:0 6px; font-size:13px">L₂−L₁</span>
+          <div class="mtx"><div class="row"><span class="cell pivot">1</span><span class="cell">½</span><span class="cell aug">½</span><span class="cell">0</span></div><div class="row"><span class="cell zero">0</span><span class="cell pivot">½</span><span class="cell aug">−½</span><span class="cell">1</span></div></div>
+          <span style="font-family:'JetBrains Mono',monospace; color:var(--amber-line); margin:0 6px; font-size:13px">L₂→2L₂ ; L₁−½L₂</span>
+          <div class="mtx"><div class="row"><span class="cell pivot">1</span><span class="cell zero">0</span><span class="cell aug">1</span><span class="cell">−1</span></div><div class="row"><span class="cell zero">0</span><span class="cell pivot">1</span><span class="cell aug">−1</span><span class="cell">2</span></div></div>
+        </div>
+        <p>La gauche est devenue l'identité, donc&nbsp;:</p>
+        <div style="text-align:center">\[ A^{-1}=\begin{pmatrix} 1 & -1 \\ -1 & 2 \end{pmatrix} \]</div>
+        <p style="margin-bottom:0">Contrôle&nbsp;: \(A\,A^{-1}=\begin{pmatrix} 2 & 1 \\ 1 & 1 \end{pmatrix}\begin{pmatrix} 1 & -1 \\ -1 & 2 \end{pmatrix}=\begin{pmatrix} 1 & 0 \\ 0 & 1 \end{pmatrix}\) ✓</p>
+      </div>
+    </div>
+
+    <div class="exo">
+      <div class="exo-head"><span class="exo-badge">Exo 5.2</span><span class="exo-title">Une matrice qui résiste</span></div>
+      <div class="exo-body"><p>Montre que \( A=\begin{pmatrix} 1 & 2 \\ 2 & 4 \end{pmatrix}\) n'est <strong>pas</strong> inversible.</p></div>
+      <button class="reveal"><span class="chev">▸</span> Voir la solution</button>
+      <div class="solution light">
+        <div class="sol-lbl">Correction</div>
+        <p>On démarre l'échelonnement&nbsp;:</p>
+        <div style="text-align:center; line-height:3">
+          <div class="mtx"><div class="row"><span class="cell pivot">1</span><span class="cell">2</span><span class="cell aug">1</span><span class="cell">0</span></div><div class="row"><span class="cell">2</span><span class="cell">4</span><span class="cell aug">0</span><span class="cell">1</span></div></div>
+          <span style="font-family:'JetBrains Mono',monospace; color:var(--amber-line); margin:0 8px">L₂−2L₁</span>
+          <div class="mtx"><div class="row"><span class="cell pivot">1</span><span class="cell">2</span><span class="cell aug">1</span><span class="cell">0</span></div><div class="row"><span class="cell zero">0</span><span class="cell zero">0</span><span class="cell aug">−2</span><span class="cell">1</span></div></div>
+        </div>
+        <p style="margin-bottom:0">La 2ᵉ ligne de la partie gauche est devenue <strong>nulle</strong> <span class="mono">(0&nbsp;0)</span>. On ne pourra jamais reformer l'identité à gauche&nbsp;: <span class="mono">A</span> n'est <strong>pas inversible</strong>. (Logique&nbsp;: la ligne 2 était le double de la ligne 1 — une information redondante.)</p>
+      </div>
+    </div>
+
+    <div class="exo">
+      <div class="exo-head"><span class="exo-badge">Exo 5.3</span><span class="exo-title">Inverse d'une 3×3 triangulaire</span></div>
+      <div class="exo-body"><p>Calcule l'inverse de \( A=\begin{pmatrix} 1 & 1 & 1 \\ 0 & 1 & 1 \\ 0 & 0 & 1 \end{pmatrix}\).</p></div>
+      <button class="reveal"><span class="chev">▸</span> Voir la solution</button>
+      <div class="solution light">
+        <div class="sol-lbl">Correction</div>
+        <p>La partie gauche est déjà presque réduite (des 1 sur la diagonale, des 0 en bas). Il suffit de la phase de <strong>réduction</strong> pour effacer les 1 au-dessus des pivots, en remontant&nbsp;:</p>
+        <div style="text-align:center; line-height:3; overflow-x:auto">
+          <div class="mtx"><div class="row"><span class="cell pivot">1</span><span class="cell">1</span><span class="cell">1</span><span class="cell aug">1</span><span class="cell">0</span><span class="cell">0</span></div><div class="row"><span class="cell zero">0</span><span class="cell pivot">1</span><span class="cell">1</span><span class="cell aug">0</span><span class="cell">1</span><span class="cell">0</span></div><div class="row"><span class="cell zero">0</span><span class="cell zero">0</span><span class="cell pivot">1</span><span class="cell aug">0</span><span class="cell">0</span><span class="cell">1</span></div></div>
+          <span style="font-family:'JetBrains Mono',monospace; color:var(--amber-line); margin:0 6px; font-size:13px">L₂−L₃ ; L₁−L₃</span>
+          <div class="mtx"><div class="row"><span class="cell pivot">1</span><span class="cell">1</span><span class="cell zero">0</span><span class="cell aug">1</span><span class="cell">0</span><span class="cell">−1</span></div><div class="row"><span class="cell zero">0</span><span class="cell pivot">1</span><span class="cell zero">0</span><span class="cell aug">0</span><span class="cell">1</span><span class="cell">−1</span></div><div class="row"><span class="cell zero">0</span><span class="cell zero">0</span><span class="cell pivot">1</span><span class="cell aug">0</span><span class="cell">0</span><span class="cell">1</span></div></div>
+          <span style="font-family:'JetBrains Mono',monospace; color:var(--amber-line); margin:0 6px; font-size:13px">L₁−L₂</span>
+          <div class="mtx"><div class="row"><span class="cell pivot">1</span><span class="cell zero">0</span><span class="cell zero">0</span><span class="cell aug">1</span><span class="cell">−1</span><span class="cell">0</span></div><div class="row"><span class="cell zero">0</span><span class="cell pivot">1</span><span class="cell zero">0</span><span class="cell aug">0</span><span class="cell">1</span><span class="cell">−1</span></div><div class="row"><span class="cell zero">0</span><span class="cell zero">0</span><span class="cell pivot">1</span><span class="cell aug">0</span><span class="cell">0</span><span class="cell">1</span></div></div>
+        </div>
+        <div style="text-align:center">\[ A^{-1}=\begin{pmatrix} 1 & -1 & 0 \\ 0 & 1 & -1 \\ 0 & 0 & 1 \end{pmatrix} \]</div>
+        <p style="margin-bottom:0">Tu peux vérifier que <span class="mono">A·A⁻¹ = I</span>. Astuce visuelle&nbsp;: l'inverse d'une triangulaire reste triangulaire.</p>
+      </div>
+    </div>
+
+    <div class="pagenav">
+      <button data-go="4"><span class="dir">← Précédent</span><span class="tt">04 · Combien de solutions ?</span></button>
+      <button class="next" data-go="6"><span class="dir">Suivant →</span><span class="tt">06 · Vecteurs &amp; comb. linéaires</span></button>
+    </div>
+  </section>
+
+  <section class="page" id="p6">
+    <p class="eyebrow">Section 06 · changer de point de vue</p>
+    <h1 class="title">Les vecteurs de dimension n</h1>
+    <p class="lead">Jusqu'ici on a vu les systèmes « en lignes » (des équations). Il existe une autre lecture, « en colonnes », qui éclaire tout&nbsp;: les <strong>vecteurs</strong>. Pas de panique — un vecteur n'est qu'une colonne de nombres, et on ne fait avec que deux choses très simples.</p>
+
+    <h2><span class="h-num">›</span>Qu'est-ce qu'un vecteur ?</h2>
+    <p>Un <strong>vecteur</strong> de <span class="mono">ℝⁿ</span> est juste une liste ordonnée de <span class="mono">n</span> nombres réels, écrite en colonne. On peut le voir comme une <strong>flèche</strong> partant de l'origine, ou comme un <strong>point</strong> de l'espace. Deux opérations, et c'est tout&nbsp;:</p>
+    <div class="card light">
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:20px">
+        <div>
+          <h4 style="margin-top:0">① Addition (composante par composante)</h4>
+          <div style="text-align:center">\[ \begin{pmatrix} x_1 \\ x_2 \\ x_3 \end{pmatrix}+\begin{pmatrix} y_1 \\ y_2 \\ y_3 \end{pmatrix}=\begin{pmatrix} x_1+y_1 \\ x_2+y_2 \\ x_3+y_3 \end{pmatrix} \]</div>
+        </div>
+        <div>
+          <h4 style="margin-top:0">② Multiplication par un scalaire r</h4>
+          <div style="text-align:center">\[ r\begin{pmatrix} x_1 \\ x_2 \\ x_3 \end{pmatrix}=\begin{pmatrix} r\,x_1 \\ r\,x_2 \\ r\,x_3 \end{pmatrix} \]</div>
+        </div>
+      </div>
+      <p style="margin:14px 0 0" class="tip-inline">« Scalaire » = simplement « un nombre » (par opposition à un vecteur). Multiplier par un scalaire <strong>étire</strong> (ou retourne) la flèche.</p>
+    </div>
+    <div class="callout c-note">
+      <div class="ico">i</div>
+      <div class="ctit">Les 10 propriétés, en une phrase</div>
+      <p style="margin-bottom:0">Ces deux opérations se comportent « comme on s'y attend »&nbsp;: l'addition est commutative et associative, il y a un vecteur nul <span class="mono">O</span> (que des 0), chaque vecteur a son opposé <span class="mono">−X</span>, et la multiplication par un scalaire se distribue sur les sommes. Tu n'as pas à les réciter&nbsp;; juste à savoir que <strong>tout fonctionne sans surprise</strong>.</p>
+    </div>
+
+    <h2><span class="h-num">›</span>Les vecteurs unitaires E₁, E₂, …</h2>
+    <p>Tout vecteur se décompose sur des briques élémentaires&nbsp;: les <strong>vecteurs unitaires</strong> <span class="mono">Eᵢ</span>, qui n'ont que des 0 sauf un seul <strong>1</strong> à la position <span class="mono">i</span>. Dans le plan&nbsp;:</p>
+    <div style="text-align:center; margin:14px 0">\[ \begin{pmatrix} x_1 \\ x_2 \end{pmatrix}=x_1\underbrace{\begin{pmatrix} 1 \\ 0 \end{pmatrix}}_{E_1}+x_2\underbrace{\begin{pmatrix} 0 \\ 1 \end{pmatrix}}_{E_2} \]</div>
+    <p>Au-delà de la dimension 3, on ne peut plus dessiner — mais l'algèbre, elle, continue parfaitement&nbsp;: un vecteur de <span class="mono">ℝⁿ</span> s'écrit toujours <span class="mono">x₁E₁ + x₂E₂ + … + xₙEₙ</span>. C'est tout l'intérêt&nbsp;: <strong>raisonner en dimension quelconque sans dessin</strong>.</p>
+
+    <h2><span class="h-num">›</span>Jouer avec les vecteurs</h2>
+    <p>Manipule les curseurs pour construire deux vecteurs <span style="color:#3f9e75; font-weight:600">u</span> et <span style="color:#3aa0a0; font-weight:600">v</span>. Observe leur somme <span style="color:#c98a2a; font-weight:600">u + v</span> (règle du parallélogramme) et l'étirement <span style="color:#7fc8a0; font-weight:600">k·u</span>.</p>
+    <div class="fig">
+      <div class="blabel">Addition &amp; multiplication par un scalaire dans le plan</div>
+      <canvas id="vecCanvas" width="760" height="460"></canvas>
+      <div class="controls">
+        <div class="ctrl"><label>u — abscisse <b id="vux">3</b></label><input type="range" id="ux" min="-5" max="5" step="1" value="3"></div>
+        <div class="ctrl"><label>u — ordonnée <b id="vuy">1</b></label><input type="range" id="uy" min="-5" max="5" step="1" value="1"></div>
+        <div class="ctrl"><label>v — abscisse <b id="vvx">-1</b></label><input type="range" id="vx" min="-5" max="5" step="1" value="-1"></div>
+        <div class="ctrl"><label>v — ordonnée <b id="vvy">2</b></label><input type="range" id="vy" min="-5" max="5" step="1" value="2"></div>
+        <div class="ctrl"><label>scalaire k (sur u) <b id="vk">1.5</b></label><input type="range" id="kv" min="-2" max="2" step="0.5" value="1.5"></div>
+      </div>
+      <div class="legend-row">
+        <span style="--c:#4FB286">u</span>
+        <span style="--c:#3aa0a0">v</span>
+        <span style="--c:#E3A23A">u + v</span>
+        <span style="--c:#9ad9b8">k · u</span>
+      </div>
+    </div>
+
+    <h2><span class="h-num">›</span>La combinaison linéaire (l'idée centrale)</h2>
+    <p>C'est <em>le</em> concept à retenir de cette section. Une <strong>combinaison linéaire</strong> de vecteurs <span class="mono">X₁, …, Xₚ</span>, c'est ce qu'on obtient en les <strong>étirant chacun par un nombre, puis en additionnant le tout</strong>&nbsp;:</p>
+    <div class="board" style="text-align:center">
+      <div class="blabel">Définition</div>
+      <p style="color:#fff; font-size:18px; margin:8px 0">\( X=\lambda_1 X_1+\lambda_2 X_2+\dots+\lambda_p X_p \)</p>
+      <p style="margin-bottom:0">les <span class="mono" style="color:var(--amber)">λᵢ</span> (« lambda ») sont des nombres réels quelconques — les « doses » de chaque vecteur.</p>
+    </div>
+    <div class="callout c-trap">
+      <div class="ico">!</div>
+      <div class="ctit">Piège fréquent · ce qui n'est PAS linéaire</div>
+      <p style="margin-bottom:0">On a seulement le droit de <strong>multiplier par un nombre</strong> et d'<strong>additionner</strong>. Des choses comme <span class="mono">X₁·X₂</span> (produit de deux vecteurs) ou <span class="mono">X₁²</span> ne sont <strong>pas</strong> des combinaisons linéaires. « Linéaire » = uniquement « doses + sommes ».</p>
+    </div>
+
+    <div class="callout c-idea">
+      <div class="ico">★</div>
+      <div class="ctit">Le déclic : AX = B relu en colonnes</div>
+      <p>Si <span class="mono">C₁, …, Cₙ</span> sont les <strong>colonnes</strong> de la matrice <span class="mono">A</span>, alors le système <span class="mono">AX = B</span> s'écrit aussi&nbsp;:</p>
+      <div style="text-align:center; margin:6px 0">\[ x_1 C_1+x_2 C_2+\dots+x_n C_n=B \]</div>
+      <p style="margin-bottom:0">Autrement dit&nbsp;: <strong>résoudre <span class="mono">AX = B</span>, c'est chercher les bonnes « doses » <span class="mono">x₁, …, xₙ</span> des colonnes de A pour fabriquer B</strong>. Le système est compatible (a une solution) <strong>si et seulement si</strong> B est une combinaison linéaire des colonnes de A. C'est exactement la même question, vue autrement.</p>
+    </div>
+
+    <div class="callout c-master">
+      <div class="ico">✓</div>
+      <div class="ctit">À maîtriser absolument</div>
+      <ul style="margin-bottom:0">
+        <li>Additionner deux vecteurs et multiplier un vecteur par un scalaire.</li>
+        <li>Calculer une <strong>combinaison linéaire</strong> du type <span class="mono">2u − 3v</span>.</li>
+        <li>Décider si un vecteur <strong>est</strong> combinaison linéaire d'autres (en résolvant un système).</li>
+        <li>Expliquer le lien <strong>AX = B ⟺ B est combinaison des colonnes de A</strong>.</li>
+      </ul>
+    </div>
+
+    <div class="exo">
+      <div class="exo-head"><span class="exo-badge">Exo 6.1</span><span class="exo-title">Calculs de base</span></div>
+      <div class="exo-body"><p>Soient \( u=\begin{pmatrix} 1 \\ -2 \\ 3 \end{pmatrix}\) et \( v=\begin{pmatrix} 0 \\ 4 \\ 1 \end{pmatrix}\). Calcule <span class="mono">2u</span>, <span class="mono">u + v</span> et <span class="mono">2u − 3v</span>.</p></div>
+      <button class="reveal"><span class="chev">▸</span> Voir la solution</button>
+      <div class="solution light">
+        <div class="sol-lbl">Correction</div>
+        <p>On travaille composante par composante&nbsp;:</p>
+        <div style="text-align:center; line-height:2.2">
+          \[ 2u=\begin{pmatrix} 2 \\ -4 \\ 6 \end{pmatrix}\qquad u+v=\begin{pmatrix} 1 \\ 2 \\ 4 \end{pmatrix} \]
+          \[ 2u-3v=\begin{pmatrix} 2 \\ -4 \\ 6 \end{pmatrix}-\begin{pmatrix} 0 \\ 12 \\ 3 \end{pmatrix}=\begin{pmatrix} 2 \\ -16 \\ 3 \end{pmatrix} \]
+        </div>
+        <p style="margin-bottom:0">Détail du dernier&nbsp;: <span class="mono">3v = (0, 12, 3)</span>, puis <span class="mono">(2−0, −4−12, 6−3) = (2, −16, 3)</span>.</p>
+      </div>
+    </div>
+
+    <div class="exo">
+      <div class="exo-head"><span class="exo-badge">Exo 6.2</span><span class="exo-title">Est-ce une combinaison linéaire ?</span></div>
+      <div class="exo-body"><p>Le vecteur \( w=\begin{pmatrix} 3 \\ 5 \end{pmatrix}\) est-il une combinaison linéaire de \( u=\begin{pmatrix} 1 \\ 1 \end{pmatrix}\) et \( v=\begin{pmatrix} 1 \\ 2 \end{pmatrix}\)&nbsp;? Si oui, avec quelles doses&nbsp;?</p></div>
+      <button class="reveal"><span class="chev">▸</span> Voir la solution</button>
+      <div class="solution light">
+        <div class="sol-lbl">Correction</div>
+        <p>On cherche des nombres <span class="mono">λ</span> et <span class="mono">μ</span> tels que <span class="mono">λu + μv = w</span>. Composante par composante, cela donne un système&nbsp;:</p>
+        <div style="text-align:center">\[ \begin{cases} \lambda + \mu = 3 \\ \lambda + 2\mu = 5 \end{cases} \]</div>
+        <p>En soustrayant la 1ʳᵉ équation de la 2ᵉ&nbsp;: <span class="mono">μ = 2</span>. Puis <span class="mono">λ = 3 − 2 = 1</span>.</p>
+        <p style="margin-bottom:0">Oui&nbsp;! <span class="mono">w = 1·u + 2·v</span>. Vérification&nbsp;: <span class="mono">1·(1,1) + 2·(1,2) = (1+2, 1+4) = (3,5)</span> ✓. (Remarque&nbsp;: ce système, c'est exactement <span class="mono">AX = w</span> avec <span class="mono">A</span> formée des colonnes <span class="mono">u</span> et <span class="mono">v</span>.)</p>
+      </div>
+    </div>
+
+    <div class="pagenav">
+      <button data-go="5"><span class="dir">← Précédent</span><span class="tt">05 · Matrices inversibles</span></button>
+      <button class="next" data-go="7"><span class="dir">Suivant →</span><span class="tt">07 · Application : portefeuilles</span></button>
+    </div>
+  </section>
+
+  <section class="page" id="p7">
+    <p class="eyebrow">Section 07 · pourquoi ça sert en éco</p>
+    <h1 class="title">Application : portefeuilles d'investissement</h1>
+    <p class="lead">Voici où l'algèbre devient de la finance. On va voir qu'un <strong>portefeuille</strong> n'est qu'un vecteur, que les <strong>rendements</strong> sont un produit matrice-vecteur, et que des questions très concrètes (« est-ce sans risque&nbsp;? », « peut-on s'assurer&nbsp;? ») se répondent… avec Gauss-Jordan.</p>
+
+    <h2><span class="h-num">›</span>Le décor, en mots simples</h2>
+    <div class="card light">
+      <ul style="margin:0">
+        <li style="margin:8px 0"><strong>A actifs</strong> (actions, obligations…). Tu répartis ton argent dessus.</li>
+        <li style="margin:8px 0">Un <strong>portefeuille</strong> est le vecteur <span class="mono">X = (x₁, …, x_A)</span> des <strong>fractions</strong> de ton budget mises sur chaque actif. Contrainte&nbsp;: tout l'argent est investi, donc <span class="mono">x₁ + … + x_A = 1</span>.</li>
+        <li style="margin:8px 0"><strong>S états de la nature</strong>&nbsp;: les scénarios possibles du futur (crise, croissance…). Un seul se réalisera, mais on ignore lequel.</li>
+        <li style="margin:8px 0"><span class="mono">R_{si}</span> = ce que rapporte 1&nbsp;€ placé dans l'actif <span class="mono">i</span> si le scénario <span class="mono">s</span> arrive. On range ces nombres dans une matrice <strong>R</strong> de taille <span class="mono">(S × A)</span>.</li>
+      </ul>
+    </div>
+    <div class="callout c-idea">
+      <div class="ico">★</div>
+      <div class="ctit">Le rendement du portefeuille = R X</div>
+      <p style="margin-bottom:0">Si tu choisis le portefeuille <span class="mono">X</span>, alors le vecteur <span class="mono">R X</span> te donne, <strong>ligne par ligne, ce que tu gagnes dans chaque scénario</strong>. Une multiplication matrice-vecteur, exactement comme à la section 01. Toute la finance qui suit, c'est lire ce vecteur <span class="mono">R X</span>.</p>
+    </div>
+
+    <h2><span class="h-num">›</span>Trois questions, trois traductions</h2>
+    <div class="card">
+      <h4 style="margin-top:0">Portefeuille <span style="color:var(--green)">sans risque</span></h4>
+      <p style="margin-bottom:0">Il rapporte <strong>la même chose quel que soit le scénario</strong>. Traduction&nbsp;: <span class="mono">R X</span> est un multiple de <span class="mono">(1, 1, …, 1)</span> (toutes ses composantes égales).</p>
+    </div>
+    <div class="card">
+      <h4 style="margin-top:0">État <span style="color:var(--rust)">assurable</span></h4>
+      <p style="margin-bottom:0">On peut bâtir un portefeuille qui paie <strong>uniquement si ce scénario <span class="mono">s*</span> se produit</strong> (et 0 sinon) — une vraie police d'assurance. Traduction&nbsp;: <span class="mono">R X</span> est un multiple du vecteur unitaire <span class="mono">E_{s*}</span> (du genre <span class="mono">(0, …, k, …, 0)</span>).</p>
+    </div>
+    <div class="card">
+      <h4 style="margin-top:0">Portefeuille <span style="color:var(--sage)">duplicable</span></h4>
+      <p style="margin-bottom:0">Il existe un <strong>autre</strong> portefeuille <span class="mono">Y</span> donnant <strong>exactement les mêmes rendements</strong> dans tous les scénarios&nbsp;: <span class="mono">R X = R Y</span> (avec même budget). Traduction&nbsp;: le système homogène <span class="mono">R(X − Y) = O</span> a une solution non nulle.</p>
+    </div>
+
+    <h2><span class="h-num">›</span>Exemple résolu (2 actifs, 3 scénarios)</h2>
+    <p>Prenons \( R=\begin{pmatrix} 1 & 3 \\ 2 & 2 \\ 3 & 1 \end{pmatrix}\). Pour comprendre quels rendements <span class="mono">(a, b, c)</span> sont <em>atteignables</em>, on résout <span class="mono">R X = (a, b, c)</span> en échelonnant la matrice complétée&nbsp;:</p>
+    <div style="text-align:center; line-height:3; overflow-x:auto">
+      <div class="mtx"><div class="row"><span class="cell pivot">1</span><span class="cell">3</span><span class="cell aug">a</span></div><div class="row"><span class="cell">2</span><span class="cell">2</span><span class="cell aug">b</span></div><div class="row"><span class="cell">3</span><span class="cell">1</span><span class="cell aug">c</span></div></div>
+      <span style="font-family:'JetBrains Mono',monospace; color:var(--amber-line); margin:0 8px; font-size:13px">L₂−2L₁, L₃−3L₁, puis L₃−2L₂</span>
+      <div class="mtx"><div class="row"><span class="cell pivot">1</span><span class="cell">3</span><span class="cell aug">a</span></div><div class="row"><span class="cell zero">0</span><span class="cell pivot">−4</span><span class="cell aug">b−2a</span></div><div class="row"><span class="cell zero">0</span><span class="cell zero">0</span><span class="cell aug">a−2b+c</span></div></div>
+    </div>
+    <p>La dernière ligne dit <span class="mono">0 = a − 2b + c</span>. Donc un vecteur de rendements n'est atteignable <strong>que si</strong> <span class="mono">a − 2b + c = 0</span>. Cette petite équation contient toutes les réponses&nbsp;:</p>
+    <div class="card light">
+      <p style="margin-top:0"><strong style="color:var(--green-deep)">✓ Un portefeuille sans risque existe.</strong> Prends <span class="mono">X = (½, ½)</span>. Alors&nbsp;:</p>
+      <div style="text-align:center">\[ RX=\begin{pmatrix} 1 & 3 \\ 2 & 2 \\ 3 & 1 \end{pmatrix}\begin{pmatrix} ½ \\ ½ \end{pmatrix}=\begin{pmatrix} 2 \\ 2 \\ 2 \end{pmatrix}=2\begin{pmatrix} 1 \\ 1 \\ 1 \end{pmatrix} \]</div>
+      <p style="margin-bottom:0">Même rendement (2&nbsp;€ par euro) dans les 3 scénarios&nbsp;: <strong>aucun risque</strong>. Et au passage <span class="mono">(2,2,2)</span> vérifie bien <span class="mono">2 − 4 + 2 = 0</span>.</p>
+    </div>
+    <div class="card light">
+      <p style="margin-top:0"><strong style="color:#9a3f27">✗ Aucun état n'est assurable.</strong> Pour assurer le scénario 1, il faudrait <span class="mono">RX = (k, 0, 0)</span> avec <span class="mono">k &gt; 0</span>. Or la condition impose <span class="mono">a − 2b + c = k − 0 + 0 = k = 0</span>&nbsp;: contradiction. Idem pour les scénarios 2 et 3. <strong>Les rendements « purs » (0,…,k,…,0) ne sont jamais atteignables ici.</strong></p>
+    </div>
+    <div class="card light">
+      <p style="margin:0"><strong style="color:var(--sage)">✗ Aucun portefeuille n'est duplicable.</strong> Résoudre <span class="mono">R Z = O</span> (avec <span class="mono">Z = X − Y</span>)&nbsp;: les deux colonnes de <span class="mono">R</span> ne sont pas proportionnelles, donc le seul <span class="mono">Z</span> possible est <span class="mono">O</span>. Conclusion <span class="mono">X = Y</span>&nbsp;: deux portefeuilles distincts ne peuvent pas avoir les mêmes rendements.</p>
+    </div>
+
+    <div class="callout c-master">
+      <div class="ico">✓</div>
+      <div class="ctit">À maîtriser absolument</div>
+      <ul style="margin-bottom:0">
+        <li>Traduire un énoncé financier en <span class="mono">R</span>, <span class="mono">X</span>, et le produit <span class="mono">R X</span>.</li>
+        <li>Donner les définitions <strong>sans risque / assurable / duplicable</strong> en termes de <span class="mono">R X</span>.</li>
+        <li>Échelonner <span class="mono">(R | (a,b,c))</span> pour trouver la <strong>condition d'atteignabilité</strong>.</li>
+        <li>En déduire l'existence (ou non) de ces trois propriétés.</li>
+      </ul>
+    </div>
+
+    <div class="exo">
+      <div class="exo-head"><span class="exo-badge">Exo 7.1</span><span class="exo-title">Quand R est carrée et inversible</span></div>
+      <div class="exo-body"><p>On a maintenant 2 actifs et <strong>2</strong> scénarios, avec \( R=\begin{pmatrix} 2 & 1 \\ 1 & 2 \end{pmatrix}\). (a) Le portefeuille <span class="mono">X = (½, ½)</span> est-il sans risque&nbsp;? (b) Les états sont-ils assurables&nbsp;? <em>Indice&nbsp;: R est-elle inversible&nbsp;?</em></p></div>
+      <button class="reveal"><span class="chev">▸</span> Voir la solution</button>
+      <div class="solution light">
+        <div class="sol-lbl">Correction</div>
+        <p><strong>(a)</strong> On calcule le rendement&nbsp;:</p>
+        <div style="text-align:center">\[ RX=\begin{pmatrix} 2 & 1 \\ 1 & 2 \end{pmatrix}\begin{pmatrix} ½ \\ ½ \end{pmatrix}=\begin{pmatrix} 1{,}5 \\ 1{,}5 \end{pmatrix}=1{,}5\begin{pmatrix} 1 \\ 1 \end{pmatrix} \]</div>
+        <p>Composantes égales → <strong>oui, sans risque</strong> (1,5&nbsp;€ par euro dans les deux scénarios).</p>
+        <p><strong>(b)</strong> Le déterminant de <span class="mono">R</span> vaut <span class="mono">2·2 − 1·1 = 3 ≠ 0</span>&nbsp;: <span class="mono">R</span> est <strong>inversible</strong>. Donc pour <em>n'importe quel</em> rendement visé <span class="mono">D</span>, le portefeuille <span class="mono">X = R⁻¹D</span> l'atteint. En particulier on peut viser <span class="mono">(k, 0)</span> (assurer l'état 1) ou <span class="mono">(0, k)</span> (assurer l'état 2).</p>
+        <p style="margin-bottom:0"><strong>Les deux états sont assurables.</strong> Contraste frappant avec l'exemple du cours&nbsp;: là, <span class="mono">R</span> avait plus de lignes (scénarios) que de colonnes (actifs), les rendements étaient « coincés » sur un plan&nbsp;; ici <span class="mono">R</span> est carrée inversible, donc <strong>tous</strong> les rendements sont atteignables.</p>
+      </div>
+    </div>
+
+    <div class="pagenav">
+      <button data-go="6"><span class="dir">← Précédent</span><span class="tt">06 · Vecteurs &amp; comb. linéaires</span></button>
+      <button class="next" data-go="8"><span class="dir">Suivant →</span><span class="tt">08 · Synthèse &amp; auto-éval</span></button>
+    </div>
+  </section>
+
+  <section class="page" id="p8">
+    <p class="eyebrow">Section 08 · on fait le point</p>
+    <h1 class="title">Synthèse &amp; auto-évaluation</h1>
+    <p class="lead">Tu es arrivé au bout — bravo. Cette page sert à deux choses&nbsp;: une <strong>carte mémo</strong> de tout le chapitre, et une <strong>checklist interactive</strong> pour repérer ce qui n'est pas encore solide. Coche ce que tu maîtrises&nbsp;; ce qui reste vide, c'est ta liste de révision.</p>
+
+    <h2><span class="h-num">›</span>La carte mémo du chapitre</h2>
+    <div class="card light">
+      <h4 style="margin-top:0">① Un système, trois écritures</h4>
+      <p style="margin-bottom:0">Le même objet se lit en <strong>équations</strong>, en <strong>matrice</strong> <span class="mono">AX = B</span>, ou en <strong>colonnes</strong> <span class="mono">x₁C₁ + … + xₙCₙ = B</span>. Savoir passer de l'un à l'autre, c'est la moitié du travail.</p>
+    </div>
+    <div class="card light">
+      <h4 style="margin-top:0">② Gauss-Jordan, la recette unique</h4>
+      <p style="margin-bottom:0">3 transformations élémentaires → matrice complétée <span class="mono">(A | B)</span> → <strong>échelonnement</strong> (pivots + 0 en-dessous) → <strong>réduction</strong> (0 au-dessus) → on lit la solution. C'est l'outil central de tout le chapitre.</p>
+    </div>
+    <div class="card light">
+      <h4 style="margin-top:0">③ Combien de solutions ? Toujours 0, 1 ou ∞</h4>
+      <p style="margin-bottom:0">Ligne <span class="mono">0 = (non nul)</span> → <strong>impossible</strong>. Gauche = identité → <strong>1 solution</strong>. Variables libres (sans pivot) → <strong>∞ solutions</strong>, écrites sous forme vectorielle. Rappel&nbsp;: si <span class="mono">p &lt; n</span>, jamais de solution unique&nbsp;; un système homogène a toujours au moins <span class="mono">X = O</span>.</p>
+    </div>
+    <div class="card light">
+      <h4 style="margin-top:0">④ Inverse = Gauss-Jordan sur (A | I)</h4>
+      <p style="margin-bottom:0"><span class="mono">(A | I) → (I | A⁻¹)</span>. Si une ligne de gauche devient nulle, pas d'inverse. Inverser = résoudre <span class="mono">n</span> systèmes d'un coup.</p>
+    </div>
+    <div class="card light">
+      <h4 style="margin-top:0">⑤ Vecteurs &amp; combinaisons linéaires</h4>
+      <p style="margin-bottom:0">Deux opérations seulement (somme, multiple). <span class="mono">AX = B</span> compatible ⟺ <strong>B est combinaison linéaire des colonnes de A</strong>. C'est le pont vers l'application finance.</p>
+    </div>
+    <div class="card light">
+      <h4 style="margin-top:0">⑥ Portefeuilles</h4>
+      <p style="margin-bottom:0">Portefeuille = vecteur <span class="mono">X</span>&nbsp;; rendements = <span class="mono">R X</span>. <strong>Sans risque</strong> = <span class="mono">RX</span> multiple de <span class="mono">(1,…,1)</span>&nbsp;; <strong>assurable</strong> = multiple d'un <span class="mono">Eₛ</span>&nbsp;; <strong>duplicable</strong> = <span class="mono">R(X−Y)=O</span> a une solution non nulle.</p>
+    </div>
+
+    <h2><span class="h-num">›</span>Checklist — qu'est-ce que je maîtrise ?</h2>
+    <p>Clique sur chaque ligne que tu te sens capable de refaire <strong>seul, sans regarder</strong>. Sois honnête&nbsp;: une case non cochée n'est pas un échec, c'est juste l'endroit où réviser en priorité.</p>
+    <ul class="check" id="checklist">
+      <li><span class="box"></span><span class="txt">Transformer un énoncé en système, puis l'écrire sous forme <span class="mono">AX = B</span> (avec les bonnes dimensions).</span></li>
+      <li><span class="box"></span><span class="txt">Calculer un produit <span class="mono">A·X</span> à la main.</span></li>
+      <li><span class="box"></span><span class="txt">Donner le vocabulaire&nbsp;: compatible / incompatible, déterminé / indéterminé, homogène.</span></li>
+      <li><span class="box"></span><span class="txt">Citer les <strong>3 transformations élémentaires</strong> et écrire une matrice complétée <span class="mono">(A | B)</span>.</span></li>
+      <li><span class="box"></span><span class="txt">Dérouler Gauss-Jordan complet (échelonnement + réduction) sur un système 3×3.</span></li>
+      <li><span class="box"></span><span class="txt">Reconnaître les 3 cas <strong>0 / 1 / ∞</strong> sur une matrice réduite.</span></li>
+      <li><span class="box"></span><span class="txt">Écrire les solutions d'un système indéterminé <strong>sous forme vectorielle</strong>.</span></li>
+      <li><span class="box"></span><span class="txt">Appliquer la règle <span class="mono">p &lt; n</span> et le cas homogène.</span></li>
+      <li><span class="box"></span><span class="txt">Calculer un inverse via <span class="mono">(A | I) → (I | A⁻¹)</span> et le vérifier.</span></li>
+      <li><span class="box"></span><span class="txt">Repérer qu'une matrice n'est pas inversible.</span></li>
+      <li><span class="box"></span><span class="txt">Calculer une combinaison linéaire et tester si un vecteur en est une.</span></li>
+      <li><span class="box"></span><span class="txt">Expliquer le lien <span class="mono">AX = B</span> ⟺ B combinaison des colonnes de A.</span></li>
+      <li><span class="box"></span><span class="txt">Traduire « sans risque / assurable / duplicable » en conditions sur <span class="mono">R X</span>.</span></li>
+    </ul>
+    <div class="callout c-idea">
+      <div class="ico">★</div>
+      <div class="ctit">Comment réviser efficacement</div>
+      <p style="margin-bottom:0">Pour chaque case non cochée, retourne à la section concernée, relis l'encadré <span style="color:var(--green-deep); font-weight:600">« À maîtriser »</span>, puis refais l'exercice <strong>en cachant la correction</strong>. Refais-le jusqu'à ne plus avoir besoin de la solution. C'est cette répétition active — pas la relecture passive — qui ancre les méthodes.</p>
+    </div>
+    <div class="callout c-note">
+      <div class="ico">i</div>
+      <div class="ctit">Un mot de méthode</div>
+      <p style="margin-bottom:0">Gauss-Jordan paraît mécanique, mais l'erreur la plus fréquente à l'examen est l'<strong>arithmétique des signes</strong> (un « − » oublié dans <span class="mono">L₂ − 2L₁</span>). Va lentement, écris chaque opération, et vérifie à la fin en réinjectant ta solution dans le système de départ.</p>
+    </div>
+
+    <div class="pagenav">
+      <button data-go="7"><span class="dir">← Précédent</span><span class="tt">07 · Application : portefeuilles</span></button>
+      <button class="next" data-go="0"><span class="dir">Retour au début ↑</span><span class="tt">00 · Bienvenue</span></button>
+    </div>
+  </section>
+
+  </div><!-- /.content -->
+  </div><!-- /.main -->
+</div><!-- /.shell -->
+
+<!-- ============ KaTeX ============ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- KaTeX ---------- */
+  function renderMath(){
+    if(window.renderMathInElement){
+      try{
+        renderMathInElement(document.body,{
+          delimiters:[
+            {left:'\\[',right:'\\]',display:true},
+            {left:'\\(',right:'\\)',display:false}
+          ],
+          throwOnError:false
+        });
+      }catch(e){}
+    }
+  }
+
+  /* ---------- Section navigation ---------- */
+  var pages = Array.prototype.slice.call(document.querySelectorAll('.page'));
+  var navBtns = Array.prototype.slice.call(document.querySelectorAll('#nav button'));
+  var barfill = document.getElementById('barfill');
+  var sidebar = document.getElementById('sidebar');
+  var scrim = document.getElementById('scrim');
+  var current = 0;
+
+  function goTo(i){
+    if(i<0) i=0; if(i>pages.length-1) i=pages.length-1;
+    current = i;
+    pages.forEach(function(p){ p.classList.remove('active'); });
+    pages[i].classList.add('active');
+    navBtns.forEach(function(b){ b.classList.toggle('on', (+b.getAttribute('data-go'))===i); });
+    if(barfill) barfill.style.width = (i/(pages.length-1)*100) + '%';
+    if(sidebar) sidebar.classList.remove('open');
+    if(scrim) scrim.classList.remove('show');
+    window.scrollTo({top:0, behavior:'smooth'});
+    var id = pages[i].id;
+    if(id==='p4') drawLine();
+    if(id==='p6') drawVec();
+    renderMath();
+  }
+
+  document.querySelectorAll('[data-go]').forEach(function(b){
+    b.addEventListener('click', function(){ goTo(+b.getAttribute('data-go')); });
+  });
+
+  /* ---------- Mobile menu ---------- */
+  var menubtn = document.getElementById('menubtn');
+  if(menubtn) menubtn.addEventListener('click', function(){
+    sidebar.classList.toggle('open');
+    scrim.classList.toggle('show');
+  });
+  if(scrim) scrim.addEventListener('click', function(){
+    sidebar.classList.remove('open');
+    scrim.classList.remove('show');
+  });
+
+  /* ---------- Reveal solutions ---------- */
+  document.querySelectorAll('.reveal').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      btn.classList.toggle('open');
+      var sol = btn.nextElementSibling;
+      if(sol && sol.classList.contains('solution')){
+        sol.classList.toggle('show');
+        renderMath();
+      }
+    });
+  });
+
+  /* ---------- Checklist ---------- */
+  document.querySelectorAll('#checklist li').forEach(function(li){
+    li.addEventListener('click', function(){
+      li.classList.toggle('done');
+      var box = li.querySelector('.box');
+      if(box) box.textContent = li.classList.contains('done') ? '✓' : '';
+    });
+  });
+
+  /* ---------- Gauss-Jordan step-through ---------- */
+  var steps = [
+    { cells:[["2","3","-2","2"],["2","4","2","-4"],["6","4","8","2"]], pivots:[],
+      cap:"Système de départ. Objectif : installer un pivot en haut à gauche." },
+    { cells:[["1","3/2","-1","1"],["2","4","2","-4"],["6","4","8","2"]], pivots:[[0,0]],
+      cap:"<span class='op'>L₁ → ½ L₁</span> : on divise la 1ʳᵉ ligne pour obtenir un pivot = 1." },
+    { cells:[["1","3/2","-1","1"],["0","1","4","-6"],["0","-5","14","-4"]], pivots:[[0,0]],
+      cap:"<span class='op'>L₂ → L₂ − 2L₁</span> et <span class='op'>L₃ → L₃ − 6L₁</span> : des 0 sous le pivot." },
+    { cells:[["1","3/2","-1","1"],["0","1","4","-6"],["0","0","34","-34"]], pivots:[[0,0],[1,1]],
+      cap:"<span class='op'>L₃ → L₃ + 5L₂</span> : on élimine sous le 2ᵉ pivot." },
+    { cells:[["1","3/2","-1","1"],["0","1","4","-6"],["0","0","1","-1"]], pivots:[[0,0],[1,1],[2,2]],
+      cap:"<span class='op'>L₃ → (1/34) L₃</span> : 3ᵉ pivot = 1. Échelonnement terminé ✓" },
+    { cells:[["1","3/2","0","0"],["0","1","0","-2"],["0","0","1","-1"]], pivots:[[0,0],[1,1],[2,2]],
+      cap:"<span class='op'>L₂ → L₂ − 4L₃</span> et <span class='op'>L₁ → L₁ + L₃</span> : on remonte (réduction)." },
+    { cells:[["1","0","0","3"],["0","1","0","-2"],["0","0","1","-1"]], pivots:[[0,0],[1,1],[2,2]],
+      cap:"<span class='op'>L₁ → L₁ − 3⁄2 L₂</span> : terminé ! On lit x = 3, y = −2, z = −1. ✓" }
+  ];
+  var si = 0;
+  var stepMatrix = document.getElementById('step-matrix');
+  var stepCap = document.getElementById('step-cap');
+  var stepCounter = document.getElementById('step-counter');
+  var stepDots = document.getElementById('step-dots');
+  var sPrev = document.getElementById('step-prev');
+  var sNext = document.getElementById('step-next');
+
+  function buildMtx(state){
+    var mtx = document.createElement('div'); mtx.className = 'mtx';
+    state.cells.forEach(function(row, r){
+      var rd = document.createElement('div'); rd.className = 'row';
+      row.forEach(function(val, c){
+        var cell = document.createElement('span');
+        var cls = 'cell';
+        if(c===3) cls += ' aug';
+        var isPivot = state.pivots.some(function(p){ return p[0]===r && p[1]===c; });
+        if(isPivot) cls += ' pivot';
+        else if(val==='0') cls += ' zero';
+        cell.className = cls;
+        cell.textContent = val;
+        rd.appendChild(cell);
+      });
+      mtx.appendChild(rd);
+    });
+    return mtx;
+  }
+  function renderStep(){
+    if(!stepMatrix) return;
+    var s = steps[si];
+    stepMatrix.innerHTML = '';
+    stepMatrix.appendChild(buildMtx(s));
+    if(stepCap) stepCap.innerHTML = s.cap;
+    if(stepCounter) stepCounter.textContent = 'Étape ' + (si+1) + ' / ' + steps.length;
+    if(stepDots){
+      stepDots.innerHTML = '';
+      steps.forEach(function(_, k){
+        var d = document.createElement('i');
+        if(k===si) d.className = 'on';
+        stepDots.appendChild(d);
+      });
+    }
+    if(sPrev) sPrev.disabled = (si===0);
+    if(sNext) sNext.disabled = (si===steps.length-1);
+  }
+  if(sPrev) sPrev.addEventListener('click', function(){ if(si>0){ si--; renderStep(); } });
+  if(sNext) sNext.addEventListener('click', function(){ if(si<steps.length-1){ si++; renderStep(); } });
+  renderStep();
+
+  /* ---------- Canvas helpers ---------- */
+  function ctx2d(cv){
+    if(!cv._lw){ cv._lw = cv.width; cv._lh = cv.height; }
+    var dpr = window.devicePixelRatio || 1;
+    cv.width = cv._lw * dpr;
+    cv.height = cv._lh * dpr;
+    var c = cv.getContext('2d');
+    c.setTransform(dpr, 0, 0, dpr, 0, 0);
+    return { c:c, W:cv._lw, H:cv._lh };
+  }
+  function makeMap(W, H, xmin, xmax, ymin, ymax){
+    var m = 36;
+    var unit = Math.min((W-2*m)/(xmax-xmin), (H-2*m)/(ymax-ymin));
+    var cx = W/2, cy = H/2;
+    return {
+      unit:unit, cx:cx, cy:cy,
+      sx:function(wx){ return cx + wx*unit; },
+      sy:function(wy){ return cy - wy*unit; }
+    };
+  }
+  function drawGrid(c, W, H, map, lo, hi){
+    c.lineWidth = 1;
+    for(var k=lo; k<=hi; k++){
+      c.strokeStyle = (k===0) ? 'rgba(159,176,168,.5)' : 'rgba(159,176,168,.13)';
+      c.beginPath(); c.moveTo(map.sx(k), map.sy(lo)); c.lineTo(map.sx(k), map.sy(hi)); c.stroke();
+      c.beginPath(); c.moveTo(map.sx(lo), map.sy(k)); c.lineTo(map.sx(hi), map.sy(k)); c.stroke();
+    }
+    // axis labels
+    c.fillStyle = '#9FB0A8';
+    c.font = "11px 'JetBrains Mono', monospace";
+    c.textAlign = 'center'; c.textBaseline = 'top';
+    for(var i=lo; i<=hi; i++){ if(i!==0) c.fillText(i, map.sx(i), map.sy(0)+4); }
+    c.textAlign = 'right'; c.textBaseline = 'middle';
+    for(var j=lo; j<=hi; j++){ if(j!==0) c.fillText(j, map.sx(0)-5, map.sy(j)); }
+  }
+  function arrow(c, x1, y1, x2, y2, color, width, dashed){
+    c.save();
+    c.strokeStyle = color; c.fillStyle = color; c.lineWidth = width;
+    c.setLineDash(dashed ? [7,6] : []);
+    c.beginPath(); c.moveTo(x1,y1); c.lineTo(x2,y2); c.stroke();
+    c.setLineDash([]);
+    var ang = Math.atan2(y2-y1, x2-x1);
+    var hl = 11;
+    if(Math.hypot(x2-x1, y2-y1) > 6){
+      c.beginPath();
+      c.moveTo(x2, y2);
+      c.lineTo(x2 - hl*Math.cos(ang - Math.PI/7), y2 - hl*Math.sin(ang - Math.PI/7));
+      c.lineTo(x2 - hl*Math.cos(ang + Math.PI/7), y2 - hl*Math.sin(ang + Math.PI/7));
+      c.closePath(); c.fill();
+    }
+    c.restore();
+  }
+
+  /* ---------- Line plotter (section 04) ---------- */
+  var lineCanvas = document.getElementById('lineCanvas');
+  var A1 = 1, B1 = 1, C1 = 2; // fixed line: x + y = 2
+  function plotLine(c, map, a, b, cc, color, lo, hi){
+    var pts = [];
+    if(Math.abs(b) > 1e-9){
+      pts.push([lo, (cc - a*lo)/b]);
+      pts.push([hi, (cc - a*hi)/b]);
+    } else if(Math.abs(a) > 1e-9){
+      var xv = cc/a;
+      pts.push([xv, lo]); pts.push([xv, hi]);
+    } else { return; }
+    c.save();
+    c.strokeStyle = color; c.lineWidth = 3;
+    c.beginPath();
+    c.moveTo(map.sx(pts[0][0]), map.sy(pts[0][1]));
+    c.lineTo(map.sx(pts[1][0]), map.sy(pts[1][1]));
+    c.stroke();
+    c.restore();
+  }
+  function drawLine(){
+    if(!lineCanvas || !lineCanvas.clientWidth) return;
+    var o = ctx2d(lineCanvas), c = o.c, W = o.W, H = o.H;
+    var lo = -6, hi = 6;
+    var map = makeMap(W, H, lo, hi, lo, hi);
+    c.clearRect(0,0,W,H);
+    drawGrid(c, W, H, map, lo, hi);
+    var a2 = +document.getElementById('a2').value;
+    var b2 = +document.getElementById('b2').value;
+    var c2 = +document.getElementById('c2').value;
+    document.getElementById('va2').textContent = a2;
+    document.getElementById('vb2').textContent = b2;
+    document.getElementById('vc2').textContent = c2;
+    plotLine(c, map, A1, B1, C1, '#4FB286', lo, hi);
+    plotLine(c, map, a2, b2, c2, '#E3A23A', lo, hi);
+    // verdict
+    var det = A1*b2 - a2*B1;
+    var v = document.getElementById('lineVerdict');
+    if(Math.abs(a2)<1e-9 && Math.abs(b2)<1e-9){
+      v.style.background = 'rgba(159,176,168,.16)'; v.style.color = '#cdd8d2';
+      v.textContent = "La droite 2 n'existe pas (a₂ = b₂ = 0). Bouge les curseurs.";
+    } else if(Math.abs(det) > 1e-9){
+      var xi = (C1*b2 - c2*B1)/det;
+      var yi = (A1*c2 - a2*C1)/det;
+      // intersection dot
+      c.save(); c.fillStyle = '#fff'; c.strokeStyle = '#241a06'; c.lineWidth = 2;
+      c.beginPath(); c.arc(map.sx(xi), map.sy(yi), 5.5, 0, 2*Math.PI); c.fill(); c.stroke(); c.restore();
+      v.style.background = 'rgba(79,178,134,.18)'; v.style.color = '#bfe6d2';
+      v.textContent = '1 solution unique : les droites se croisent en (' + (Math.round(xi*100)/100) + ' ; ' + (Math.round(yi*100)/100) + ').';
+    } else {
+      // parallel: coincident if (a2,b2,c2) proportional to (1,1,2) -> a2=b2 and c2=2*a2
+      var coincident = (Math.abs(a2 - b2) < 1e-9) && (Math.abs(c2 - 2*a2) < 1e-9);
+      if(coincident){
+        v.style.background = 'rgba(227,162,58,.18)'; v.style.color = '#f2d79b';
+        v.textContent = 'Une infinité de solutions : les deux droites sont confondues.';
+      } else {
+        v.style.background = 'rgba(190,86,56,.2)'; v.style.color = '#f0b9a8';
+        v.textContent = 'Aucune solution : droites parallèles mais distinctes.';
+      }
+    }
+  }
+  ['a2','b2','c2'].forEach(function(id){
+    var el = document.getElementById(id);
+    if(el) el.addEventListener('input', drawLine);
+  });
+  document.querySelectorAll('.pbtn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var parts = btn.getAttribute('data-line').split(',');
+      document.getElementById('a2').value = parts[0];
+      document.getElementById('b2').value = parts[1];
+      document.getElementById('c2').value = parts[2];
+      drawLine();
+    });
+  });
+
+  /* ---------- Vector playground (section 06) ---------- */
+  var vecCanvas = document.getElementById('vecCanvas');
+  function drawVec(){
+    if(!vecCanvas || !vecCanvas.clientWidth) return;
+    var o = ctx2d(vecCanvas), c = o.c, W = o.W, H = o.H;
+    var lo = -6, hi = 6;
+    var map = makeMap(W, H, lo, hi, lo, hi);
+    c.clearRect(0,0,W,H);
+    drawGrid(c, W, H, map, lo, hi);
+    var ux = +document.getElementById('ux').value;
+    var uy = +document.getElementById('uy').value;
+    var vx = +document.getElementById('vx').value;
+    var vy = +document.getElementById('vy').value;
+    var k  = +document.getElementById('kv').value;
+    document.getElementById('vux').textContent = ux;
+    document.getElementById('vuy').textContent = uy;
+    document.getElementById('vvx').textContent = vx;
+    document.getElementById('vvy').textContent = vy;
+    document.getElementById('vk').textContent = k;
+    var ox = map.sx(0), oy = map.sy(0);
+    var sx = ux+vx, sy = uy+vy;
+    // parallelogram guides
+    c.save();
+    c.strokeStyle = 'rgba(227,162,58,.45)'; c.lineWidth = 1.5; c.setLineDash([5,5]);
+    c.beginPath();
+    c.moveTo(map.sx(ux), map.sy(uy)); c.lineTo(map.sx(sx), map.sy(sy));
+    c.moveTo(map.sx(vx), map.sy(vy)); c.lineTo(map.sx(sx), map.sy(sy));
+    c.stroke();
+    c.restore();
+    // k.u (dashed, behind)
+    arrow(c, ox, oy, map.sx(k*ux), map.sy(k*uy), '#9ad9b8', 2.5, true);
+    // u + v
+    arrow(c, ox, oy, map.sx(sx), map.sy(sy), '#E3A23A', 3, false);
+    // u and v
+    arrow(c, ox, oy, map.sx(ux), map.sy(uy), '#4FB286', 3.2, false);
+    arrow(c, ox, oy, map.sx(vx), map.sy(vy), '#3aa0a0', 3.2, false);
+    // labels
+    c.fillStyle = '#cfeede'; c.font = "bold 13px 'Space Grotesk', sans-serif";
+    c.textAlign = 'left'; c.textBaseline = 'bottom';
+    function lab(txt, wx, wy, col){
+      c.fillStyle = col;
+      c.fillText(txt, map.sx(wx)+6, map.sy(wy)-4);
+    }
+    if(ux!==0||uy!==0) lab('u', ux, uy, '#7fd3aa');
+    if(vx!==0||vy!==0) lab('v', vx, vy, '#6fc7c7');
+    if(sx!==0||sy!==0) lab('u+v', sx, sy, '#f0c878');
+  }
+  ['ux','uy','vx','vy','kv'].forEach(function(id){
+    var el = document.getElementById(id);
+    if(el) el.addEventListener('input', drawVec);
+  });
+
+  /* ---------- Resize ---------- */
+  var rt;
+  window.addEventListener('resize', function(){
+    clearTimeout(rt);
+    rt = setTimeout(function(){
+      var id = pages[current] ? pages[current].id : '';
+      if(id==='p4') drawLine();
+      if(id==='p6') drawVec();
+    }, 160);
+  });
+
+  /* ---------- Init ---------- */
+  renderMath();
+  if(barfill) barfill.style.width = '0%';
+})();
+</script>
+</body>
+</html>
