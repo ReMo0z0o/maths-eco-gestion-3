@@ -39,6 +39,15 @@ export default function SiteHeader() {
             Exercices
           </Link>
           <Link
+            to="/examens"
+            className="rounded-md px-3 py-1.5 text-foreground/80 transition-colors hover:bg-muted hover:text-foreground"
+            activeProps={{
+              className: "rounded-md px-3 py-1.5 bg-muted font-semibold text-foreground",
+            }}
+          >
+            Examens
+          </Link>
+          <Link
             to="/demonstrations"
             className="rounded-md px-3 py-1.5 text-foreground/80 transition-colors hover:bg-muted hover:text-foreground"
             activeProps={{

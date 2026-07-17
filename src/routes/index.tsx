@@ -3,6 +3,7 @@ import SiteHeader from "@/components/SiteHeader";
 import { chapters } from "@/data/chapters";
 import { exercisesForChapter, allExercises } from "@/data/exercises";
 import { allDemos } from "@/data/demos";
+import { allExams } from "@/data/exams";
 import { useProgress } from "@/hooks/use-progress";
 
 export const Route = createFileRoute("/")({
@@ -134,8 +135,14 @@ function Index() {
             >
               🎓 Démonstrations d'examen
             </Link>
+            <Link
+              to="/examens"
+              className="inline-flex items-center gap-2 rounded-lg border border-input bg-background px-5 py-2.5 text-sm font-semibold shadow-sm transition-colors hover:bg-muted"
+            >
+              📝 Examens corrigés
+            </Link>
           </div>
-          <dl className="mt-10 grid max-w-2xl grid-cols-2 gap-4 font-sans-ui sm:grid-cols-4">
+          <dl className="mt-10 grid max-w-3xl grid-cols-2 gap-4 font-sans-ui sm:grid-cols-5">
             <div className="rounded-xl border border-border bg-card p-3 text-center shadow-sm">
               <dt className="text-[11px] uppercase tracking-wide text-muted-foreground">
                 Chapitres
@@ -159,6 +166,12 @@ function Index() {
                 Démonstrations
               </dt>
               <dd className="text-2xl font-bold text-primary">🎓 {allDemos.length}</dd>
+            </div>
+            <div className="rounded-xl border border-border bg-card p-3 text-center shadow-sm">
+              <dt className="text-[11px] uppercase tracking-wide text-muted-foreground">
+                Examens résolus
+              </dt>
+              <dd className="text-2xl font-bold text-primary">📝 {allExams.length}</dd>
             </div>
           </dl>
         </div>
