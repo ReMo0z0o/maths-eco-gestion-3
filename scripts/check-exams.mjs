@@ -14,7 +14,7 @@ const EXPECTED = {
   janvier2025: { id: "janvier-2025", questions: [3, 4, 5, 6, 7, 8], totalPoints: 34 },
   janvier2022: { id: "janvier-2022", questions: [1, 2, 3, 4, 5, 6, 7, 8, 9], totalPoints: 40 },
   janvier2021: { id: "janvier-2021", questions: [1, 2, 3, 4, 5, 6, 7, 8], totalPoints: 40 },
-  exemple1: { id: "exemple-1", questions: [1, 2, 3, 4, 5, 6, 7, 8], totalPoints: 38 },
+  exemple1: { id: "exemple-1", questions: [1, 2, 3, 4, 5, 6, 7, 8, 9], totalPoints: 41 },
 };
 
 const targets = process.argv.slice(2).length ? process.argv.slice(2) : Object.keys(EXPECTED);
