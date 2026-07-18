@@ -2,6 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useState } from "react";
 import SiteHeader from "@/components/SiteHeader";
 import MathText from "@/components/MathText";
+import DomainFigure from "@/components/DomainFigure";
 import { chapters } from "@/data/chapters";
 import { getExam, getExamQuestion } from "@/data/exams";
 import { getDemo, demoSlug } from "@/data/demos";
@@ -42,6 +43,7 @@ function QuestionPage() {
   const [solutionOpen, setSolutionOpen] = useState(false);
   const [stepsShown, setStepsShown] = useState(0);
   const [showAnswer, setShowAnswer] = useState(false);
+  const [showFigure, setShowFigure] = useState(false);
   const progressKey = `exam:${exam.id}:${question.id}`;
   const done = isDone(progressKey);
   const demo = question.demoRef ? getDemo(question.demoRef) : undefined;
@@ -198,6 +200,29 @@ function QuestionPage() {
                   </button>
                 )}
               </div>
+              {question.figure && (
+                <div className="rounded-xl border border-primary/30 bg-primary/[0.04] p-4">
+                  {showFigure ? (
+                    <>
+                      <p className="font-sans-ui text-xs font-bold uppercase tracking-wide text-primary">
+                        📈 Représentation graphique du domaine
+                      </p>
+                      <div className="mt-2">
+                        <DomainFigure spec={question.figure} />
+                      </div>
+                    </>
+                  ) : (
+                    <button
+                      onClick={() => setShowFigure(true)}
+                      className="font-sans-ui text-sm font-semibold text-primary transition-colors hover:text-primary/80"
+                    >
+                      📈 Voir la représentation graphique du domaine (essaie d'abord de la dessiner
+                      !)
+                    </button>
+                  )}
+                </div>
+              )}
+
               <div
                 className={`rounded-xl border p-4 ${showAnswer ? "border-emerald-300 bg-emerald-50" : "border-dashed border-border"}`}
               >

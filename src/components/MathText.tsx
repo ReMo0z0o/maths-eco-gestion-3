@@ -99,8 +99,16 @@ function InlineSegments({ segments }: { segments: Segment[] }) {
         seg.type === "math" ? (
           <MathSpan key={i} latex={seg.value} display={false} />
         ) : seg.type === "bold" ? (
+          // Un segment gras peut contenir des maths (« **droite $y = x$** ») :
+          // on re-parse son contenu (pas de gras imbriqué possible).
           <strong key={i} className="font-semibold">
-            {seg.value}
+            {parseInline(seg.value).map((sub, j) =>
+              sub.type === "math" ? (
+                <MathSpan key={j} latex={sub.value} display={false} />
+              ) : (
+                <span key={j}>{sub.value}</span>
+              ),
+            )}
           </strong>
         ) : (
           <span key={i}>{seg.value}</span>

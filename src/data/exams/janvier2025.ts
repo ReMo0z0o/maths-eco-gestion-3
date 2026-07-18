@@ -756,6 +756,18 @@ $$\int_0^1 y^2 \cdot \frac{1 - y^2}{2}\, \mathrm{d}y = \frac{1}{2} \int_0^1 (y^2
 Les deux ordres d'intégration donnent $\frac{1}{15}$ : le résultat est confirmé. Ordre de grandeur plausible : on intègre une fonction comprise entre 0 et 1 sur un triangle d'aire $\frac{1}{2}$, le résultat devait être un petit nombre positif.`,
         },
       ],
+      figure: {
+        window: { xMin: -0.4, xMax: 1.45, yMin: -0.35, yMax: 1.35 },
+        regions: [{ xFrom: 0, xTo: 1, yLow: "0", yHigh: "1-x" }],
+        curves: [{ fn: "1-x", domain: [-0.2, 1.2], label: "x + y = 1", labelAt: [0.6, 0.6] }],
+        points: [
+          { at: [0, 0], label: "(0, 0)", offset: [-44, 16] },
+          { at: [1, 0], label: "(1, 0)", offset: [8, 18] },
+          { at: [0, 1], label: "(0, 1)", offset: [-46, -6] },
+        ],
+        caption:
+          "Le domaine (en violet) est le triangle délimité par les deux axes (x = 0 et y = 0) et la droite x + y = 1 : pour chaque x entre 0 et 1, y monte de 0 à 1 − x, ce qui donne directement les bornes de l'intégrale itérée.",
+      },
       answer: String.raw`$R$ est le triangle de sommets $(0, 0)$, $(1, 0)$ et $(0, 1)$, décrit par $0 \leq x \leq 1$, $0 \leq y \leq 1 - x$, et
 
 $$\iint_R (1 - x)y^2 \, \mathrm{d}y\,\mathrm{d}x = \int_0^1 \frac{(1 - x)^4}{3}\,\mathrm{d}x = \frac{1}{15}.$$`,

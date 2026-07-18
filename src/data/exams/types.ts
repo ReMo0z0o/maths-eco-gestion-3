@@ -4,6 +4,8 @@
  * `$...$` math en ligne · `$$...$$` display · `**gras**` · listes `- ` · ligne vide = paragraphe.
  */
 
+import type { DomainFigureSpec } from "../figures";
+
 export interface ExamStep {
   /** Titre court de l'étape de résolution */
   title: string;
@@ -41,6 +43,8 @@ export interface ExamQuestion {
   demoRef?: string;
   /** Exercices de TP très proches (ids, ex. « 5.2 ») pour s'entraîner davantage */
   exerciseRefs?: string[];
+  /** Représentation graphique du domaine (questions d'intégrales doubles) */
+  figure?: DomainFigureSpec;
 }
 
 export interface Exam {

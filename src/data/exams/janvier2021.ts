@@ -742,6 +742,21 @@ $$ = \left[ 2y^{3/2} + \frac{y^3}{3} \right]_0^1 = 2 + \frac{1}{3} = \frac{7}{3}
 Les deux ordres d'intégration coïncident : le résultat $\frac{7}{3}$ est confirmé par une méthode indépendante.`,
         },
       ],
+      figure: {
+        window: { xMin: -0.45, xMax: 1.45, yMin: -0.3, yMax: 1.4 },
+        regions: [{ xFrom: 0, xTo: 1, yLow: "x*x", yHigh: "1" }],
+        curves: [{ fn: "x*x", domain: [-0.35, 1.18], label: "y = x²", labelAt: [1.02, 0.68] }],
+        segments: [
+          { from: [-0.3, 1], to: [1.3, 1], label: "y = 1", labelAt: [1.14, 1.14], dashed: true },
+        ],
+        points: [
+          { at: [0, 0], label: "(0, 0)", offset: [-44, 16] },
+          { at: [0, 1], label: "(0, 1)", offset: [-46, -6] },
+          { at: [1, 1], label: "(1, 1)", offset: [8, 16] },
+        ],
+        caption:
+          "Le domaine (en violet) est la zone au-dessus de la parabole y = x² et sous l'horizontale y = 1, pour x entre 0 et 1 : pour chaque x, y va de x² à 1 — les bornes de l'intégrale intérieure.",
+      },
       answer: String.raw`$$ \int_0^1 \int_{x^2}^{1} (3 + 2xy)\, dy\, dx = \frac{7}{3} \approx 2.33 $$
 
 Domaine : $D = \{(x, y) : 0 \leq x \leq 1,\ x^2 \leq y \leq 1\}$, la région comprise entre la parabole $y = x^2$ (bord inférieur) et la droite $y = 1$ (bord supérieur), de sommets $(0, 0)$, $(1, 1)$ et $(0, 1)$.`,

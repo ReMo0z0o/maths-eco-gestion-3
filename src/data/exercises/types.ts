@@ -16,6 +16,8 @@ export interface SolutionStep {
   content: string;
 }
 
+import type { DomainFigureSpec } from "../figures";
+
 export interface ExercisePart {
   /** « a », « b », … ou null si l'exercice n'a pas de sous-questions */
   label: string | null;
@@ -25,6 +27,8 @@ export interface ExercisePart {
   steps: SolutionStep[];
   /** Réponse finale concise (format MathText) */
   answer: string;
+  /** Représentation graphique du domaine (exercices d'intégrales doubles) */
+  figure?: DomainFigureSpec;
 }
 
 export interface Exercise {

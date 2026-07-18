@@ -786,6 +786,24 @@ C'est le signal que le sujet était bien conçu : le facteur $\frac{2}{x + 4}$ d
 $$\iint_R \frac{2(y + 1)}{x + 4} \, dA = \frac{3}{2}.$$`,
         },
       ],
+      figure: {
+        window: { xMin: -0.5, xMax: 2.8, yMin: -0.5, yMax: 3.4 },
+        regions: [{ xFrom: 1, xTo: 2, yLow: "1", yHigh: "x+1" }],
+        curves: [{ fn: "x+1", domain: [-0.4, 2.3], label: "y = x + 1", labelAt: [1.25, 2.9] }],
+        segments: [
+          { from: [1, 1], to: [1, 2], label: "x = 1", labelAt: [0.55, 1.62], dashed: true },
+          { from: [2, 1], to: [2, 3], label: "x = 2", labelAt: [2.06, 1.6], dashed: true },
+          { from: [-0.3, 1], to: [2.6, 1], label: "y = 1", labelAt: [0.12, 0.72], dashed: true },
+        ],
+        points: [
+          { at: [1, 1], label: "(1, 1)", offset: [-46, 18] },
+          { at: [2, 1], label: "(2, 1)", offset: [8, 18] },
+          { at: [1, 2], label: "(1, 2)", offset: [-46, -8] },
+          { at: [2, 3], label: "(2, 3)", offset: [8, -6] },
+        ],
+        caption:
+          "Le domaine (en violet) est le trapèze entre les verticales x = 1 et x = 2, le plancher y = 1 et la droite oblique y = x + 1 : pour chaque x entre 1 et 2, y va de 1 à x + 1 — ce sont les bornes utilisées dans le calcul.",
+      },
       answer: String.raw`(a) $R$ est le trapèze $\{1 \leq x \leq 2, \; 1 \leq y \leq x + 1\}$, de sommets $(1, 1)$, $(2, 1)$, $(2, 3)$ et $(1, 2)$. (b) En intégrant d'abord en $y$ : l'intégrale intérieure donne $\frac{x^2 + 4x}{2}$, la fraction se simplifie en $x$, et $\int_1^2 x \, dx = \frac{3}{2}$. L'intégrale vaut $\frac{3}{2}$.`,
       examTips: [
         String.raw`La représentation graphique est notée : place les 4 sommets avec leurs coordonnées et hachure le domaine. Un dessin propre justifie aussi tes bornes d'intégration — double dividende.`,

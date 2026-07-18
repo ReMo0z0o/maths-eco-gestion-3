@@ -859,6 +859,27 @@ $$\int_0^{1/2} \int_x^{2x} 1\, dy\, dx + \int_{1/2}^{1} \int_x^{1} 1\, dy\, dx =
 **Vérification 2 — géométrie pure** : triangle de base le segment de $\left(\tfrac{1}{2}, 1\right)$ à $(1,1)$ (longueur $\tfrac{1}{2}$) et de hauteur $1$ (distance verticale au sommet $(0,0)$) : aire $= \frac{1}{2} \cdot \frac{1}{2} \cdot 1 = \frac{1}{4}$ ✓ Les trois méthodes concordent.`,
         },
       ],
+      figure: {
+        window: { xMin: -0.4, xMax: 1.45, yMin: -0.3, yMax: 1.4 },
+        regions: [
+          { xFrom: 0, xTo: 0.5, yLow: "x", yHigh: "2*x" },
+          { xFrom: 0.5, xTo: 1, yLow: "x", yHigh: "1" },
+        ],
+        curves: [
+          { fn: "2*x", domain: [-0.15, 0.65], label: "y = 2x", labelAt: [0.08, 0.95] },
+          { fn: "x", domain: [-0.2, 1.25], label: "y = x", labelAt: [1.05, 0.88] },
+        ],
+        segments: [
+          { from: [-0.25, 1], to: [1.25, 1], label: "y = 1", labelAt: [1.12, 1.14], dashed: true },
+        ],
+        points: [
+          { at: [0, 0], label: "(0, 0)", offset: [-44, 16] },
+          { at: [0.5, 1], label: "(1/2, 1)", offset: [-26, -8] },
+          { at: [1, 1], label: "(1, 1)", offset: [10, -4] },
+        ],
+        caption:
+          "Le domaine (en violet) est le triangle de sommets (0,0), (1/2, 1) et (1,1), entre la droite y = 2x (bord gauche), la droite y = x (bord droit) et le plafond y = 1. En tranches verticales il faut couper en x = 1/2 (d'où les deux morceaux) ; en tranches horizontales, une seule intégrale suffit : x va de y/2 à y.",
+      },
       answer: String.raw`$\displaystyle\iint_R 1\, dA = \frac{1}{4}$. Le domaine est le triangle de sommets $(0,0)$, $\left(\tfrac{1}{2}, 1\right)$ et $(1,1)$, délimité à gauche par $y = 2x$, à droite par $y = x$ et en haut par $y = 1$.`,
       examTips: [
         String.raw`3 points pour ~10 minutes maximum : l'intégrale est triviale, les points sont dans la **description du domaine** et le **graphique** — dessine-le proprement avec les trois sommets nommés, c'est exigé par l'énoncé.`,

@@ -2,6 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useState } from "react";
 import SiteHeader from "@/components/SiteHeader";
 import MathText from "@/components/MathText";
+import DomainFigure from "@/components/DomainFigure";
 import { ExamBadge } from "@/components/ExerciseBadges";
 import { getChapter } from "@/data/chapters";
 import { allExercises, getExercise, exerciseSlug, exerciseIdFromSlug } from "@/data/exercises";
@@ -38,6 +39,7 @@ export const Route = createFileRoute("/exercices/$chapterId/$exerciseId")({
 function PartSolution({ part, index }: { part: ExercisePart; index: number }) {
   const [shown, setShown] = useState(0);
   const [showAnswer, setShowAnswer] = useState(false);
+  const [showFigure, setShowFigure] = useState(false);
   const allShown = shown >= part.steps.length;
 
   return (
@@ -93,6 +95,28 @@ function PartSolution({ part, index }: { part: ExercisePart; index: number }) {
             </button>
           )}
         </div>
+
+        {part.figure && (
+          <div className="rounded-xl border border-primary/30 bg-primary/[0.04] p-4">
+            {showFigure ? (
+              <>
+                <p className="font-sans-ui text-xs font-bold uppercase tracking-wide text-primary">
+                  📈 Représentation graphique du domaine
+                </p>
+                <div className="mt-2">
+                  <DomainFigure spec={part.figure} />
+                </div>
+              </>
+            ) : (
+              <button
+                onClick={() => setShowFigure(true)}
+                className="font-sans-ui text-sm font-semibold text-primary transition-colors hover:text-primary/80"
+              >
+                📈 Voir la représentation graphique du domaine (essaie d'abord de la dessiner !)
+              </button>
+            )}
+          </div>
+        )}
 
         <div
           className={`rounded-xl border p-4 ${showAnswer ? "border-emerald-300 bg-emerald-50" : "border-dashed border-border"}`}

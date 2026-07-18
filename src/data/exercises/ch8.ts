@@ -469,6 +469,21 @@ $$\int_0^1 \frac{15x^4}{x^5+1}\, dx = 3 \int_0^1 \frac{5x^4}{x^5+1}\, dx = 3 \Bi
 **Vérification numérique :** $3 \ln 2 \approx 2{,}08$ ; la fonction $\frac{30y}{x^5+1}$ est positive sur le domaine, le résultat est bien positif ✓`,
           },
         ],
+        figure: {
+          window: { xMin: -0.35, xMax: 1.45, yMin: -0.3, yMax: 1.35 },
+          regions: [{ xFrom: 0, xTo: 1, yLow: "0", yHigh: "x*x" }],
+          curves: [{ fn: "x*x", domain: [-0.25, 1.15], label: "y = x²", labelAt: [0.3, 0.55] }],
+          segments: [
+            { from: [1, 0], to: [1, 1], label: "x = 1", labelAt: [1.05, 0.42], dashed: true },
+          ],
+          points: [
+            { at: [0, 0], label: "(0, 0)", offset: [-44, 16] },
+            { at: [1, 0], label: "(1, 0)", offset: [8, 18] },
+            { at: [1, 1], label: "(1, 1)" },
+          ],
+          caption:
+            "Le domaine (en violet) est la zone sous la parabole y = x² et au-dessus de l'axe Ox, pour x entre 0 et 1 : pour chaque x fixé, y monte de 0 jusqu'à x² — exactement les bornes de l'intégrale intérieure.",
+        },
         answer: String.raw`$3 \ln 2 \approx 2{,}08$. Le domaine est la région entre l'axe $Ox$ et la parabole $y = x^2$, pour $0 \le x \le 1$ (coins $(0,0)$, $(1,0)$, $(1,1)$).`,
       },
       {
@@ -501,6 +516,29 @@ $$\int_1^2 \ln 2\, dy = \ln 2 \cdot (2 - 1) = \ln 2$$
 **Vérification numérique :** $\ln 2 \approx 0{,}69$ ; la fonction $\frac{1}{x}$ est positive sur le domaine (où $x \ge 1$), le résultat est bien positif ✓`,
           },
         ],
+        figure: {
+          window: { xMin: -0.6, xMax: 4.7, yMin: -0.5, yMax: 2.6 },
+          regions: [
+            { xFrom: 1, xTo: 2, yLow: "1", yHigh: "x" },
+            { xFrom: 2, xTo: 4, yLow: "x/2", yHigh: "2" },
+          ],
+          curves: [
+            { fn: "x", domain: [-0.3, 2.45], label: "y = x", labelAt: [2.1, 2.35] },
+            { fn: "x/2", domain: [-0.5, 4.65], label: "y = x/2", labelAt: [3.9, 1.65] },
+          ],
+          segments: [
+            { from: [-0.4, 1], to: [4.5, 1], label: "y = 1", labelAt: [3.6, 0.72], dashed: true },
+            { from: [-0.4, 2], to: [4.6, 2], label: "y = 2", labelAt: [0.15, 2.2], dashed: true },
+          ],
+          points: [
+            { at: [1, 1], label: "(1, 1)", offset: [-46, -8] },
+            { at: [2, 1], label: "(2, 1)", offset: [4, 18] },
+            { at: [2, 2], label: "(2, 2)", offset: [-48, -8] },
+            { at: [4, 2], label: "(4, 2)", offset: [6, -8] },
+          ],
+          caption:
+            "Le trapèze (en violet) est délimité par la droite y = x (bord gauche), la droite y = x/2 (bord droit) et les horizontales y = 1 et y = 2 : chaque tranche horizontale à hauteur y va de x = y à x = 2y, conformément aux bornes de l'intégrale.",
+        },
         answer: String.raw`$\ln 2 \approx 0{,}69$. Le domaine est le trapèze compris entre les droites $y = x$ et $y = \frac{x}{2}$, de sommets $(1,1)$, $(2,1)$, $(4,2)$ et $(2,2)$.`,
       },
     ],
@@ -559,6 +597,27 @@ $$\int_0^1 \int_x^1 y^2\, dy\, dx = \int_0^1 \Big[ \frac{y^3}{3} \Big]_{y=x}^{y=
 Les deux ordres donnent bien le même résultat ✓`,
           },
         ],
+        figure: {
+          window: { xMin: -0.35, xMax: 1.4, yMin: -0.3, yMax: 1.35 },
+          regions: [{ xFrom: 0, xTo: 1, yLow: "x", yHigh: "1" }],
+          curves: [{ fn: "x", domain: [-0.25, 1.2], label: "y = x", labelAt: [1.02, 0.86] }],
+          segments: [
+            {
+              from: [-0.25, 1],
+              to: [1.25, 1],
+              label: "y = 1",
+              labelAt: [1.12, 1.12],
+              dashed: true,
+            },
+          ],
+          points: [
+            { at: [0, 0], label: "(0, 0)", offset: [-44, 16] },
+            { at: [0, 1], label: "(0, 1)", offset: [-46, -6] },
+            { at: [1, 1], label: "(1, 1)", offset: [8, 16] },
+          ],
+          caption:
+            "Le triangle (en violet) a pour sommets (0,0), (0,1) et (1,1) : bord gauche sur l'axe x = 0, plafond y = 1, hypoténuse y = x. En tranches horizontales, x va de 0 à y ; en tranches verticales, y va de x à 1 — les deux ordres donnent 1/4.",
+        },
         answer: String.raw`$\dfrac{1}{4}$. Le domaine est le triangle de sommets $(0,0)$, $(0,1)$ et $(1,1)$.`,
       },
     ],
@@ -617,6 +676,24 @@ $$\int_1^2 \int_{1/x}^{x} \frac{x}{y^3}\, dy\, dx = \Big( 2 - \frac{\ln 2}{2} \B
 Cohérence : sur le domaine, $x > 0$ et $y > 0$, donc la fonction $\frac{x}{y^3}$ est strictement **positive** — le résultat doit être positif ✓ Tu peux aussi revérifier l'intégrale intérieure en dérivant : $\frac{d}{dy}\Big(-\frac{x}{2y^2}\Big) = \frac{x}{y^3}$ ✓`,
           },
         ],
+        figure: {
+          window: { xMin: -0.4, xMax: 2.7, yMin: -0.4, yMax: 2.5 },
+          regions: [{ xFrom: 1, xTo: 2, yLow: "1/x", yHigh: "x" }],
+          curves: [
+            { fn: "1/x", domain: [0.42, 2.6], label: "y = 1/x", labelAt: [2.18, 0.62] },
+            { fn: "x", domain: [-0.3, 2.35], label: "y = x", labelAt: [2.0, 2.3] },
+          ],
+          segments: [
+            { from: [2, 0.5], to: [2, 2], label: "x = 2", labelAt: [2.06, 1.35], dashed: true },
+          ],
+          points: [
+            { at: [1, 1], label: "(1, 1)", offset: [-46, -8] },
+            { at: [2, 0.5], label: "(2, 1/2)", offset: [8, 14] },
+            { at: [2, 2], label: "(2, 2)", offset: [8, -6] },
+          ],
+          caption:
+            "Le domaine (en violet) est l'« éventail » compris entre l'hyperbole y = 1/x (frontière inférieure) et la droite y = x (frontière supérieure), fermé à droite par x = 2 : les deux courbes se touchent en (1,1), et pour chaque x entre 1 et 2, y monte de 1/x jusqu'à x.",
+        },
         answer: String.raw`$\dfrac{15}{8} - \dfrac{\ln 2}{2} \approx 1{,}53$. Le domaine est la région comprise entre l'hyperbole $y = \frac{1}{x}$ et la droite $y = x$, pour $x$ allant de 1 à 2 (pointe en $(1,1)$, fermée à droite par le segment vertical $x = 2$).`,
       },
     ],

@@ -742,6 +742,24 @@ $$ I \approx 201{,}7144 - 8{,}9634 + 75{,}9375 + 1{,}5 \approx 270{,}19. $$
 **Contrôle de plausibilité :** l'intégrande est positif sur $D$ (car $y \geq 0$ sur le domaine), le résultat doit être positif ✓ ; et le terme dominant $\frac{1}{2}e^6 \approx 202$ donne le bon ordre de grandeur.`,
         },
       ],
+      figure: {
+        window: { xMin: -0.6, xMax: 3.8, yMin: -0.8, yMax: 6.6 },
+        regions: [{ xFrom: 0, xTo: 3, yLow: "x/2", yHigh: "2*x" }],
+        curves: [
+          { fn: "2*x", domain: [-0.2, 3.15], label: "y = 2x", labelAt: [2.1, 5.7] },
+          { fn: "x/2", domain: [-0.5, 3.6], label: "y = x/2", labelAt: [3.1, 1.05] },
+        ],
+        segments: [
+          { from: [3, 1.5], to: [3, 6], label: "x = 3", labelAt: [3.08, 3.7], dashed: true },
+        ],
+        points: [
+          { at: [0, 0], label: "(0, 0)", offset: [-44, 18] },
+          { at: [3, 1.5], label: "(3, 3/2)", offset: [8, 16] },
+          { at: [3, 6], label: "(3, 6)", offset: [8, -4] },
+        ],
+        caption:
+          "Le domaine (en violet) est le triangle compris entre la droite y = x/2 (frontière inférieure) et la droite y = 2x (frontière supérieure), fermé à droite par x = 3 : pour chaque x entre 0 et 3, y va de x/2 à 2x.",
+      },
       answer: String.raw`Le domaine est le triangle de sommets $(0,0)$, $\left(3, \frac{3}{2}\right)$, $(3, 6)$, compris entre les droites $y = \frac{x}{2}$ et $y = 2x$ et la verticale $x = 3$. L'intégrale intérieure vaut $e^{2x} - e^{x/2} + \frac{15}{4}x^3$, et
 
 $$ I = \frac{1}{2}e^6 - 2e^{3/2} + \frac{1215}{16} + \frac{3}{2} \approx 270{,}19. $$`,
